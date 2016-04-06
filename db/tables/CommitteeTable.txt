@@ -1,18 +1,18 @@
 String createCommitteeTable = "CREATE TABLE COMMITTEE (UID INT PRIMARY KEY, "
-			+ "TITLE VARCHAR(160) DEFAULT NULL, "
-			+ "CHAIRMAN INT, "
-			+ "BUDGETACCESS VARCHAR(1000) DEFAULT NULL, " //list of UID #'s
-			+ "MEMBERS VARCHAR(1000) DEFAULT NULL, " //list of UID #'s
-			+ "TASKS VARCHAR(1000) DEFAULT NULL, " //list of task UID #'s
-			+ "INCOME VARCHAR(1000) DEFAULT NULL, " //list of task UID #'s
-			+ "EXPENSE VARCHAR(1000) DEFAULT NULL, " //list of task UID #'s						
-			+ "BUDGET DOUBLE)";
-			
-			title (char) - title of the comittee
-			chairman (int) - number of chairmen???
-			budgetaccess (char) - 
-			members (char) - 
-			tasks (char) - 
-			income (char) - 
-			expense (char) - 
-			budget (double) - budget as a single number
++ "TITLE VARCHAR(160) DEFAULT NULL, "
++ "CHAIRMAN INT, "
++ "BUDGETACCESS VARCHAR(1000) DEFAULT NULL, " //list of UID #'s
++ "MEMBERS VARCHAR(1000) DEFAULT NULL, " //list of UID #'s
++ "TASKS VARCHAR(1000) DEFAULT NULL, " //list of task UID #'s
++ "INCOME VARCHAR(1000) DEFAULT NULL, " //list of task UID #'s
++ "EXPENSE VARCHAR(1000) DEFAULT NULL, " //list of task UID #'s						
++ "BUDGET DOUBLE)";
+
+title (char) - title of the comittee
+chairman (int) - number of chairmen???
+budgetaccess (char) - 
+members (char) - 
+tasks (char) - 
+income (char) - 
+expense (char) - 
+budget (double) - budget as a single number
