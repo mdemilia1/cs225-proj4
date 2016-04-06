@@ -1,1 +1,4 @@
-jk
+Income and Expenses are Ideticel in almost everything, except a few hardcoded strings that differentiate between the two.
+No limitations for maximum or minimum in either.
+
+One should be removed entirely, as they don't seem to interact for a full total.
