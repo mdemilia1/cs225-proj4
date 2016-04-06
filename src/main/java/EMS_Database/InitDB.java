@@ -57,11 +57,9 @@ public abstract class InitDB implements Interface_FunctionWrapper {
 
 	// define database properties for connection
 	Properties props = new Properties();
-	props.put("user", "root");
-	props.put("password", "ccaes1");
 
 	// Driver name
-	String driver = "org.apache.derby.jdbc.EmbeddedDriver";
+	String driver = "org.sqlite.JDBC";
 
 	// connect to DB driver.
 	try {
@@ -70,21 +68,14 @@ public abstract class InitDB implements Interface_FunctionWrapper {
 	    cnfe.printStackTrace();
 	}
 
-	// connect to DB if one already exists
-	try {
-	    dbConnection = DriverManager.getConnection("jdbc:derby:EMS_DB", props); //if create is needed exception is thrown
-	    //System.out.println("Database Connection Established.");
-	    //debugLog.info("Database Connection Established.");
-	} catch (SQLException sqle) {
-
 	    try {
 		//create connection if no database exists
-		dbConnection = DriverManager.getConnection("jdbc:derby:EMS_DB;create=true", props);
-		System.out.println("Database Created Successfully.");
-		debugLog.info("Database Created Successfully.");
+		dbConnection = DriverManager.getConnection("jdbc:sqlite:ems.db", props);
+		System.out.println("Database Connected Successfully.");
+		debugLog.info("Database Connected Successfully.");
 
 		//create tables if none exist.
-		String createUserTable = "CREATE TABLE USERS (UID INT PRIMARY KEY, "
+		String createUserTable = "CREATE TABLE IF NOT EXISTS USERS (UID INT PRIMARY KEY, "
 			+ "LEVEL INT, "
 			+ "FNAME VARCHAR(50) DEFAULT NULL, "
 			+ "LNAME VARCHAR(50) DEFAULT NULL, "
@@ -99,7 +90,7 @@ public abstract class InitDB implements Interface_FunctionWrapper {
 			+ "PARTICIPANT VARCHAR(100) DEFAULT NULL, "
 			+ "EVENTLEVEL INT NOT NULL)";
 
-		String createEventsTable = "CREATE TABLE EVENTS (UID INT PRIMARY KEY, "
+		String createEventsTable = "CREATE TABLE IF NOT EXISTS EVENTS (UID INT PRIMARY KEY, "
 			+ "DESCRIPTION VARCHAR(5000) DEFAULT NULL, "                        
 			+ "DETAILS VARCHAR(500) DEFAULT NULL, "
                         + "TITLE VARCHAR(100) DEFAULT NULL, "
@@ -116,7 +107,7 @@ public abstract class InitDB implements Interface_FunctionWrapper {
 			+ "PARTICIPANT VARCHAR(500) DEFAULT NULL, " //participant list
 			+ "COMMITTEE VARCHAR(160) DEFAULT NULL)"; //committee list
 
-		String createSubEventTable = "CREATE TABLE SUBEVENTS (UID INT PRIMARY KEY, "
+		String createSubEventTable = "CREATE TABLE IF NOT EXISTS SUBEVENTS (UID INT PRIMARY KEY, "
 			+ "DESCRIPTION VARCHAR(5000) DEFAULT NULL, "
 			+ "DETAILS VARCHAR(500) DEFAULT NULL, "
 			+ "TITLE VARCHAR(100) DEFAULT NULL, "
@@ -129,7 +120,7 @@ public abstract class InitDB implements Interface_FunctionWrapper {
 			+ "STARTDATE TIMESTAMP, "
 			+ "ENDDATE TIMESTAMP)";
 
-		String createCommitteeTable = "CREATE TABLE COMMITTEE (UID INT PRIMARY KEY, "
+		String createCommitteeTable = "CREATE TABLE IF NOT EXISTS COMMITTEE (UID INT PRIMARY KEY, "
 			+ "TITLE VARCHAR(160) DEFAULT NULL, "
 			+ "CHAIRMAN INT, "
 			+ "BUDGETACCESS VARCHAR(1000) DEFAULT NULL, " //list of UID #'s
@@ -139,7 +130,7 @@ public abstract class InitDB implements Interface_FunctionWrapper {
 			+ "EXPENSE VARCHAR(1000) DEFAULT NULL, " //list of task UID #'s						
 			+ "BUDGET DOUBLE)";
 
-		String createTasksTable = "CREATE TABLE TASKS (UID INT PRIMARY KEY, "
+		String createTasksTable = "CREATE TABLE IF NOT EXISTS TASKS (UID INT PRIMARY KEY, "
 			+ "DESCRIPTION VARCHAR(5000) DEFAULT NULL, "
 			+ "DETAILS VARCHAR(500) DEFAULT NULL, "
 			+ "TITLE VARCHAR(100) DEFAULT NULL, "
@@ -153,17 +144,17 @@ public abstract class InitDB implements Interface_FunctionWrapper {
 			+ "COMPLETE INT, "
 			+ "MANAGER VARCHAR(160) DEFAULT NULL)"; //users in charge of task
 
-		String createIncomeTable = "CREATE TABLE INCOME (UID INT PRIMARY KEY, "
+		String createIncomeTable = "CREATE TABLE IF NOT EXISTS INCOME (UID INT PRIMARY KEY, "
 			+ "DESCRIPTION VARCHAR(1000) DEFAULT NULL, "
 			+ "DATE TIMESTAMP, "
 			+ "VALUE DOUBLE)";
 
-		String createExpenseTable = "CREATE TABLE EXPENSE (UID INT PRIMARY KEY, "
+		String createExpenseTable = "CREATE TABLE IF NOT EXISTS EXPENSE (UID INT PRIMARY KEY, "
 			+ "DESCRIPTION VARCHAR(1000) DEFAULT NULL, "
 			+ "DATE TIMESTAMP, "
 			+ "VALUE DOUBLE)";
 		
-		String createKeyTable = "CREATE TABLE ROOTKEY (UID INT PRIMARY KEY, "
+		String createKeyTable = "CREATE TABLE IF NOT EXISTS ROOTKEY (UID INT PRIMARY KEY, "
 			+ "MOD BIGINT, "
 			+ "EXP BIGINT)";
 
@@ -190,8 +181,6 @@ public abstract class InitDB implements Interface_FunctionWrapper {
 		sqlee.printStackTrace();
 		debugLog.severe("TABLE CREATION FAILED!");
 	    }
-
-	}
 
     }
 
