@@ -8,6 +8,7 @@ String createCommitteeTable = "CREATE TABLE COMMITTEE (UID INT PRIMARY KEY, "
 + "EXPENSE VARCHAR(1000) DEFAULT NULL, " //list of task UID #'s						
 + "BUDGET DOUBLE)";
 
+UID (int) - primary key?
 title (char) - title of the comittee
 chairman (int) - number of chairmen???
 budgetaccess (char) - 
