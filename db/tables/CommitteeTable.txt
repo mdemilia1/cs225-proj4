@@ -1,3 +1,4 @@
+Alexander Popov
 String createCommitteeTable = "CREATE TABLE COMMITTEE (UID INT PRIMARY KEY, "
 + "TITLE VARCHAR(160) DEFAULT NULL, "
 + "CHAIRMAN INT, "

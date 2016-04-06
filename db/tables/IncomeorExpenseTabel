@@ -2,3 +2,7 @@ Income and Expenses are Ideticel in almost everything, except a few hardcoded st
 No limitations for maximum or minimum in either.
 
 One should be removed entirely, as they don't seem to interact for a full total.
+
+Both interact with each respective GUI JPanel independityly, However, we could generic the GUI with reletive ease and have the
+Hardcode string only work up there.
+The GUI does the adding comparison(totals)?
