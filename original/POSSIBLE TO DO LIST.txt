@@ -1,0 +1,69 @@
+- add multiple event functionality - this is already built into the classes and the database
+	it's just a panel needs to be made for it, and a couple methods in the event manager
+	need to be updated to handle multiple events
+
+- general bug fixes: there is a debugging folder, with some already known bugs
+	many of them have already been fixed, some are user friendliness
+	issues
+
+- add actual email verification : make sure the email address exists
+
+- clean up the user management panel and make it look nicer
+
+- fix the sizing issues of the calendar
+
+- fix the home side panel listener - it currently updates when the mouse is moved which is very unefficient
+
+- finish and format the report printing
+- add actual paper printing for the reports
+	one of the members already began writing the method, but it was never implemented in the
+	final build of the project
+	here is the code for it anyway:
+	
+
+    private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {
+         PrinterJob pj = PrinterJob.getPrinterJob();
+        pj.setJobName("name");
+        PageFormat format = pj.getPageFormat(null);
+        pj.setPrintable (new Printable() {
+
+            @Override
+            public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
+                    throws PrinterException {
+             if (pageIndex > 0){
+                return Printable.NO_SUCH_PAGE;
+             }
+             Graphics2D g2 = (Graphics2D) graphics;
+             g2.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+             printAll(graphics);
+             
+             return Printable.PAGE_EXISTS;
+            }}, format);
+
+            if (pj.printDialog() == false)
+                return;
+        try {
+            pj.print();
+        } catch (PrinterException ex) {
+            Logger.getLogger(CommitteeReport.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+
+
+
+
+Below are bigger changes that change the actual structure of how the program runs
+-----
+
+- eliminate the redundant classes:
+	- many GUI classes were created as panels, but then later turned into
+		dialogs, so there are a couple dialogs that serve as wrappers
+	- the interface_ data classes and input_ data classes are
+		redundant. They were created at a time before the actual
+		back end classes were ready, but were already built
+		into the database, so they were never removed
+
+
+- remove extraneous fields in the database (there are a couple fields that were created due to miscommunication)
+- set the database up to take an actual, for example, event object, instead of an input_event

@@ -1,0 +1,25 @@
+Updating property file: /home/anderson/EMS/EventManagmentSystem/build/built-clean.properties
+Deleting directory /home/anderson/EMS/EventManagmentSystem/build
+clean:
+init:
+deps-jar:
+Created dir: /home/anderson/EMS/EventManagmentSystem/build
+Updating property file: /home/anderson/EMS/EventManagmentSystem/build/built-jar.properties
+Created dir: /home/anderson/EMS/EventManagmentSystem/build/classes
+Created dir: /home/anderson/EMS/EventManagmentSystem/build/empty
+Created dir: /home/anderson/EMS/EventManagmentSystem/build/generated-sources/ap-source-output
+Compiling 114 source files to /home/anderson/EMS/EventManagmentSystem/build/classes
+
+ERROR	{    Note: /home/anderson/EMS/EventManagmentSystem/src/GUI/TaskPanel.java uses or overrides a deprecated API.    }
+     	{    Note: Recompile with -Xlint:deprecation for details.							 }
+
+Copying 4 files to /home/anderson/EMS/EventManagmentSystem/build/classes
+compile:
+Created dir: /home/anderson/EMS/EventManagmentSystem/dist
+Copying 1 file to /home/anderson/EMS/EventManagmentSystem/build
+Copy libraries to /home/anderson/EMS/EventManagmentSystem/dist/lib.
+Building jar: /home/anderson/EMS/EventManagmentSystem/dist/EventManagmentSystem.jar
+To run this application from the command line without Ant, try:
+/usr/java/jdk1.6.0_43/bin/java -jar "/home/anderson/EMS/EventManagmentSystem/dist/EventManagmentSystem.jar"
+jar:
+BUILD SUCCESSFUL (total time: 2 seconds)

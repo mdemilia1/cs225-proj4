@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.6.0_27" class="java.beans.XMLDecoder">
+ <object class="com.horstmann.violet.UseCaseDiagramGraph">
+  <void method="addNode">
+   <object id="ActorNode0" class="com.horstmann.violet.ActorNode">
+    <void property="name">
+     <void property="text">
+      <string>Organizer</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>19.0</double>
+     <double>455.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="UseCaseNode0" class="com.horstmann.violet.UseCaseNode">
+    <void property="name">
+     <void property="text">
+      <string>Creates committees(*)(2)</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>327.0</double>
+     <double>97.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="UseCaseNode1" class="com.horstmann.violet.UseCaseNode">
+    <void property="name">
+     <void property="text">
+      <string>Chooses a committee(*)
+he/she will belong to</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>330.0</double>
+     <double>183.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="UseCaseNode2" class="com.horstmann.violet.UseCaseNode">
+    <void property="name">
+     <void property="text">
+      <string>Add meetings 
+to a calendar(*)(3)</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>338.0</double>
+     <double>264.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="UseCaseNode3" class="com.horstmann.violet.UseCaseNode">
+    <void property="name">
+     <void property="text">
+      <string>Manages event(*)(1)</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>337.0</double>
+     <double>7.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object class="com.horstmann.violet.NoteNode">
+    <void property="color">
+     <object id="Color0" class="java.awt.Color">
+      <int>176</int>
+      <int>196</int>
+      <int>222</int>
+      <int>255</int>
+     </object>
+    </void>
+    <void property="text">
+     <void property="text">
+      <string>(1) An event consists of professional meetings, 
+such as small conferences.</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>10.0</double>
+     <double>785.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object class="com.horstmann.violet.NoteNode">
+    <void property="color">
+     <object idref="Color0"/>
+    </void>
+    <void property="text">
+     <void property="text">
+      <string>(2) A committee manages different aspects 
+of organizing the event such as marketing, 
+registration, logistics, etc.</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>9.0</double>
+     <double>847.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="UseCaseNode4" class="com.horstmann.violet.UseCaseNode">
+    <void property="name">
+     <void property="text">
+      <string>Add due dates to 
+the event schedule(*)</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>337.0</double>
+     <double>344.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="UseCaseNode5" class="com.horstmann.violet.UseCaseNode">
+    <void property="name">
+     <void property="text">
+      <string>Edits the calendar(*)(3)</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>336.0</double>
+     <double>419.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object class="com.horstmann.violet.NoteNode">
+    <void property="color">
+     <object id="Color1" class="java.awt.Color">
+      <int>176</int>
+      <int>196</int>
+      <int>222</int>
+      <int>255</int>
+     </object>
+    </void>
+    <void property="text">
+     <void property="text">
+      <string>(3) A calendar will be used by the organizer to add meetings 
+and due dates to the events schedule. The calendar will be 
+editable by the organizer to enter information on a status of
+a task such as completed, half-done, behind schedule, etc.</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>306.0</double>
+     <double>790.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="UseCaseNode6" class="com.horstmann.violet.UseCaseNode">
+    <void property="name">
+     <void property="text">
+      <string>Sends e-mail messages
+ to specific contacts(*)(4)</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>333.0</double>
+     <double>498.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object class="com.horstmann.violet.NoteNode">
+    <void property="color">
+     <object idref="Color1"/>
+    </void>
+    <void property="text">
+     <void property="text">
+      <string>(4) A contact can be any participant of the event such as 
+attendees, speakers, presenters, moderators, a company, 
+sponsors, vendors, the organizer, etc.</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>306.0</double>
+     <double>878.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="UseCaseNode7" class="com.horstmann.violet.UseCaseNode">
+    <void property="name">
+     <void property="text">
+      <string>Add a new budget(*)(5) 
+category to an existing 
+group of budgets</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>322.0</double>
+     <double>577.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object class="com.horstmann.violet.NoteNode">
+    <void property="color">
+     <object idref="Color0"/>
+    </void>
+    <void property="text">
+     <void property="text">
+      <string>(5) A budget  is the expense(quoted and incurred) 
+and income(fundraising, registration, booth rental, etc.) 
+of an entity.</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>661.0</double>
+     <double>789.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="UseCaseNode8" class="com.horstmann.violet.UseCaseNode">
+    <void property="name">
+     <void property="text">
+      <string>Enters data(6) about the event 
+through the use of forms(7)</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>325.0</double>
+     <double>684.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object class="com.horstmann.violet.NoteNode">
+    <void property="color">
+     <object idref="Color0"/>
+    </void>
+    <void property="text">
+     <void property="text">
+      <string>(7) Forms and reports, a feature of most databases 
+should be cosidered to be implemented.</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>994.0</double>
+     <double>788.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object class="com.horstmann.violet.NoteNode">
+    <void property="color">
+     <object class="java.awt.Color">
+      <int>176</int>
+      <int>196</int>
+      <int>222</int>
+      <int>255</int>
+     </object>
+    </void>
+    <void property="text">
+     <void property="text">
+      <string>(6) Examples of data that should be included into forms 
+by the organizers are: budget, schedule, specific 
+sessions, people involved, etc.</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>657.0</double>
+     <double>861.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object class="com.horstmann.violet.NoteNode">
+    <void property="color">
+     <object idref="Color0"/>
+    </void>
+    <void property="text">
+     <void property="text">
+      <string>(*) Possible classes</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>997.0</double>
+     <double>841.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.UseCaseRelationshipEdge">
+    <void property="endArrowHead">
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/>
+    </void>
+   </object>
+   <object idref="ActorNode0"/>
+   <object idref="UseCaseNode2"/>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.UseCaseRelationshipEdge">
+    <void property="endArrowHead">
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/>
+    </void>
+   </object>
+   <object idref="ActorNode0"/>
+   <object idref="UseCaseNode1"/>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.UseCaseRelationshipEdge">
+    <void property="endArrowHead">
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/>
+    </void>
+   </object>
+   <object idref="ActorNode0"/>
+   <object idref="UseCaseNode0"/>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.UseCaseRelationshipEdge">
+    <void property="endArrowHead">
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/>
+    </void>
+   </object>
+   <object idref="ActorNode0"/>
+   <object idref="UseCaseNode3"/>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.UseCaseRelationshipEdge">
+    <void property="endArrowHead">
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/>
+    </void>
+   </object>
+   <object idref="ActorNode0"/>
+   <object idref="UseCaseNode4"/>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.UseCaseRelationshipEdge">
+    <void property="endArrowHead">
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/>
+    </void>
+   </object>
+   <object idref="ActorNode0"/>
+   <object idref="UseCaseNode5"/>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.UseCaseRelationshipEdge">
+    <void property="endArrowHead">
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/>
+    </void>
+   </object>
+   <object idref="ActorNode0"/>
+   <object idref="UseCaseNode6"/>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.UseCaseRelationshipEdge">
+    <void property="endArrowHead">
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/>
+    </void>
+   </object>
+   <object idref="ActorNode0"/>
+   <object idref="UseCaseNode7"/>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.UseCaseRelationshipEdge">
+    <void property="endArrowHead">
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/>
+    </void>
+   </object>
+   <object idref="ActorNode0"/>
+   <object idref="UseCaseNode8"/>
+  </void>
+ </object>
+</java>

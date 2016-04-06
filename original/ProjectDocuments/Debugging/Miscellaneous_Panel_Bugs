@@ -1,0 +1,25 @@
+EVENT REPORT PANEL-
+    VIEW BUTTON
+		It displays true when no one is registered for the event and a commitee has been added.
+	    It displays some event information and event_report_2.error when no one is registered for the event and a sub event has been added.
+	    //RESOLVED- It displays 1 when no one is registered for the event(don't not know why yet).
+
+EVENT MANAGEMENT PANEL-
+    Main event location not displayed on the Event Details.
+    Furthermore, I did not find a way to initially set it to a value	//FIXED or edit it afterwards.
+	Under "Event Details" the "Edit This Event" button when clicked, shows the editable dates one month behind for both start and end times from what was chosen as the Sign-up process. 
+		Also, since we do not have an actual description to show the user when the Main Event is, unless specified under details, it is easy to get confused.
+
+SUB EVENT DETAILS PANEL-
+    1. "edit" button shows a pop-up window that is resizable. Not a bug per se but it allows the user to create a weird looking window.
+//FIXED    2. It has an empty JTextFieldArea that does not seem to do anything.
+    3. If a sub event spans many days, it only shows its start date.
+    4. If a user clicks on the Sub Event Details and there are no events, then clicks the "Edit Event" button, then clicks the save button,
+         an exception is thrown. See Edit_Ghost_Sub_Event.exception.
+    5. If a user clicks on the Sub Event Details and there are no events, then clicks the "Remove Event" button, then clicks the yes option,
+         an exception is thrown. See Remove_Ghost_Sub_Event.exception.
+
+USER MANAGEMENT PANEL-
+    1. Admin may remove himself from being an admin, an action that can't be undone. It throws an exception. See Remove_Admin_Privileges.exception.
+    2. A regular user after given administrator privileges can do the same as above as well as demoting the main admin to a regular user. See above.
+
