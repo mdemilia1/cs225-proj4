@@ -69,7 +69,8 @@ country - The country the user lives in
   Length - 100 (should be less)
   Default - null
   
-participant -
+participant - I think this is a field that says whether the user is a participant or not (1 being true)
+this probably should be a boolean.
   Type - int
   Length
   Default - null
