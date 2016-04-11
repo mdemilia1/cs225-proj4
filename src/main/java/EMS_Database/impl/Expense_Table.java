@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.logging.Level;
+import exception.UpdateException;
 
 /**
  *
@@ -18,27 +19,7 @@ import java.util.logging.Level;
 public class Expense_Table extends InitDB implements Interface_BudgetData {
     private String tableName = "EXPENSE";
     
-    //SPECIAL FUNCTIONS    
-    @Override
-    public int nextValidUID() {
-	int newUID = 0;
-        try {
-
-            PreparedStatement idQueryStmt = dbConnection.prepareStatement("SELECT * FROM EXPENSE");
-            ResultSet rs = idQueryStmt.executeQuery();
-
-            while (rs.next()) {
-                newUID = rs.getInt("UID");
-                //System.out.println(newUID);
-            }
-            return (newUID + 1);
-
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-            System.exit(1);
-        }
-        return newUID; // should not be zero
-    }
+    //SPECIAL FUNCTIONS
 
     @Override
     public String queryEntireTable() {
@@ -95,22 +76,21 @@ public class Expense_Table extends InitDB implements Interface_BudgetData {
     }
     
     public int insertBudgetItem(InputExpense input) {
-	int newUID = nextValidUID();
         try {
             //Creating Statement
             PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO EXPENSE VALUES(?,?,?,?)");
-            AddAddressStmt.setInt(1, newUID);
-            AddAddressStmt.setString(2, input.getDescription());
-	    AddAddressStmt.setTimestamp(3, input.getTime());
-            AddAddressStmt.setDouble(4, input.getValue());
+            AddAddressStmt.setInt(++column, imput.getDescription());
+            AddAddressStmt.setInt(++column, imput.getTime());
+            AddAddressStmt.setInt(++column, imput.getValue());
             //Execute Statement
-            AddAddressStmt.executeUpdate();
+         return    AddAddressStmt.executeUpdate();
             
 
         } catch (SQLException sqle) {
-            System.err.println(sqle.getMessage());	
-        } finally {
-            return newUID;
+            System.err.println(sqle.getMessage());
+           // debugLog.log(Level., "EXPENSES table insertion failded. UID={0}", uid);
+
+           // throw new UpdateException("Error creating expense", sqle);
         }
     }
 
