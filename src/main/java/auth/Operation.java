@@ -5,7 +5,7 @@ package auth;
  */
 public enum Operation {
     VIEW,
-    WRITE,
+    MODIFY,
     CREATE,
     DELETE,
 }
