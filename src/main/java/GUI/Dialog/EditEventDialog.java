@@ -122,7 +122,7 @@ public class EditEventDialog extends javax.swing.JDialog {
 
         editTimeScheduleButton.setFont(dd.getStandardText());
         editTimeScheduleButton.setMinimumSize(dd.getBigButtonDimension());
-        editTimeScheduleButton.setText("edit");
+        editTimeScheduleButton.setText("Edit");
         editTimeScheduleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editTimeScheduleButtonActionPerformed(evt);
@@ -165,7 +165,7 @@ public class EditEventDialog extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(85, Short.MAX_VALUE)
+                .addContainerGap(102, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(headerLabel)
                     .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
