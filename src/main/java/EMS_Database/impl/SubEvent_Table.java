@@ -29,65 +29,41 @@ public class SubEvent_Table extends InitDB implements Interface_SubEventData {
      */
     @Override
     public int createSubEvent(InputSubEventData subevent) {
-	int newUID = nextValidUID();
 
 	try {
 	    //Creating Statement
-	    PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO SUBEVENTS VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
-	    AddAddressStmt.setInt(1, newUID);
-	    AddAddressStmt.setString(2, subevent.getDescription());
-	    AddAddressStmt.setString(3, subevent.getDetails());
-	    AddAddressStmt.setString(4, subevent.getTitle());
-	    AddAddressStmt.setInt(5, subevent.getComplete());
-	    AddAddressStmt.setString(6, subevent.getStreet());
-	    AddAddressStmt.setString(7, subevent.getCity());
-	    AddAddressStmt.setString(8, subevent.getState());
-	    AddAddressStmt.setString(9, subevent.getZipcode());
-	    AddAddressStmt.setString(10, subevent.getCountry());
-	    AddAddressStmt.setTimestamp(11, subevent.getStartTime());
-	    AddAddressStmt.setTimestamp(12, subevent.getEndTime());
+	    PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO SUBEVENTS VALUES(?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+		int column = 0;
+	    AddAddressStmt.setString(++column, subevent.getDescription());
+	    AddAddressStmt.setString(++column, subevent.getDetails());
+	    AddAddressStmt.setString(++column, subevent.getTitle());
+	    AddAddressStmt.setInt(++column, subevent.getComplete());
+	    AddAddressStmt.setString(++column, subevent.getStreet());
+	    AddAddressStmt.setString(++column, subevent.getCity());
+	    AddAddressStmt.setString(++column, subevent.getState());
+	    AddAddressStmt.setString(++column, subevent.getZipcode());
+	    AddAddressStmt.setString(++column, subevent.getCountry());
+	    AddAddressStmt.setTimestamp(++column, subevent.getStartTime());
+	    AddAddressStmt.setTimestamp(++column, subevent.getEndTime());
 
 	    //Execute Statement
-	    AddAddressStmt.executeUpdate();
+	    return AddAddressStmt.executeUpdate();
 
-	    for (int uid : currentUIDList(tableName)) {
-		if (newUID == uid) {
-		    throw new DoesNotExistException("Problem inserting UID=" + newUID + " into database");
-		}
-	    }
+	//    for (int uid : currentUIDList(tableName)) {
+	//	if (newUID == uid) {
+	//	    throw new DoesNotExistException("Problem inserting UID=" + newUID + " into database");
+	//	}
+	//   }
+        // Do we need this? - Tom
 
 	} catch (SQLException sqle) {
 	    System.err.println(sqle.getMessage());
-	} finally {
-	    return newUID;
-	}
+		//  debugLog.log(Level.SEVERE, "SUBEVENT table insertion failed. UID={0}", uid);
+		//
+		//  throw new UpdateException("Error creating sub-event", sqle);
     }
 
-    /**
-     * Gets the next valid UID in the Events table
-     *
-     * @return the next valid UID that should be used.
-     */
-    @Override
-    public int nextValidUID() {
-	int newUID = 0;
-	try {
 
-	    PreparedStatement idQueryStmt = dbConnection.prepareStatement("SELECT * FROM SUBEVENTS");
-	    ResultSet rs = idQueryStmt.executeQuery();
-
-	    while (rs.next()) {
-		newUID = rs.getInt("UID");
-		//System.out.println(newUID);
-	    }
-	    return (newUID + 1);
-
-	} catch (SQLException sqle) {
-	    sqle.printStackTrace();
-	    System.exit(1);
-	}
-	return newUID; // should not be zero
-    }
 
     /**
      * A debug function to display the entire contents of this table

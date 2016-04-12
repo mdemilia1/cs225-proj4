@@ -48,37 +48,33 @@ public class UserData_Table extends InitDB implements Interface_UserData {
     @Override
     public int createUser(InputUser user) {
 
-	int uid = nextValidUID();
-
 	try {
 	    //Creating Statement
-	    PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO USERS VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-	    AddAddressStmt.setInt(1, uid);
-	    AddAddressStmt.setInt(2, user.getLevel());
-	    AddAddressStmt.setString(3, user.getFirstName());
-	    AddAddressStmt.setString(4, user.getLastName());
-	    AddAddressStmt.setString(5, user.getPwd());
-	    AddAddressStmt.setString(6, user.getEmail());
-	    AddAddressStmt.setString(7, user.getPhone());
-	    AddAddressStmt.setString(8, user.getStreet());
-	    AddAddressStmt.setString(9, user.getCity());
-	    AddAddressStmt.setString(10, user.getState());
-	    AddAddressStmt.setString(11, user.getZipcode());
-	    AddAddressStmt.setString(12, user.getCountry());
-	    AddAddressStmt.setInt(13, user.getParticipant());
-	    AddAddressStmt.setInt(14, user.getEventLevel());
+	    PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO USERS VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+		int column = 0;
+		AddAddressStmt.setInt(++column, user.getLevel());
+		AddAddressStmt.setString(++column, user.getFirstName());
+		AddAddressStmt.setString(++column, user.getLastName());
+		AddAddressStmt.setString(++column, user.getPwd());
+		AddAddressStmt.setString(++column, user.getEmail());
+		AddAddressStmt.setString(++column, user.getPhone());
+		AddAddressStmt.setString(++column, user.getStreet());
+		AddAddressStmt.setString(++column, user.getCity());
+		AddAddressStmt.setString(++column, user.getState());
+		AddAddressStmt.setString(++column, user.getZipcode());
+		AddAddressStmt.setString(++column, user.getCountry());
+		AddAddressStmt.setInt(++column, user.getParticipant());
+		AddAddressStmt.setInt(++column, user.getEventLevel());
 
 	    //Execute Statement
-	    AddAddressStmt.executeUpdate();
+	    return AddAddressStmt.executeUpdate();
 
 
 	} catch (SQLException sqle) {
-	    System.err.println(sqle.getMessage());
-	    debugLog.log(Level.SEVERE, "USERS table insertion failed. UID={0}", uid);
-	} finally {
-	    return uid;
+        System.err.println(sqle.getMessage());
+	//    debugLog.log(Level.SEVERE, "USERS table insertion failed. UID={0}", uid);
+	//	throw new UpdateException("Error creating user", sqle);
 	}
-    }
 
     /**
      * A method to look up a UID by email address.

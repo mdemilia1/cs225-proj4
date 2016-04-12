@@ -28,63 +28,39 @@ public class Committees_Table extends InitDB implements Interface_CommitteeData 
      */
     @Override
     public int createCommittee(InputCommittee committee) {
-        int newUID = nextValidUID();
 
         try {
             //Creating Statement
-            PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO COMMITTEE VALUES(?,?,?,?,?,?,?,?,?)");
-            AddAddressStmt.setInt(1, newUID);
-            AddAddressStmt.setString(2, committee.getTitle());
-            AddAddressStmt.setInt(3, committee.getChairman());
-            AddAddressStmt.setString(4, listToString(committee.getBudgetAcess()));
-            AddAddressStmt.setString(5, listToString(committee.getCommitteeMembers()));
-            AddAddressStmt.setString(6, listToString(committee.getTaskList()));
-	    AddAddressStmt.setString(7, listToString(committee.getIncome()));
-	    AddAddressStmt.setString(8, listToString(committee.getExpense()));	    
-            AddAddressStmt.setDouble(9, committee.getBudget());
+            PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO COMMITTEE VALUES(?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            int column = 0;
+            AddAddressStmt.setString(++column, committee.getTitle());
+            AddAddressStmt.setInt(++column, committee.getChairman());
+            AddAddressStmt.setString(++column, listToString(committee.getBudgetAcess()));
+            AddAddressStmt.setString(++column, listToString(committee.getCommitteeMembers()));
+            AddAddressStmt.setString(++column, listToString(committee.getTaskList()));
+    	    AddAddressStmt.setString(++column, listToString(committee.getIncome()));
+    	    AddAddressStmt.setString(++column, listToString(committee.getExpense()));
+            AddAddressStmt.setDouble(++column, committee.getBudget());
             
             //Execute Statement
-            AddAddressStmt.executeUpdate();
+            return AddAddressStmt.executeUpdate();
             
             //check for duplicates
-            for(int uid : currentUIDList(tableName)){
-                if(newUID == uid){
-                    throw new DoesNotExistException("CommitteeTable");
-                }
-            }
+        //    for(int uid : currentUIDList(tableName)){
+        //        if(newUID == uid){
+        //            throw new DoesNotExistException("CommitteeTable");
+        //        }
+        //    }
+            // Do we need this? - Tom
 
         } catch (SQLException sqle) {
             System.err.println(sqle.getMessage()); //seriously bad...
-        } finally {
-            return newUID;
-        }
+            //  debugLog.log(Level.SEVERE, "COMMITTEE table insertion failed. UID={0}", uid);
+            //
+            //  throw new UpdateException("Error creating committee", sqle);
     }
 
-    /**
-     * Gets the next valid UID in the Events table
-     *
-     * @return the next valid UID that should be used.
-     */
-    @Override
-    public int nextValidUID() {
-        int newUID = 0;
-        try {
 
-            PreparedStatement idQueryStmt = dbConnection.prepareStatement("SELECT * FROM COMMITTEE");
-            ResultSet rs = idQueryStmt.executeQuery();
-
-            while (rs.next()) {
-                newUID = rs.getInt("UID");
-                //System.out.println(newUID);
-            }
-            return (newUID + 1);
-
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-            System.exit(1);
-        }
-        return newUID; // should not be zero
-    }
 
     /**
      * Debug function for returning the entire table as a string.

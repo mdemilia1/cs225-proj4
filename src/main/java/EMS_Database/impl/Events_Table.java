@@ -31,62 +31,35 @@ public class Events_Table extends InitDB implements Interface_EventData {
      */
     @Override
     public int createEvent(InputEventData event) {
-        int newUID = nextValidUID();
 
         try {
             //Creating Statement
-            PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO EVENTS VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            AddAddressStmt.setInt(1, newUID);
-            AddAddressStmt.setString(2, event.getDescription());
-            AddAddressStmt.setString(3, event.getDetails());
-            AddAddressStmt.setString(4, event.getTitle());
-            AddAddressStmt.setTimestamp(5, event.getStartDate());
-            AddAddressStmt.setTimestamp(6, event.getEndDate());
-            AddAddressStmt.setInt(7, event.getComplete());
-            AddAddressStmt.setString(8, event.getStreet());
-            AddAddressStmt.setString(9, event.getCity());
-            AddAddressStmt.setString(10, event.getState());
-            AddAddressStmt.setString(11, event.getZipcode());
-            AddAddressStmt.setString(12, event.getCountry());
-            AddAddressStmt.setString(13, listToString(event.getOrganizerList())); //inserted as a string
-            AddAddressStmt.setString(14, listToString(event.getSubEventList())); //inserted as a string
-            AddAddressStmt.setString(15, listToString(event.getParticipantList())); //inserted as a string
-            AddAddressStmt.setString(16, listToString(event.getCommittee())); //inserted as a string
+            PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO EVENTS VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            int column = 0;
+            AddAddressStmt.setString(++column, event.getDescription());
+            AddAddressStmt.setString(++column, event.getDetails());
+            AddAddressStmt.setString(++column, event.getDetails());
+            AddAddressStmt.setString(++column, event.getTitle());
+            AddAddressStmt.setTimestamp(++column, event.getStartDate());
+            AddAddressStmt.setTimestamp(++column, event.getEndDate());
+            AddAddressStmt.setInt(++column, event.getComplete());
+            AddAddressStmt.setString(++column, event.getStreet());
+            AddAddressStmt.setString(++column, event.getCity());
+            AddAddressStmt.setString(++column, event.getState());
+            AddAddressStmt.setString(++column, event.getZipcode());
+            AddAddressStmt.setString(++column, event.getCountry());
+            AddAddressStmt.setString(++column, listToString(event.getOrganizerList())); //inserted as a string
+            AddAddressStmt.setString(++column, listToString(event.getSubEventList())); //inserted as a string
+            AddAddressStmt.setString(++column, listToString(event.getParticipantList())); //inserted as a string
+            AddAddressStmt.setString(++column, listToString(event.getCommittee())); //inserted as a string
 
             //Execute Statement
-            AddAddressStmt.executeUpdate();
-
+            return AddAddressStmt.executeUpdate();
         } catch (SQLException sqle) {
             System.err.println(sqle.getMessage());
-        } finally {
-            return newUID;
-        }
-    }
-
-    /**
-     * Gets the next vaild UID in the Events table
-     *
-     * @return the next valid UID that should be used.
-     */
-    @Override
-    public int nextValidUID() {
-        int newUID = 0;
-        try {
-
-            PreparedStatement idQueryStmt = dbConnection.prepareStatement("SELECT * FROM EVENTS");
-            ResultSet rs = idQueryStmt.executeQuery();
-
-            while (rs.next()) {
-                newUID = rs.getInt("UID");
-                //System.out.println(newUID);
-            }
-            return (newUID + 1);
-
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-            System.exit(1);
-        }
-        return newUID; // should not be zero
+        //  debugLog.log(Level.SEVERE, "EVENT table insertion failed. UID={0}", uid);
+        //
+        //  throw new UpdateException("Error creating event", sqle);
     }
 
     /**

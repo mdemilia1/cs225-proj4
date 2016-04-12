@@ -74,61 +74,36 @@ public class Tasks_Table extends InitDB implements Interface_TaskData {
      */
     @Override
     public int createTask(InputTask task) {
-	int newUID = nextValidUID();
 
 	try {
 	    //Creating Statement
-	    PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO TASKS VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
-	    AddAddressStmt.setInt(1, newUID);
-	    AddAddressStmt.setString(2, task.getDescripton());
-	    AddAddressStmt.setString(3, task.getDetails());
-	    AddAddressStmt.setString(4, task.getTitle());
-	    AddAddressStmt.setString(5, task.getStreet());
-	    AddAddressStmt.setString(6, task.getCity());
-	    AddAddressStmt.setString(7, task.getState());
-	    AddAddressStmt.setString(8, task.getZipcode());
-	    AddAddressStmt.setString(9, task.getCountry());
-	    AddAddressStmt.setTimestamp(10, task.getStartDate());
-	    AddAddressStmt.setTimestamp(11, task.getEndDate());
-	    AddAddressStmt.setInt(12, task.getComplete());
-	    AddAddressStmt.setString(13, listToString(task.getManager()));
+	    PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO TASKS VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+		int column = 0;
+	    AddAddressStmt.setString(++column, task.getDescripton());
+	    AddAddressStmt.setString(++column, task.getDetails());
+	    AddAddressStmt.setString(++column, task.getTitle());
+	    AddAddressStmt.setString(++column, task.getStreet());
+	    AddAddressStmt.setString(++column, task.getCity());
+	    AddAddressStmt.setString(++column, task.getState());
+	    AddAddressStmt.setString(++column, task.getZipcode());
+	    AddAddressStmt.setString(++column, task.getCountry());
+	    AddAddressStmt.setTimestamp(++column, task.getStartDate());
+	    AddAddressStmt.setTimestamp(++column, task.getEndDate());
+	    AddAddressStmt.setInt(++column, task.getComplete());
+	    AddAddressStmt.setString(++column, listToString(task.getManager()));
 
 	    //Execute Statement
-	    AddAddressStmt.executeUpdate();
+	    return AddAddressStmt.executeUpdate();
 
 
 	} catch (SQLException sqle) {
 	    System.err.println(sqle.getMessage()); //seriously bad...
-	} finally {
-	    return newUID;
-	}
+		//  debugLog.log(Level.SEVERE, "TASKS table insertion failed. UID={0}", uid);
+		//
+		//  throw new UpdateException("Error creating Tasks", sqle);
     }
 
-    /**
-     * Gets the next valid UID in the Events table
-     *
-     * @return the next valid UID that should be used.
-     */
-    @Override
-    public int nextValidUID() {
-	int newUID = 0;
-	try {
 
-	    PreparedStatement idQueryStmt = dbConnection.prepareStatement("SELECT * FROM TASKS");
-	    ResultSet rs = idQueryStmt.executeQuery();
-
-	    while (rs.next()) {
-		newUID = rs.getInt("UID");
-		//System.out.println(newUID);
-	    }
-	    return (newUID + 1);
-
-	} catch (SQLException sqle) {
-	    System.err.println(sqle.getMessage());
-	    System.exit(1);
-	}
-	return newUID; // should not be zero
-    }
 
     /**
      * This function removes a committee specified by the UID.
