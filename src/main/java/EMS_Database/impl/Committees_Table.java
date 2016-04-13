@@ -139,12 +139,15 @@ public class Committees_Table extends InitDB implements Interface_CommitteeData 
     }
 
     @Override
-    public double remainingMonies(int uid) throws DoesNotExistException {
+    public double remainingMonies(int uid) throws DoesNotExistException, AuthorizationException {
+    	Permissions.get().checkPermission(tableName, "INCOME", Operation.VIEW);
+    	Permissions.get().checkPermission(tableName, "EXPENSE", Operation.VIEW);
 	return totalIncome(uid)-totalExpense(uid);
     }
 
     @Override
-    public double totalIncome(int uid) throws DoesNotExistException {
+    public double totalIncome(int uid) throws DoesNotExistException, AuthorizationException {
+    	Permissions.get().checkPermission(tableName, "INCOME", Operation.VIEW);
 	double income = 0.0;
 	Income_Table in = new Income_Table();
 	for(int uids : getIncome(uid)){
@@ -154,7 +157,8 @@ public class Committees_Table extends InitDB implements Interface_CommitteeData 
     }
 
     @Override
-    public double totalExpense(int uid) throws DoesNotExistException {
+    public double totalExpense(int uid) throws DoesNotExistException, AuthorizationException {
+    	Permissions.get().checkPermission(tableName, "EXPENSE", Operation.VIEW);
 	double expense = 0.0;
 	Expense_Table ex = new Expense_Table();
 	for(int uids : getExpense(uid)){
@@ -171,41 +175,49 @@ public class Committees_Table extends InitDB implements Interface_CommitteeData 
     ///////////////////GETTERS////////////////////
     @Override
     public String getTitle(int uid) throws DoesNotExistException, AuthorizationException {
+       Permissions.get().checkPermission(tableName, "TITLE", Operation.VIEW);
        return getDBString("TITLE",tableName,uid);
     }
 
     @Override
-    public int getChairman(int uid) throws DoesNotExistException {
+    public int getChairman(int uid) throws DoesNotExistException, AuthorizationException {
+       Permissions.get().checkPermission(tableName, "CHAIRMAN", Operation.VIEW);
         return getDBInt("CHAIRMAN",tableName,uid);
     }
 
      @Override
-    public ArrayList<Integer> getBudgetAccessList(int uid) throws DoesNotExistException {
+    public ArrayList<Integer> getBudgetAccessList(int uid) throws DoesNotExistException, AuthorizationException {
+       Permissions.get().checkPermission(tableName, "BUDGETACCESS", Operation.VIEW);
         return getDBArrayList("BUDGETACCESS",tableName,uid);
     }
 
     @Override
-    public ArrayList<Integer> getCommitteeMembers(int uid) throws DoesNotExistException {
+    public ArrayList<Integer> getCommitteeMembers(int uid) throws DoesNotExistException, AuthorizationException {
+       Permissions.get().checkPermission(tableName, "MEMBERS", Operation.VIEW);
         return getDBArrayList("MEMBERS",tableName,uid);
     }
 
     @Override
-    public ArrayList<Integer> getTaskList(int uid) throws DoesNotExistException {
+    public ArrayList<Integer> getTaskList(int uid) throws DoesNotExistException, AuthorizationException {
+       Permissions.get().checkPermission(tableName, "TASKS", Operation.VIEW);
         return getDBArrayList("TASKS",tableName,uid);
     }    
 
     @Override
-    public ArrayList<Integer> getIncome(int uid) throws DoesNotExistException {
+    public ArrayList<Integer> getIncome(int uid) throws DoesNotExistException, AuthorizationException {
+       Permissions.get().checkPermission(tableName, "INCOME", Operation.VIEW);
 	return getDBArrayList("INCOME",tableName,uid);
     }
 
     @Override
-    public ArrayList<Integer> getExpense(int uid) throws DoesNotExistException {
+    public ArrayList<Integer> getExpense(int uid) throws DoesNotExistException, AuthorizationException {
+       Permissions.get().checkPermission(tableName, "EXPENSE", Operation.VIEW);
 	return getDBArrayList("EXPENSE",tableName,uid);
     }    
     
     @Override
-    public double getBudget(int uid) throws DoesNotExistException {
+    public double getBudget(int uid) throws DoesNotExistException, AuthorizationException {
+       Permissions.get().checkPermission(tableName, "BUDGET", Operation.VIEW);
         return getDBDouble("BUDGET",tableName,uid);
     }
     
@@ -214,42 +226,50 @@ public class Committees_Table extends InitDB implements Interface_CommitteeData 
     
     /////////////////////////SETTERS///////////////////////////
     @Override
-    public void setTitle(int uid, String title) throws DoesNotExistException {
+    public void setTitle(int uid, String title) throws DoesNotExistException, AuthorizationException {
+        Permissions.get().checkPermission(tableName, "TITLE", Operation.MODIFY);
 	setDBString("TITLE",tableName,uid,title);
     }
 
     @Override
-    public void setChairman(int uid, int nuid) throws DoesNotExistException {
+    public void setChairman(int uid, int nuid) throws DoesNotExistException, AuthorizationException {
+        Permissions.get().checkPermission(tableName, "CHAIRMAN", Operation.MODIFY);
         setDBInt("CHAIRMAN",tableName,uid,nuid);
     }
     
     @Override
-    public void setBudget(int uid, double budget) throws DoesNotExistException {
+    public void setBudget(int uid, double budget) throws DoesNotExistException, AuthorizationException {
+        Permissions.get().checkPermission(tableName, "BUDGET", Operation.MODIFY);
         setDBDouble("BUDGET",tableName,uid,budget);
     }  
 
     @Override
-    public void setBudgetAccessList(int uid, ArrayList<Integer> accessList) throws DoesNotExistException {
+    public void setBudgetAccessList(int uid, ArrayList<Integer> accessList) throws DoesNotExistException, AuthorizationException {
+        Permissions.get().checkPermission(tableName, "BUDGETACCESS", Operation.MODIFY);
         setDBArrayList("BUDGETACCESS",tableName,uid,accessList);
     }
 
     @Override
-    public void setCommitteeMembers(int uid, ArrayList<Integer> memberList) throws DoesNotExistException {
+    public void setCommitteeMembers(int uid, ArrayList<Integer> memberList) throws DoesNotExistException, AuthorizationException {
+        Permissions.get().checkPermission(tableName, "MEMBERS", Operation.MODIFY);
         setDBArrayList("MEMBERS",tableName,uid,memberList);
     }
 
     @Override
-    public void setIncome(int uid, ArrayList<Integer> income) throws DoesNotExistException {
+    public void setIncome(int uid, ArrayList<Integer> income) throws DoesNotExistException, AuthorizationException {
+        Permissions.get().checkPermission(tableName, "INCOME", Operation.MODIFY);
 	setDBArrayList("INCOME",tableName,uid,income);
     }
 
     @Override
-    public void setExpense(int uid, ArrayList<Integer> expense) throws DoesNotExistException {
+    public void setExpense(int uid, ArrayList<Integer> expense) throws DoesNotExistException, AuthorizationException {
+        Permissions.get().checkPermission(tableName, "EXPENSE", Operation.MODIFY);
 	setDBArrayList("EXPENSE",tableName,uid,expense);
     }
 
     @Override
-    public void setTaskList(int uid, ArrayList<Integer> taskList) throws DoesNotExistException {
+    public void setTaskList(int uid, ArrayList<Integer> taskList) throws DoesNotExistException, AuthorizationException {
+        Permissions.get().checkPermission(tableName, "TASKS", Operation.MODIFY);
         setDBArrayList("TASKS",tableName,uid,taskList);
     }        
 }
