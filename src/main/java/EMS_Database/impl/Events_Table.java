@@ -39,7 +39,7 @@ public class Events_Table extends InitDB implements Interface_EventData {
         // Not sure about this commented out code. It seems like the proper step to take but not sure how exactly to do so if even possible
         try {
             //Creating Statement
-            PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO EVENTS VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO EVENTS VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             int column = 0;
             AddAddressStmt.setString(++column, event.getDescription());
             AddAddressStmt.setString(++column, event.getDetails());

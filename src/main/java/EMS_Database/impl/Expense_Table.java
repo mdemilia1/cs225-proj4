@@ -78,7 +78,7 @@ public class Expense_Table extends InitDB implements Interface_BudgetData {
     public int insertBudgetItem(InputExpense input) {
         try {
             //Creating Statement
-            PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO EXPENSE VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO EXPENSE VALUES(NULL,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             int column = 0;
             AddAddressStmt.setInt(++column, imput.getDescription());
             AddAddressStmt.setInt(++column, imput.getTime());

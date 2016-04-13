@@ -33,7 +33,7 @@ public class SubEvent_Table extends InitDB implements Interface_SubEventData {
 
 	try {
 	    //Creating Statement
-	    PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO SUBEVENTS VALUES(?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+	    PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO SUBEVENTS VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 		int column = 0;
 	    AddAddressStmt.setString(++column, subevent.getDescription());
 	    AddAddressStmt.setString(++column, subevent.getDetails());

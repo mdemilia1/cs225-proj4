@@ -80,7 +80,7 @@ public class Income_Table extends InitDB implements Interface_BudgetData {
 
 	try {
 	    //Creating Statement
-	    PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO INCOME VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+	    PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO INCOME VALUES(NULL,?,?,?)", Statement.RETURN_GENERATED_KEYS);
         AddAddressStmt.setInt(++column, imput.getDescription());
         AddAddressStmt.setInt(++column, imput.getTime());
         AddAddressStmt.setInt(++column, imput.getValue());

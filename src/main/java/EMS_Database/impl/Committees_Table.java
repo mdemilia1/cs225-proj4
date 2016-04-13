@@ -35,7 +35,7 @@ public class Committees_Table extends InitDB implements Interface_CommitteeData 
 
         try {
             //Creating Statement
-            PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO COMMITTEE VALUES(?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO COMMITTEE VALUES(NULL,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             int column = 0;
             AddAddressStmt.setString(++column, committee.getTitle());
             AddAddressStmt.setInt(++column, committee.getChairman());
