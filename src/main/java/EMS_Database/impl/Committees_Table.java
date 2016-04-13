@@ -10,6 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
+import auth.AuthorizationException;
+import auth.Operation;
+import auth.Permissions;
 
 /**
  *
@@ -103,13 +106,15 @@ public class Committees_Table extends InitDB implements Interface_CommitteeData 
      * @param uid the UID of the committee to be removed.
      * @return a boolean. true if removal was successful.
      * @throws DoesNotExistException if the uid does not exist in the table.
+     * @throws AuthorizationException if the accessing user does not have authorization to do so
      */
     @Override
-    public void removeCommittee(int uid) throws DoesNotExistException {
+    public void removeCommittee(int uid) throws DoesNotExistException, AuthorizationException {
         String table = "COMMITTEE";
-	//checking for existance of that uid
-	boolean exists = false;
-	for (int validID : currentUIDList(table)) {
+        Permissions.get().checkPermission(table, null, Operation.DELETE, uid);
+        //checking for existance of that uid
+        boolean exists = false;
+        for (int validID : currentUIDList(table)) {
 	    if (validID == uid) {
 		exists = true;
 		break;
@@ -164,7 +169,7 @@ public class Committees_Table extends InitDB implements Interface_CommitteeData 
     
     ///////////////////GETTERS////////////////////
     @Override
-    public String getTitle(int uid) throws DoesNotExistException {
+    public String getTitle(int uid) throws DoesNotExistException, AuthorizationException {
        return getDBString("TITLE",tableName,uid);
     }
 
