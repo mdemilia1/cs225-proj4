@@ -74,7 +74,9 @@ public class Tasks_Table extends InitDB implements Interface_TaskData {
      * @return an int of the UID of the created task.
      */
     @Override
-    public int createTask(InputTask task) {
+    public int createTask(InputTask task) throws AuthenticationException {
+    	String table = "TASKS";
+    	Permissions.get().checkPermissions(table,null,Operation.CREATE);
 	int newUID = nextValidUID();
 
 	try {
@@ -141,7 +143,7 @@ public class Tasks_Table extends InitDB implements Interface_TaskData {
     @Override
     public void removeTask(int uid) throws DoesNotExistException, AuthorizationException {
 	String table = "TASKS";
-        Permissions.get().checkPermission(table, null, Operation.DELETE, uid);
+        Permissions.get().checkPermission(table, null, Operation.DELETE);
 	//checking for existance of that uid
 	boolean exists = false;
 	for (int validID : currentUIDList(table)) {
