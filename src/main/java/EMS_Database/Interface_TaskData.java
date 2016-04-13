@@ -2,6 +2,7 @@ package EMS_Database;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import auth.AuthorizationException;
 
 /**
  *
