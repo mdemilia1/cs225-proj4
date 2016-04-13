@@ -75,18 +75,13 @@ public class Tasks_Table extends InitDB implements Interface_TaskData {
      * @return an int of the UID of the created task.
      */
     @Override
-<<<<<<< HEAD
-    public int createTask(InputTask task) {
-=======
     public int createTask(InputTask task) throws AuthenticationException {
     	String table = "TASKS";
     	Permissions.get().checkPermissions(table,null,Operation.CREATE);
-	int newUID = nextValidUID();
->>>>>>> origin/authorization
 
 	try {
 	    //Creating Statement
-		PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO TASKS VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO TASKS VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 		int column = 0;
 		AddAddressStmt.setString(++column, task.getDescripton());
 		AddAddressStmt.setString(++column, task.getDetails());
