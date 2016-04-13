@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import auth.AuthorizationException;
 import auth.Operation;
 import auth.Permissions;
+import exception.UpdateException;
 
 /**
  *

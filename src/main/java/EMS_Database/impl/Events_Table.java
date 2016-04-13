@@ -8,7 +8,7 @@ import EMS_Database.InputEventData;
 import auth.AuthorizationException;
 import auth.Operation;
 import auth.Permissions;
-
+import exception.UpdateException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

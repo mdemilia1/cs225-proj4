@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
+import exception.UpdateException;
 
 /**
  * Database implementation of all user related data.
@@ -50,7 +51,7 @@ public class UserData_Table extends InitDB implements Interface_UserData {
 
 	try {
 	    //Creating Statement
-	    PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO USERS VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+	    PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO USERS VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 		int column = 0;
 		AddAddressStmt.setInt(++column, user.getLevel());
 		AddAddressStmt.setString(++column, user.getFirstName());
