@@ -1,7 +1,7 @@
 package EMS_Database.impl;
 
 import EMS_Database.DoesNotExistException;
-import EMS_Database.AuthorizationException;
+import auth.AuthorizationException;
 import EMS_Database.InitDB;
 import static EMS_Database.InitDB.debugLog;
 import EMS_Database.InputTask;
