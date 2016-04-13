@@ -112,7 +112,7 @@ public class Committees_Table extends InitDB implements Interface_CommitteeData 
     @Override
     public void removeCommittee(int uid) throws DoesNotExistException, AuthorizationException {
         String table = "COMMITTEE";
-        Permissions.get().checkPermission(table, null, Operation.DELETE, uid);
+        Permissions.get().checkPermission(table, null, Operation.DELETE);
         //checking for existance of that uid
         boolean exists = false;
         for (int validID : currentUIDList(table)) {

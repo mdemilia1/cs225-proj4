@@ -63,7 +63,7 @@ public class NewExpenseDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         newExpenseLabel.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
-        newExpenseLabel.setText("Add a new Expense");
+        newExpenseLabel.setText("Add a New Expense");
 
         descriptionLabel.setText("Description:");
 

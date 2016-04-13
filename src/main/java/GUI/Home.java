@@ -418,7 +418,7 @@ public class Home extends javax.swing.JFrame {
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         // TODO add your handling code here:
-        this.dispose();
+        System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void committeeReportsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_committeeReportsMenuItemActionPerformed

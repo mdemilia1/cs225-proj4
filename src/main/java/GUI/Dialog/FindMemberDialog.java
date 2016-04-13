@@ -78,6 +78,7 @@ public class FindMemberDialog extends javax.swing.JDialog {
         memberListScrollPane.setViewportView(memberList);
 
         listLabel.setFont(dd.getStandardText());
+        listLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         listLabel.setText("Member List");
 
         SelectButton.setFont(dd.getStandardText());
@@ -96,24 +97,21 @@ public class FindMemberDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(memberListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(SelectButton))
-                    .addComponent(listLabel))
-                .addContainerGap(211, Short.MAX_VALUE))
+                    .addComponent(listLabel)
+                    .addComponent(SelectButton)
+                    .addComponent(memberListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(SelectButton)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(listLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(memberListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addGap(24, 24, 24)
+                .addComponent(listLabel)
+                .addGap(18, 18, 18)
+                .addComponent(memberListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addComponent(SelectButton)
+                .addContainerGap())
         );
 
         pack();

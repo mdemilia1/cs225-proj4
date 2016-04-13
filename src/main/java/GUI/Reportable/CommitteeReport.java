@@ -70,7 +70,9 @@ public class CommitteeReport extends javax.swing.JDialog {
 
         jScrollPane1.setFocusable(false);
 
+        jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
+        jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
