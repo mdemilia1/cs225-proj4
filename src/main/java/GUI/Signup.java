@@ -378,6 +378,8 @@ public class Signup extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    // Change made by Syed
+    
     private void signupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupButtonActionPerformed
 
         if (firstNameField.getText().equals("") || firstNameField.getText().equals(FIRST_NAME_FIELD)
