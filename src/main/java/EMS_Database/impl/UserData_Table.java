@@ -206,6 +206,8 @@ public class UserData_Table extends InitDB implements Interface_UserData {
 				returnQuery.append(",");
 				returnQuery.append(rs.getString("LNAME"));
 				returnQuery.append(",");
+				returnQuery.append(rs.getString("PWD"));
+				returnQuery.append(",");
 				returnQuery.append(rs.getString("EMAIL"));
 				returnQuery.append(",");
 				returnQuery.append(rs.getString("PHONE"));
@@ -573,7 +575,6 @@ public class UserData_Table extends InitDB implements Interface_UserData {
 	 */
 	@Override
 	public void setAddress(int uid, Address address) throws DoesNotExistException, AuthorizationException {
-		Permissions.get().checkPermission(tableName, "ADDRESS", Operation.MODIFY);
 		setStreet(uid, address.getStreet());
 		setCity(uid, address.getCity());
 		setState(uid, address.getState());
