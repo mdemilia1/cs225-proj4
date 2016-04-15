@@ -15,9 +15,12 @@ import BackEnd.UserSystem.UserExceptions.ZipCodeInvalidFormatException;
 import BackEnd.UserSystem.UserExceptions.ZipCodeInvalidLengthException;
 import BackEnd.UserSystem.PhoneNumber;
 import BackEnd.UserSystem.User;
+
+import java.awt.*;
+import java.util.Vector;
+
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import java.awt.Color;
 
 /**
  *
@@ -104,11 +107,8 @@ public class Signup extends javax.swing.JPanel {
         phoneNumberLabel.setFont(new java.awt.Font("Candara", 1, 14)); // NOI18N
         phoneNumberLabel.setText("Phone Number");
 
-        /****
-         * The code below is used to initially add text and text color to form fields
-         ****/
+        //<editor-fold desc="The code below is used to initially add text and text color to form fields">
         firstNameField.setText(FIRST_NAME_FIELD);
-        //Change made by Syed
         firstNameField.setForeground(java.awt.Color.gray);
         firstNameField.setPreferredSize(new java.awt.Dimension(380, 28));
         firstNameField.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -121,7 +121,6 @@ public class Signup extends javax.swing.JPanel {
         });
 
         lastNameField.setText(LAST_NAME_FIELD);
-        //Change made by Syed
         lastNameField.setForeground(java.awt.Color.gray);
         lastNameField.setPreferredSize(new java.awt.Dimension(360, 28));
         lastNameField.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -146,7 +145,6 @@ public class Signup extends javax.swing.JPanel {
         reenterPasswordLabel.setText("Re-enter password");
 
         phoneNumberField.setText(PHONE_NUMBER_FIELD);
-        //Change made by Syed
         phoneNumberField.setForeground(java.awt.Color.gray);
         phoneNumberField.setPreferredSize(new java.awt.Dimension(380, 28));
         phoneNumberField.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -162,7 +160,6 @@ public class Signup extends javax.swing.JPanel {
         addressLabel.setText("Address");
 
         streetField.setText(STREET_FIELD);
-        //Change made by Syed
         streetField.setForeground(java.awt.Color.gray);
         streetField.setPreferredSize(new java.awt.Dimension(380, 28));
         streetField.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -175,7 +172,6 @@ public class Signup extends javax.swing.JPanel {
         });
 
         cityField.setText(CITY_FIELD);
-        //Change made by Syed
         cityField.setForeground(java.awt.Color.gray);
         cityField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -187,7 +183,6 @@ public class Signup extends javax.swing.JPanel {
         });
 
         stateField.setText(STATE_FIELD);
-        //Change made by Syed
         stateField.setForeground(java.awt.Color.gray);
         stateField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -199,7 +194,6 @@ public class Signup extends javax.swing.JPanel {
         });
 
         countryField.setText(COUNTRY_FIELD);
-        //Change made by Syed
         countryField.setForeground(java.awt.Color.gray);
         countryField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -211,7 +205,6 @@ public class Signup extends javax.swing.JPanel {
         });
 
         zipCodeField.setText(ZIP_CODE_FIELD);
-        //Change made by Syed
         zipCodeField.setForeground(java.awt.Color.gray);
         zipCodeField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -221,6 +214,7 @@ public class Signup extends javax.swing.JPanel {
                 zipCodeFieldFocusLost(evt);
             }
         });
+        //</editor-fold>
 
         signupLabel.setFont(new java.awt.Font("Candara", 1, 16)); // NOI18N
         signupLabel.setText("Sign up");
@@ -253,8 +247,11 @@ public class Signup extends javax.swing.JPanel {
 
         requiredFields.setText("* Indicates required fields");
 
+        // For documentation on org.jdesktop.layout.GroupLayout visit:
+        // http://javadox.com/org.swinglabs/swing-layout/1.0.3/org/jdesktop/layout/GroupLayout.html
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
+        System.out.println("what is this " + this.toString());
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
@@ -376,8 +373,32 @@ public class Signup extends javax.swing.JPanel {
                         .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 318, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(0, 0, Short.MAX_VALUE))))
         );
+
+        // Set focus traversal Policy to true for this panel, otherwise it returns null for getFocusTraversalPolicy()
+        this.setFocusTraversalPolicyProvider(true);
+        // Stores the TAB focus order of the form
+        Vector<Component> order = new Vector<Component>(13);
+        order.add(firstNameField);
+        order.add(lastNameField);
+        order.add(phoneNumberField);
+        order.add(streetField);
+        order.add(cityField);
+        order.add(stateField);
+        order.add(zipCodeField);
+        order.add(countryField);
+        order.add(emailField);
+        order.add(passwordField);
+        order.add(reenterPassWordField);
+        order.add(signupButton);
+        order.add(cancelButton);
+
+        // Creates new policy using MyOwnFocusTraversalPolicy, a subclass of FocusTraversalPolicy
+        newPolicy = new MyOwnFocusTraversalPolicy(order);
+        this.setFocusTraversalPolicy(newPolicy);
     }// </editor-fold>//GEN-END:initComponents
 
+    // Change made by Syed
+    
     private void signupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupButtonActionPerformed
 
         if (firstNameField.getText().equals("") || firstNameField.getText().equals(FIRST_NAME_FIELD)
@@ -467,12 +488,10 @@ public class Signup extends javax.swing.JPanel {
         parentDialog.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
-    /****
-     * The code below pertains to gaining and losing focus for the fields on the left side of the sign-up form
-     ****/
+
+    //<editor-fold desc="The code below pertains to gaining and losing focus for the fields on the left side of the form">
     private void firstNameFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_firstNameFieldFocusLost
         if (firstNameField.getText().equals("") || firstNameField.getText().equals(FIRST_NAME_FIELD)) {
-            //Change made by Syed
             firstNameField.setForeground(Color.gray);
             firstNameField.setText(FIRST_NAME_FIELD);
         }
@@ -481,14 +500,12 @@ public class Signup extends javax.swing.JPanel {
     private void lastNameFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_lastNameFieldFocusGained
         if (lastNameField.getText().equals(LAST_NAME_FIELD)) {
             lastNameField.setText("");
-            //Change made by Syed
             lastNameField.setForeground(Color.black);
         }
     }//GEN-LAST:event_lastNameFieldFocusGained
 
     private void lastNameFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_lastNameFieldFocusLost
         if (lastNameField.getText().equals("") || lastNameField.getText().equals(LAST_NAME_FIELD)) {
-            //Change made by Syed
             lastNameField.setForeground(Color.gray);
             lastNameField.setText(LAST_NAME_FIELD);
         }
@@ -497,14 +514,12 @@ public class Signup extends javax.swing.JPanel {
     private void phoneNumberFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_phoneNumberFieldFocusGained
         if (phoneNumberField.getText().equals(PHONE_NUMBER_FIELD)) {
             phoneNumberField.setText("");
-            //Change made by Syed
             phoneNumberField.setForeground(Color.black);
         }
     }//GEN-LAST:event_phoneNumberFieldFocusGained
 
     private void phoneNumberFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_phoneNumberFieldFocusLost
         if (phoneNumberField.getText().equals("") || phoneNumberField.getText().equals(PHONE_NUMBER_FIELD)) {
-            //Change made by Syed
             phoneNumberField.setForeground(Color.gray);
             phoneNumberField.setText(PHONE_NUMBER_FIELD);
         }
@@ -513,14 +528,12 @@ public class Signup extends javax.swing.JPanel {
     private void streetFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_streetFieldFocusGained
         if (streetField.getText().equals(STREET_FIELD)) {
             streetField.setText("");
-            //Change made by Syed
             streetField.setForeground(Color.black);
         }
     }//GEN-LAST:event_streetFieldFocusGained
 
     private void streetFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_streetFieldFocusLost
         if (streetField.getText().equals("") || streetField.getText().equals(STREET_FIELD)) {
-            //Change made by Syed
             streetField.setForeground(Color.gray);
             streetField.setText(STREET_FIELD);
         }
@@ -529,14 +542,12 @@ public class Signup extends javax.swing.JPanel {
     private void cityFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cityFieldFocusGained
         if (cityField.getText().equals(CITY_FIELD)) {
             cityField.setText("");
-            //Change made by Syed
             cityField.setForeground(Color.black);
         }
     }//GEN-LAST:event_cityFieldFocusGained
 
     private void cityFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cityFieldFocusLost
         if (cityField.getText().equals("") || cityField.getText().equals(CITY_FIELD)) {
-            //Change made by Syed
             cityField.setForeground(Color.gray);
             cityField.setText(CITY_FIELD);
         }
@@ -545,14 +556,12 @@ public class Signup extends javax.swing.JPanel {
     private void stateFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_stateFieldFocusGained
         if (stateField.getText().equals(STATE_FIELD)) {
             stateField.setText("");
-            //Change made by Syed
             stateField.setForeground(Color.black);
         }
     }//GEN-LAST:event_stateFieldFocusGained
 
     private void stateFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_stateFieldFocusLost
         if (stateField.getText().equals("") || stateField.getText().equals(STATE_FIELD)) {
-            //Change made by Syed
             stateField.setForeground(Color.gray);
             stateField.setText(STATE_FIELD);
         }
@@ -561,14 +570,12 @@ public class Signup extends javax.swing.JPanel {
     private void zipCodeFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_zipCodeFieldFocusGained
         if (zipCodeField.getText().equals(ZIP_CODE_FIELD)) {
             zipCodeField.setText("");
-            //Change made by Syed
             zipCodeField.setForeground(Color.black);
         }
     }//GEN-LAST:event_zipCodeFieldFocusGained
 
     private void zipCodeFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_zipCodeFieldFocusLost
         if (zipCodeField.getText().equals("") || zipCodeField.getText().equals(ZIP_CODE_FIELD)) {
-            //Change made by Syed
             zipCodeField.setForeground(Color.gray);
             zipCodeField.setText(ZIP_CODE_FIELD);
         }
@@ -577,29 +584,31 @@ public class Signup extends javax.swing.JPanel {
     private void countryFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_countryFieldFocusGained
         if (countryField.getText().equals(COUNTRY_FIELD)) {
             countryField.setText("");
-            //Change made by Syed
             countryField.setForeground(Color.black);
         }
     }//GEN-LAST:event_countryFieldFocusGained
 
     private void countryFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_countryFieldFocusLost
         if (countryField.getText().equals("") || countryField.getText().equals(COUNTRY_FIELD)) {
-            //Change made by Syed
             countryField.setForeground(Color.gray);
             countryField.setText(COUNTRY_FIELD);
         }
     }//GEN-LAST:event_countryFieldFocusLost
 
+    // There is a slight difference here between firstNameFieldFocusGained, and every other FieldFocusGained,
+    // when the sign-up form first becomes visible, a check is run if this is the first run, if so,
+    // the content of the field are selected.
     private void firstNameFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_firstNameFieldFocusGained
         if (firstRun) {
             firstRun = false;
             firstNameField.selectAll();
+            firstNameField.setForeground(Color.black);
         } else if (firstNameField.getText().equals(FIRST_NAME_FIELD)) {
             firstNameField.setText("");
-            //Change made by Syed
             firstNameField.setForeground(Color.black);
         }
     }//GEN-LAST:event_firstNameFieldFocusGained
+    //</editor-fold>
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel addressLabel;
@@ -631,4 +640,49 @@ public class Signup extends javax.swing.JPanel {
     private javax.swing.JTextField streetField;
     private javax.swing.JTextField zipCodeField;
     // End of variables declaration//GEN-END:variables
+    static MyOwnFocusTraversalPolicy newPolicy;
+
+
+    /**
+     * This snippet is taken of code, was taken from, http://docs.oracle.com/javase/tutorial/displayCode.html?code=http://docs.oracle.com/javase/tutorial/uiswing/examples/misc/FocusTraversalDemoProject/src/misc/FocusTraversalDemo.java
+     * For an explanation and a good demo, go to http://docs.oracle.com/javase/tutorial/uiswing/misc/focus.html
+     */
+    public static class MyOwnFocusTraversalPolicy
+            extends FocusTraversalPolicy
+    {
+        Vector<Component> order;
+
+        public MyOwnFocusTraversalPolicy(Vector<Component> order) {
+            this.order = new Vector<Component>(order.size());
+            this.order.addAll(order);
+        }
+        public Component getComponentAfter(Container focusCycleRoot,
+                                           Component aComponent)
+        {
+            int idx = (order.indexOf(aComponent) + 1) % order.size();
+            return order.get(idx);
+        }
+
+        public Component getComponentBefore(Container focusCycleRoot,
+                                            Component aComponent)
+        {
+            int idx = order.indexOf(aComponent) - 1;
+            if (idx < 0) {
+                idx = order.size() - 1;
+            }
+            return order.get(idx);
+        }
+
+        public Component getDefaultComponent(Container focusCycleRoot) {
+            return order.get(0);
+        }
+
+        public Component getLastComponent(Container focusCycleRoot) {
+            return order.lastElement();
+        }
+
+        public Component getFirstComponent(Container focusCycleRoot) {
+            return order.get(0);
+        }
+    }
 }
