@@ -6,6 +6,8 @@ import BackEnd.EventSystem.Income;
 import EMS_Database.DoesNotExistException;
 import EMS_Database.impl.Expense_Table;
 import EMS_Database.impl.Income_Table;
+import auth.AuthorizationException;
+import exception.UpdateException;
 
 /**
  * This class serves as a liaison between the GUI and the back end and the data.
@@ -28,12 +30,12 @@ public class BudgetItemManager {
      * initializes the budget item manager, and connects to the budget item
      * database
      */
-    public BudgetItemManager() {
+    BudgetItemManager() {
         incomeTable = new Income_Table();
         expenseTable = new Expense_Table();
     }
 
-    public void connectManagers(LoginManager logInManager, EventManager eventManager, CommitteeManager committeeManager) {
+    void connectManagers(LoginManager logInManager, EventManager eventManager, CommitteeManager committeeManager) {
         this.logInManager = logInManager;
         this.eventManager = eventManager;
         this.committeeManager = committeeManager;
@@ -44,7 +46,7 @@ public class BudgetItemManager {
      *
      * @return the income table
      */
-    public Income_Table getIncomeTable() {
+    Income_Table getIncomeTable() {
         return incomeTable;
     }
 
@@ -53,7 +55,7 @@ public class BudgetItemManager {
      *
      * @return the expense table
      */
-    public Expense_Table getExpenseTable() {
+    Expense_Table getExpenseTable() {
         return expenseTable;
     }
 
@@ -83,7 +85,7 @@ public class BudgetItemManager {
      * @throws DoesNotExistException
      */
     public void editValue(int value)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         if (PrivilegeManager.hasBudgetPrivilege(
                 logInManager.getLoggedInUser(),
@@ -106,7 +108,7 @@ public class BudgetItemManager {
      * @throws DoesNotExistException
      */
     public void editDescription(String description)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         if (PrivilegeManager.hasBudgetPrivilege(
                 logInManager.getLoggedInUser(),
@@ -133,7 +135,7 @@ public class BudgetItemManager {
      * @throws DoesNotExistException
      */
     public void editDate(int year, int month, int day, int hour, int minute)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         if (PrivilegeManager.hasBudgetPrivilege(
                 logInManager.getLoggedInUser(),

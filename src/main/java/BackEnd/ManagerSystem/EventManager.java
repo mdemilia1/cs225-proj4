@@ -25,7 +25,12 @@ import EMS_Database.impl.Income_Table;
 import EMS_Database.impl.SubEvent_Table;
 import EMS_Database.impl.Tasks_Table;
 import EMS_Database.impl.UserData_Table;
+import auth.AuthorizationException;
+import auth.Permissions;
+import exception.UpdateException;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class serves as a liaison between the GUI and the back end and the data.
@@ -66,7 +71,7 @@ public class EventManager {
             SubEvent_Table subEventsTable, Committees_Table committeesTable,
             Income_Table incomeTable, Expense_Table expenseTable)
             throws DoesNotExistException {
-        this.eventList = new ArrayList<Event>();
+        this.eventList = new ArrayList<>();
         this.usersTable = usersTable;
         this.eventsTable = new Events_Table();
         this.subEventsTable = subEventsTable;
@@ -77,7 +82,7 @@ public class EventManager {
         rebuildEventList(userList);
     }
     
-    public void connectManagers(LoginManager logInManager, UserManager userManager){
+    void connectManagers(LoginManager logInManager, UserManager userManager){
         this.logInManager = logInManager;
         this.userManager = userManager;
     }
@@ -128,19 +133,19 @@ public class EventManager {
      * @throws DuplicateInsertionException
      */
     public Event createEvent(Event event)
-            throws PrivilegeInsufficientException, DuplicateInsertionException {
+            throws PrivilegeInsufficientException, DuplicateInsertionException, UpdateException, AuthorizationException {
 
         Event newEvent = null;
         User loggedInUser = logInManager.getLoggedInUser();
         if (PrivilegeManager.hasEventCreationPrivilege(loggedInUser)) {
             ArrayList<Integer> organizerIDList, subEventIDList, participantIDList, committeeIDList;
-            organizerIDList = new ArrayList<Integer>();
+            organizerIDList = new ArrayList<>();
             organizerIDList.add(loggedInUser.getUserId());
-            subEventIDList = new ArrayList<Integer>();
-            participantIDList = new ArrayList<Integer>();
+            subEventIDList = new ArrayList<>();
+            participantIDList = new ArrayList<>();
             participantIDList.add(loggedInUser.getUserId());
             System.out.println(participantIDList);
-            committeeIDList = new ArrayList<Integer>();
+            committeeIDList = new ArrayList<>();
 
             newEvent = new Event(eventsTable.createEvent(new InputEventData(
                     event.getDescription(), event.getLocation().getDetails(), event.getTitle() , "IGNORE",
@@ -164,7 +169,7 @@ public class EventManager {
      * @throws DoesNotExistException
      */
     public void deleteEvent()
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         User loggedInUser = logInManager.getLoggedInUser();
         if (PrivilegeManager.hasEventPrivilege(loggedInUser, selectedEvent)) {
@@ -192,11 +197,11 @@ public class EventManager {
      * @throws DoesNotExistException
      */
     public void addOrganizer(User organizer)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException, UpdateException {
 
         //User loggedInUser = logInManager.getLoggedInUser();
         //if (PrivilegeManager.hasEventPrivilege(loggedInUserr, selectedEvent)) {
-            Integer organizerUserID = new Integer(usersTable.getUIDByEmail(organizer.getEmailAddress()));
+            Integer organizerUserID = usersTable.getUIDByEmail(organizer.getEmailAddress());
             ArrayList<Integer> newOrganizerList = eventsTable.getOrganizerList(selectedEvent.getEVENT_ID());
             newOrganizerList.add(organizerUserID);
 
@@ -213,12 +218,12 @@ public class EventManager {
      * @throws DoesNotExistException
      */
     public void removeOrganizer(User organizer)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException, UpdateException {
 
         //User loggedInUser = logInManager.getLoggedInUser();
         //User selectedUser = userManager.getSelectedUser();
         //if (PrivilegeManager.hasUserPrivilege(loggedInUser, selectedUser)) {
-            Integer organizerUserID = new Integer(usersTable.getUIDByEmail(organizer.getEmailAddress()));
+            Integer organizerUserID = usersTable.getUIDByEmail(organizer.getEmailAddress());
             ArrayList<Integer> newOrganizerList = eventsTable.getOrganizerList(selectedEvent.getEVENT_ID());
             newOrganizerList.remove(organizerUserID);
 
@@ -237,7 +242,7 @@ public class EventManager {
      * @throws DoesNotExistException
      */
     public SubEvent createSubEvent(SubEvent subEvent)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, AuthorizationException, UpdateException {
 
         SubEvent newSubEvent = null;
         User loggedInUser = logInManager.getLoggedInUser();
@@ -268,12 +273,12 @@ public class EventManager {
      * @throws DoesNotExistException
      */
     public void deleteSubEvent(SubEvent subEvent)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, AuthorizationException, UpdateException {
 
         User loggedInUser = logInManager.getLoggedInUser();
         if (PrivilegeManager.hasSubEventPrivilege(loggedInUser, selectedEvent)) {
 
-            Integer subEventID = new Integer(subEvent.getSUB_EVENT_ID());
+            Integer subEventID = subEvent.getSUB_EVENT_ID();
             ArrayList<Integer> newSubEventIDList = eventsTable.getSubEventList(selectedEvent.getEVENT_ID());
             newSubEventIDList.remove(subEventID);
 
@@ -293,28 +298,29 @@ public class EventManager {
      * @throws DoesNotExistException
      */
     public Committee createCommittee(Committee committee)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         Committee newCommittee = null;
         User loggedInUser = logInManager.getLoggedInUser();
         if (PrivilegeManager.hasEventPrivilege(loggedInUser, selectedEvent)) {
-            ArrayList<Integer> budgetAccessIDList = new ArrayList<Integer>();
+            ArrayList<Integer> budgetAccessIDList;
+            budgetAccessIDList = new ArrayList<>();
             for (int i = 0; i < committee.getBudgetAccessList().size(); i++) {
                 budgetAccessIDList.add(committee.getBudgetAccessList().get(i).getUserId());
             }
-            ArrayList<Integer> memberIDList = new ArrayList<Integer>();
+            ArrayList<Integer> memberIDList = new ArrayList<>();
             for (int i = 0; i < committee.getMemberList().size(); i++) {
                 memberIDList.add(committee.getMemberList().get(i).getUserId());
             }
-            ArrayList<Integer> incomeIDList = new ArrayList<Integer>();
+            ArrayList<Integer> incomeIDList = new ArrayList<>();
             for (int i = 0; i < committee.getBudget().getIncomeList().size(); i++) {
                 incomeIDList.add(committee.getBudget().getIncomeList().get(i).getBUDGET_ITEM_ID());
             }
-            ArrayList<Integer> expenseIDList = new ArrayList<Integer>();
+            ArrayList<Integer> expenseIDList = new ArrayList<>();
             for (int i = 0; i < committee.getBudget().getExpenseList().size(); i++) {
                 expenseIDList.add(committee.getBudget().getExpenseList().get(i).getBUDGET_ITEM_ID());
             }
-            ArrayList<Integer> taskIDList = new ArrayList<Integer>();
+            ArrayList<Integer> taskIDList = new ArrayList<>();
             for (int i = 0; i < committee.getTaskList().size(); i++) {
                 taskIDList.add(committee.getTaskList().get(i).getTASK_ID());
             }
@@ -344,7 +350,7 @@ public class EventManager {
      * @throws DoesNotExistException
      */
     public void deleteCommittee(Committee committee)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, AuthorizationException, UpdateException {
 
         User loggedInUser = logInManager.getLoggedInUser();
         if (PrivilegeManager.hasEventPrivilege(loggedInUser, selectedEvent)) {
@@ -361,7 +367,7 @@ public class EventManager {
     }
 
     private void deleteTaskList(Committee committee)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException, UpdateException {
 
         ArrayList<Integer> taskIDList = committeesTable.getTaskList(committee.getCOMMITTEE_ID());
         for (Integer taskID : taskIDList) {
@@ -373,7 +379,7 @@ public class EventManager {
     }
 
     private void deleteIncomeList(Committee committee)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException, UpdateException {
 
         ArrayList<Integer> incomeIDList = committeesTable.getIncome(committee.getCOMMITTEE_ID());
         for (Integer incomeID : incomeIDList) {
@@ -385,7 +391,7 @@ public class EventManager {
     }
 
     private void deleteExpenseList(Committee committee)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException, UpdateException {
 
         ArrayList<Integer> expenseIDList = committeesTable.getExpense(committee.getCOMMITTEE_ID());
         for (Integer expenseID : expenseIDList) {
@@ -405,7 +411,7 @@ public class EventManager {
      * @throws DoesNotExistException
      */
     public Participant createParticipant(Participant participant)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException, UpdateException {
 
         Participant newParticipant = null;
         User loggedInUser = logInManager.getLoggedInUser();
@@ -428,7 +434,7 @@ public class EventManager {
      * @throws DoesNotExistException
      */
     public void deleteParticipant(Participant participant)
-            throws DoesNotExistException {
+            throws DoesNotExistException, UpdateException, AuthorizationException {
 
         if (!(participant instanceof User)) {
             usersTable.removeUser(participant.getUserId());
@@ -449,7 +455,7 @@ public class EventManager {
      * @throws DoesNotExistException
      */    
     public void editTitle(String title)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         User loggedInUser = logInManager.getLoggedInUser();
         if (PrivilegeManager.hasEventPrivilege(loggedInUser, selectedEvent)) {
@@ -467,7 +473,7 @@ public class EventManager {
      * @throws DoesNotExistException
      */
     public void editDescription(String description)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         User loggedInUser = logInManager.getLoggedInUser();
         if (PrivilegeManager.hasEventPrivilege(loggedInUser, selectedEvent)) {
@@ -485,7 +491,7 @@ public class EventManager {
      * @throws DoesNotExistException
      */
     public void editLocation(Location location)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         User loggedInUser = logInManager.getLoggedInUser();
         if (PrivilegeManager.hasEventPrivilege(loggedInUser, selectedEvent)) {
@@ -512,7 +518,7 @@ public class EventManager {
      * @throws DoesNotExistException
      */
     public void editStartDateTime(int year, int month, int day, int hour, int minute)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         User loggedInUser = logInManager.getLoggedInUser();
         if (PrivilegeManager.hasEventPrivilege(loggedInUser, selectedEvent)) {
@@ -530,7 +536,7 @@ public class EventManager {
      * @throws DoesNotExistException
      */
     public void editTimeSchedule(TimeSchedule timeSchedule)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         User loggedInUser = logInManager.getLoggedInUser();
         if (PrivilegeManager.hasEventPrivilege(loggedInUser, selectedEvent)) {
@@ -554,7 +560,7 @@ public class EventManager {
      * @throws DoesNotExistException
      */
     public void editEndDateTime(int year, int month, int day, int hour, int minute)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         User loggedInUser = logInManager.getLoggedInUser();
         if (PrivilegeManager.hasEventPrivilege(loggedInUser, selectedEvent)) {
@@ -567,19 +573,25 @@ public class EventManager {
      * private method for rebuilding the event list
      *
      * @param userList the list of users in the database
-     * @throws DoesNotExistException
      */
-    private void rebuildEventList(ArrayList<Participant> userList)
-            throws DoesNotExistException {
+    private void rebuildEventList(ArrayList<Participant> userList) {
+        try (Permissions.SystemTransaction txn = Permissions.get().beginSystemTransaction()) {
+            List<Integer> eventIDList = eventsTable.getUIDsNeedingRebuild();
+            for (Integer eventID : eventIDList) {
+                Event event;
+                try {
+                    event = rebuildEvent(eventID, userList);
+                } catch (DoesNotExistException | AuthorizationException ex) {
+                    continue;
+                }
 
-        ArrayList<Integer> eventIDList = eventsTable.currentUIDList("EVENTS");
-        for (Integer eventID : eventIDList) {
-            eventList.add(rebuildEvent(eventID, userList));
+                eventList.add(event);
+            }
         }
     }
 
     private Event rebuildEvent(int eventID, ArrayList<Participant> userList)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException {
 
         Event event = new Event(eventID, eventsTable.getTitle(eventID));
         event.setDescription(eventsTable.getDescription(eventID));
@@ -598,9 +610,9 @@ public class EventManager {
     }
 
     private ArrayList<SubEvent> rebuildSubEventList(int eventID)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException {
 
-        ArrayList<SubEvent> subEventList = new ArrayList<SubEvent>();
+        ArrayList<SubEvent> subEventList = new ArrayList<>();
         for (Integer subEventID : eventsTable.getSubEventList(eventID)) {
             subEventList.add(rebuildSubEvent(subEventID));
         }
@@ -608,7 +620,7 @@ public class EventManager {
     }
 
     private SubEvent rebuildSubEvent(int subEventID)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException {
 
         SubEvent subEvent = new SubEvent(subEventID, subEventsTable.getTitle(subEventID));
         subEvent.setDescription(subEventsTable.getDescription(subEventID));
@@ -623,9 +635,9 @@ public class EventManager {
     }
 
     private ArrayList<User> rebuildOrganizerList(int eventID, ArrayList<Participant> userList)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException {
 
-        ArrayList<User> organizerList = new ArrayList<User>();
+        ArrayList<User> organizerList = new ArrayList<>();
         ArrayList<Integer> organizerIDList = eventsTable.getOrganizerList(eventID);
         for (Participant user : userList) {
             if (organizerIDList.contains(user.getUserId())) {
@@ -636,9 +648,9 @@ public class EventManager {
     }
 
     private ArrayList<Participant> rebuildParticipantList(int eventID, ArrayList<Participant> userList)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException {
 
-        ArrayList<Participant> participantList = new ArrayList<Participant>();
+        ArrayList<Participant> participantList = new ArrayList<>();
         ArrayList<Integer> participantIDList = eventsTable.getParticipantList(eventID);
         for (Participant participant : userList) {
             if (participantIDList.contains(participant.getUserId())) {
@@ -649,9 +661,9 @@ public class EventManager {
     }
 
     private ArrayList<Committee> rebuildCommitteeList(int eventID, ArrayList<Participant> userList)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException {
 
-        ArrayList<Committee> committeeList = new ArrayList<Committee>();
+        ArrayList<Committee> committeeList = new ArrayList<>();
         for (Integer committeeID : eventsTable.getCommittee(eventID)) {
             committeeList.add(rebuildCommittee(committeeID, userList));
         }
@@ -659,7 +671,7 @@ public class EventManager {
     }
 
     private Committee rebuildCommittee(int committeeID, ArrayList<Participant> userList)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException {
 
         Committee committee = new Committee(committeeID, committeesTable.getTitle(committeeID));
         for (Participant user : userList) {
@@ -680,9 +692,9 @@ public class EventManager {
     }
 
     private ArrayList<User> rebuildCommitteeMemberList(int committeeID, ArrayList<Participant> userList)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException {
         
-        ArrayList<User> memberList = new ArrayList<User>();
+        ArrayList<User> memberList = new ArrayList<>();
         ArrayList<Integer> memberIDList = committeesTable.getCommitteeMembers(committeeID);
 
         for (Participant user : userList) {
@@ -694,9 +706,9 @@ public class EventManager {
     }
 
     private ArrayList<User> rebuildBudgetAccessList(int committeeID, ArrayList<Participant> userList)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException {
         
-        ArrayList<User> budgetAccessList = new ArrayList<User>();
+        ArrayList<User> budgetAccessList = new ArrayList<>();
         ArrayList<Integer> budgetAccessIDList = committeesTable.getBudgetAccessList(committeeID);
 
         for (Participant user : userList) {
@@ -708,9 +720,9 @@ public class EventManager {
     }
 
     private ArrayList<Task> rebuildTaskList(int committeeID, ArrayList<Participant> userList)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException {
         
-        ArrayList<Task> taskList = new ArrayList<Task>();
+        ArrayList<Task> taskList = new ArrayList<>();
         for (Integer taskID : committeesTable.getTaskList(committeeID)) {
             taskList.add(rebuildTask(taskID, userList));
         }
@@ -719,7 +731,7 @@ public class EventManager {
     }
 
     private Task rebuildTask(int taskID, ArrayList<Participant> userList)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException {
         
         Task task = new Task(taskID, tasksTable.getTitle(taskID));
         task.setLocation(new Location(tasksTable.getStreet(taskID), tasksTable.getCity(taskID),
@@ -729,15 +741,15 @@ public class EventManager {
         task.getTimeSchedule().setEndDateTime(tasksTable.getEndDate(taskID));
 
         task.setResponsibleList(rebuildResponsibleList(taskID, userList));
-        task.setCompleted(tasksTable.getComplete(taskID) == 1 ? true : false);
+        task.setCompleted(tasksTable.getComplete(taskID) == 1);
 
         return task;
     }
 
     private ArrayList<User> rebuildResponsibleList(int taskID, ArrayList<Participant> userList)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException {
         
-        ArrayList<User> responsibleList = new ArrayList<User>();
+        ArrayList<User> responsibleList = new ArrayList<>();
         ArrayList<Integer> responsibleIDList = tasksTable.getAuthority(taskID);
 
         for (Participant user : userList) {
@@ -749,9 +761,9 @@ public class EventManager {
     }
 
     private ArrayList<Income> rebuildIncomeList(int committeeID)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException {
         
-        ArrayList<Income> incomeList = new ArrayList<Income>();
+        ArrayList<Income> incomeList = new ArrayList<>();
         ArrayList<Integer> incomeIDList = committeesTable.getIncome(committeeID);
         for (Integer incomeID : incomeIDList) {
             incomeList.add(rebuildIncome(incomeID));
@@ -760,14 +772,14 @@ public class EventManager {
     }
 
     private Income rebuildIncome(int incomeID)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException {
         return new Income(incomeID, incomeTable.getValue(incomeID), incomeTable.getDescription(incomeID));
     }
 
     private ArrayList<Expense> rebuildExpenseList(int committeeID)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException {
 
-        ArrayList<Expense> expenseList = new ArrayList<Expense>();
+        ArrayList<Expense> expenseList = new ArrayList<>();
         ArrayList<Integer> expenseIDList = committeesTable.getExpense(committeeID);
         for (Integer expenseID : expenseIDList) {
             expenseList.add(rebuildExpense(expenseID));
@@ -776,7 +788,7 @@ public class EventManager {
     }
 
     private Expense rebuildExpense(int expenseID)
-            throws DoesNotExistException {
+            throws DoesNotExistException, AuthorizationException {
         return new Expense(expenseID, expenseTable.getValue(expenseID), expenseTable.getDescription(expenseID));
     }
 }

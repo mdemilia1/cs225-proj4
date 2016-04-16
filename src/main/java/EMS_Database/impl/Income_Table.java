@@ -1,149 +1,107 @@
 package EMS_Database.impl;
 
-import EMS_Database.DoesNotExistException;
-import EMS_Database.InitDB;
-import static EMS_Database.InitDB.debugLog;
-import EMS_Database.InputIncome;
-import EMS_Database.Interface_BudgetData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.logging.Level;
+import EMS_Database.*;
+import auth.AuthorizationException;
+import auth.Operation;
+import auth.Permissions;
+import exception.ReadException;
 import exception.UpdateException;
 
+import java.sql.*;
 
-/**
- *
- * @author mike
- */
 public class Income_Table extends InitDB implements Interface_BudgetData {
-    private String tableName = "INCOME";
-    
-    //SPECIAL FUNCTIONS
+    private static final String tableName = "INCOME";
 
     @Override
-    public String queryEntireTable() {
-	StringBuilder returnQuery = new StringBuilder();
-	try {
-	    PreparedStatement idQueryStmt = dbConnection.prepareStatement("SELECT * FROM INCOME");
-	    ResultSet rs = idQueryStmt.executeQuery();
-
-	    while (rs.next()) {
-		returnQuery.append(rs.getInt("UID"));
-		returnQuery.append(",");
-		returnQuery.append(rs.getString("DESCRIPTION"));
-		returnQuery.append(",");
-		returnQuery.append(rs.getString("DATE"));
-		returnQuery.append(",");
-		returnQuery.append(rs.getDouble("VALUE"));
-		returnQuery.append("\n");
-	    }
-
-	} catch (SQLException sqle) {
-	    sqle.printStackTrace();
-	    System.exit(1);
-	}
-
-	return returnQuery.toString();
+    protected String getTableName() {
+        return tableName;
     }
 
     @Override
-    public void removeBudgetItem(int uid) throws DoesNotExistException {
-	String table = "INCOME";
-	//checking for existance of that uid
-	boolean exists = false;
-	for (int validID : currentUIDList(table)) {
-	    if (validID == uid) {
-		exists = true;
-		break;
-	    }
-	}
-	//what to do if that uid does not exist
-	if (exists == false) {
-	    debugLog.log(Level.WARNING, "UID={0} does not exist in {1} table. Error occurred while calling removeEvent", new Object[]{uid, table});
-	    throw new DoesNotExistException("check debug log. " + table + " table error.");
-	}
-	
-	try {
-	    PreparedStatement idQueryStmt = dbConnection.prepareStatement("DELETE FROM "+table+" WHERE UID=?");
-	    idQueryStmt.setInt(1, uid);
-	    idQueryStmt.executeUpdate();
-
-	} catch (SQLException sqle) {
-	    System.err.println(sqle.getMessage());
-	    System.err.println("Deleting stuff from "+table+" is dangerous...");
-	}	
-    }
-
-    public int insertBudgetItem(InputIncome input) {
-
-	try {
-	    //Creating Statement
-	    PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO INCOME VALUES(NULL,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-        AddAddressStmt.setInt(++column, imput.getDescription());
-        AddAddressStmt.setInt(++column, imput.getTime());
-        AddAddressStmt.setInt(++column, imput.getValue());
-	    //Execute Statement
-	    return AddAddressStmt.executeUpdate();
-
-	   
-	} catch (SQLException sqle) {
-	    System.err.println(sqle.getMessage());
-        // debugLog.log(Level., "INCOME table insertion failded. UID={0}", uid);
-
-        // throw new UpdateException("Error creating income", sqle);
+    public void removeBudgetItem(int uid) throws AuthorizationException, UpdateException, DoesNotExistException {
+        remove(uid);
     }
 
     @Override
-    public double total() {
-	double returnQuery = 0.0;
-	try {
-	    PreparedStatement idQueryStmt = dbConnection.prepareStatement("SELECT * FROM INCOME");
-	    ResultSet rs = idQueryStmt.executeQuery();
-	    while (rs.next()) {
-		returnQuery += rs.getDouble("VALUE");
-	    }
-	    return returnQuery;
+    public int insertBudgetItem(InputIncome input) throws AuthorizationException, UpdateException {
+        Permissions.get().checkPermission(tableName, null, Operation.CREATE);
 
-	} catch (SQLException sqle) {
-	    sqle.printStackTrace();
-	    System.exit(1);
-	}
-	return returnQuery;
+        try {
+            //Creating Statement
+            PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO " + tableName + " VALUES(NULL, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            int column = 0;
+            AddAddressStmt.setString(++column, input.getDescription());
+            AddAddressStmt.setTimestamp(++column, input.getDate());
+            AddAddressStmt.setDouble(++column, input.getValue());
+            //Execute Statement
+            return AddAddressStmt.executeUpdate();
+        } catch (SQLException sqle) {
+            throw new UpdateException("Error creating income", sqle);
+        }
+    }
+
+    @Override
+    @Deprecated
+    public int insertBudgetItem(InputExpense input) throws AuthorizationException, UpdateException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public double total() throws AuthorizationException {
+        final String field = "VALUE";
+        Permissions.get().checkPermission(tableName, field, Operation.VIEW);
+
+        try {
+            PreparedStatement idQueryStmt = dbConnection.prepareStatement("SELECT SUM(" + field + ") FROM " + tableName);
+            ResultSet rs = idQueryStmt.executeQuery();
+            return rs.next() ? rs.getDouble(1) : 0.0;
+        } catch (SQLException sqle) {
+            throw new ReadException("Error retrieving total", sqle);
+        }
     }
 
     //GETTERS
     @Override
-    public String getDescription(int uid) throws DoesNotExistException {
-	return getDBString("DESCRIPTION",tableName,uid);
+    public String getDescription(int uid) throws AuthorizationException, DoesNotExistException {
+        final String field = "DESCRIPTION";
+        Permissions.get().checkPermission(tableName, field, Operation.VIEW);
+        return getDBString(field, uid);
     }
 
     @Override
-    public double getValue(int uid) throws DoesNotExistException {
-	return getDBDouble("VALUE",tableName,uid);
+    public double getValue(int uid) throws AuthorizationException, DoesNotExistException {
+        final String field = "VALUE";
+        Permissions.get().checkPermission(tableName, field, Operation.VIEW);
+        return getDBDouble(field, uid);
     }
 
     @Override
-    public Timestamp getDate(int uid) throws DoesNotExistException {
-	return getDBTimestamp("DATE",tableName,uid);
+    public Timestamp getDate(int uid) throws AuthorizationException, DoesNotExistException {
+        final String field = "DATE";
+        Permissions.get().checkPermission(tableName, field, Operation.VIEW);
+        return getDBTimestamp(field, uid);
     }
-    
-            
+
+
     //SETTERS
     @Override
-    public void setDescription(int uid, String description) throws DoesNotExistException {
-	setDBString("DESCRIPTION",tableName,uid,description);
+    public void setDescription(int uid, String description) throws AuthorizationException, UpdateException, DoesNotExistException {
+        final String field = "DESCRIPTION";
+        Permissions.get().checkPermission(tableName, field, Operation.MODIFY);
+        setDBString(field, uid, description);
     }
 
     @Override
-    public void setValue(int uid, double value) throws DoesNotExistException {
-	setDBDouble("VALUE",tableName,uid,value);
+    public void setValue(int uid, double value) throws AuthorizationException, UpdateException, DoesNotExistException {
+        final String field = "VALUE";
+        Permissions.get().checkPermission(tableName, field, Operation.MODIFY);
+        setDBDouble(field, uid, value);
     }
 
     @Override
-    public void setDate(int uid, Timestamp date) throws DoesNotExistException {
-	setDBTimestamp("DATE",tableName,uid,date);
-    }        
-
+    public void setDate(int uid, Timestamp date) throws AuthorizationException, UpdateException, DoesNotExistException {
+        final String field = "DATE";
+        Permissions.get().checkPermission(tableName, field, Operation.MODIFY);
+        setDBTimestamp(field, uid, date);
+    }
 }

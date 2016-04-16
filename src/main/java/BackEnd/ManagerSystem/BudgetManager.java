@@ -12,6 +12,9 @@ import EMS_Database.InputIncome;
 import EMS_Database.impl.Committees_Table;
 import EMS_Database.impl.Expense_Table;
 import EMS_Database.impl.Income_Table;
+import auth.AuthorizationException;
+import exception.UpdateException;
+
 import java.util.ArrayList;
 
 /**
@@ -45,7 +48,7 @@ public class BudgetManager {
         this.expenseTable = expenseTable;
     }
 
-    public void connectManagers(LoginManager logInManager, EventManager eventManager, CommitteeManager committeeManager) {
+    void connectManagers(LoginManager logInManager, EventManager eventManager, CommitteeManager committeeManager) {
         this.logInManager = logInManager;
         this.eventManager = eventManager;
         this.committeeManager = committeeManager;
@@ -80,7 +83,7 @@ public class BudgetManager {
      * @throws DuplicateInsertionException
      */
     public Income createIncome(Income income)
-            throws PrivilegeInsufficientException, DoesNotExistException, DuplicateInsertionException {
+            throws PrivilegeInsufficientException, DoesNotExistException, DuplicateInsertionException, UpdateException, AuthorizationException {
 
         Income newIncome = null;
         Committee selectedCommittee = committeeManager.getSelectedCommittee();
@@ -105,14 +108,11 @@ public class BudgetManager {
      * privilege level
      *
      * @param income the income item to delete
-     * @param loggedInUser the currently logged in user
-     * @param selectedEvent the currently selected event
-     * @param selectedCommittee the currently selected committee
      * @throws PrivilegeInsufficientException
      * @throws DoesNotExistException
      */
     public void deleteIncome(Income income)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, AuthorizationException, UpdateException {
 
         Committee selectedCommittee = committeeManager.getSelectedCommittee();
         if (PrivilegeManager.hasBudgetPrivilege(
@@ -139,7 +139,7 @@ public class BudgetManager {
      * @throws DoesNotExistException
      */
     public Expense createExpense(Expense expense)
-            throws PrivilegeInsufficientException, DoesNotExistException, DuplicateInsertionException {
+            throws PrivilegeInsufficientException, DoesNotExistException, DuplicateInsertionException, UpdateException, AuthorizationException {
 
         Expense newExpense = null;
         Committee selectedCommittee = committeeManager.getSelectedCommittee();
@@ -167,7 +167,7 @@ public class BudgetManager {
      * @throws DoesNotExistException
      */
     public void deleteExpense(Expense expense)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, AuthorizationException, UpdateException {
 
         Committee selectedCommittee = committeeManager.getSelectedCommittee();
         if (PrivilegeManager.hasBudgetPrivilege(

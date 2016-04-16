@@ -1,7 +1,8 @@
 package exception;
 
 /**
- * Thrown to frontend when an error occurs while saving information to the database.
+ * Thrown to frontend when an error occurs while saving information to the database.  This can occur if, for example,
+ * an attempt is made to create a duplicate entry.
  * @author Paul Buonopane
  */
 public class UpdateException extends Exception {

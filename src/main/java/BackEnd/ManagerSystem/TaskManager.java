@@ -7,6 +7,9 @@ import BackEnd.UserSystem.Location;
 import BackEnd.UserSystem.User;
 import EMS_Database.DoesNotExistException;
 import EMS_Database.impl.Tasks_Table;
+import auth.AuthorizationException;
+import exception.UpdateException;
+
 import java.util.ArrayList;
 
 /**
@@ -32,7 +35,7 @@ public class TaskManager {
         tasksTable = new Tasks_Table();
     }
 
-    public void connectManagers(LoginManager logInManager, EventManager eventManager, CommitteeManager committeeManager) {
+    void connectManagers(LoginManager logInManager, EventManager eventManager, CommitteeManager committeeManager) {
         this.logInManager = logInManager;
         this.eventManager = eventManager;
         this.committeeManager = committeeManager;
@@ -43,7 +46,7 @@ public class TaskManager {
      *
      * @return the task table
      */
-    public Tasks_Table getTasksTable() {
+    Tasks_Table getTasksTable() {
         return tasksTable;
     }
 
@@ -74,7 +77,7 @@ public class TaskManager {
      * @throws DoesNotExistException
      */
     public void addResponsible(User responsible)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, AuthorizationException, UpdateException {
 
         if (PrivilegeManager.hasTaskPrivilege(
                 logInManager.getLoggedInUser(),
@@ -97,7 +100,7 @@ public class TaskManager {
      * @throws DoesNotExistException
      */
     public void removeResponsible(User responsible)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, AuthorizationException, UpdateException {
 
         if (PrivilegeManager.hasTaskPrivilege(
                 logInManager.getLoggedInUser(),
@@ -119,7 +122,7 @@ public class TaskManager {
      * @throws DoesNotExistException
      */
     public void editTitle(String title)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         if (PrivilegeManager.hasTaskPrivilege(
                 logInManager.getLoggedInUser(),
@@ -140,7 +143,7 @@ public class TaskManager {
      * @throws DoesNotExistException
      */
     public void editCompleted(boolean completed)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         if (PrivilegeManager.hasTaskPrivilege(
                 logInManager.getLoggedInUser(),
@@ -148,7 +151,7 @@ public class TaskManager {
                 committeeManager.getSelectedCommittee(),
                 selectedTask)) {
             selectedTask.setCompleted(completed);
-            tasksTable.setComplete(selectedTask.getTASK_ID(), completed == true ? 1 : 0);
+            tasksTable.setComplete(selectedTask.getTASK_ID(), completed ? 1 : 0);
         }
     }
 
@@ -161,7 +164,7 @@ public class TaskManager {
      * @throws DoesNotExistException
      */
     public void editDescription(String description)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         if (PrivilegeManager.hasTaskPrivilege(
                 logInManager.getLoggedInUser(),
@@ -182,7 +185,7 @@ public class TaskManager {
      * @throws DoesNotExistException
      */
     public void editLocation(Location location)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         if (PrivilegeManager.hasTaskPrivilege(
                 logInManager.getLoggedInUser(),
@@ -208,7 +211,7 @@ public class TaskManager {
      * @throws DoesNotExistException
      */
     public void editTimeSchedule(TimeSchedule timeSchedule)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         if (PrivilegeManager.hasTaskPrivilege(
                 logInManager.getLoggedInUser(),
@@ -235,7 +238,7 @@ public class TaskManager {
      * @throws DoesNotExistException
      */
     public void editStartDateTime(int year, int month, int day, int hour, int minute)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         if (PrivilegeManager.hasTaskPrivilege(
                 logInManager.getLoggedInUser(),
@@ -260,7 +263,7 @@ public class TaskManager {
      * @throws DoesNotExistException
      */
     public void editEndDateTime(int year, int month, int day, int hour, int minute)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
 
         if (PrivilegeManager.hasTaskPrivilege(
                 logInManager.getLoggedInUser(),

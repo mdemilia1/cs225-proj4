@@ -1,35 +1,30 @@
 package EMS_Database;
 
+import auth.AuthorizationException;
+import exception.UpdateException;
+
 import java.sql.Timestamp;
-import java.util.ArrayList;
 
-/**
- *
- * @author mike
- */
 public interface Interface_BudgetData {
+    void removeBudgetItem(int uid) throws AuthorizationException, UpdateException, DoesNotExistException;
 
-    // SPECIAL CASE FUNCTIONS       
-    public int nextValidUID();
-    
-    public String queryEntireTable();
-    
-    public void removeBudgetItem(int uid) throws DoesNotExistException; 
-    
-    public double total();
-    
+    int insertBudgetItem(InputIncome input) throws AuthorizationException, UpdateException;
+
+    int insertBudgetItem(InputExpense input) throws AuthorizationException, UpdateException;
+
+    double total() throws AuthorizationException;
+
     // GETTERS
-    public String getDescription(int uid) throws DoesNotExistException;  
-    
-    public double getValue(int uid) throws DoesNotExistException;    
-    
-    public Timestamp getDate(int uid)throws DoesNotExistException;
-    
+    String getDescription(int uid) throws AuthorizationException, DoesNotExistException;
+
+    double getValue(int uid) throws AuthorizationException, DoesNotExistException;
+
+    Timestamp getDate(int uid) throws AuthorizationException, DoesNotExistException;
+
     // SETTERS
-    public void setDescription(int uid, String description) throws DoesNotExistException;
-    
-    public void setValue(int uid, double value) throws DoesNotExistException;
-    
-    public void setDate(int uid, Timestamp date) throws DoesNotExistException;
-    
+    void setDescription(int uid, String description) throws AuthorizationException, UpdateException, DoesNotExistException;
+
+    void setValue(int uid, double value) throws AuthorizationException, UpdateException, DoesNotExistException;
+
+    void setDate(int uid, Timestamp date) throws AuthorizationException, UpdateException, DoesNotExistException;
 }

@@ -2,6 +2,7 @@ package EMS_Database;
 
 import BackEnd.UserSystem.Participant;
 import BackEnd.UserSystem.User;
+import auth.PrivilegeLevel;
 
 /**
  * An object class for use with implementing a new user into the database
@@ -11,7 +12,7 @@ import BackEnd.UserSystem.User;
 public class InputUser {
 
     private int uid;
-    private int level;
+    private PrivilegeLevel privilegeLevel;
     private String fname;
     private String lname;
     private String pwd;
@@ -22,110 +23,109 @@ public class InputUser {
     private String state;
     private String zipcode;
     private String country;
-    private int eventLevel;
-    private int participant;
     
-    /** 
+    /*
      * User function creates a valid new user to create an insertion into the DB
      * 
-     * @param uid The unique user identification number. Does not check
-     * for duplicates upon creation.
-     * @param level The created users privilege level as an Integer.
-     * @param fname The String of the first name of the user
-     * @param lname The String of the last name of the user
-     * @param pwd The protected password of the user (should be hashed.) as a
-     * String
-     * @param email The email of the user as a String.
-     * @param phone The phone number represented as a String 
-     * @param street Personal info as a String default is null
-     * @param city Personal info as a String default is null
-     * @param state Personal info as a String default is null
-     * @param zipcode Personal info as a String default is null
-     * @param country Personal info as a String default is null
-     * @param eventLevel Event access level must be declared
+     * uid The unique user identification number. Does not check for duplicates upon creation.
+     * level PrivilegeLevel.id()
+     * fname The String of the first name of the user
+     * lname The String of the last name of the user
+     * pwd The protected password of the user (should be hashed.) as a String
+     * email The email of the user as a String.
+     * phone The phone number represented as a String
+     * street Personal info as a String default is null
+     * city Personal info as a String default is null
+     * state Personal info as a String default is null
+     * zipcode Personal info as a String default is null
+     * country Personal info as a String default is null
+     * eventLevel No longer used
      * 
      */
-    
-    public InputUser(){        
+
+    public InputUser() {
         //if nothing is specified.
-        this.level = 1;
+        this.privilegeLevel = PrivilegeLevel.PARTICIPANT;
         this.fname = "default firstname";
         this.lname = "default lastname";
         this.pwd = "password";
-        this.email = "user@email.com";        
+        this.email = "user@email.com";
         this.phone = "8675309";
         this.street = "default streetname";
         this.city = "default city";
         this.state = "default state";
         this.zipcode = "AAAAAA";
         this.country = "default country";
-        this.eventLevel = 1;
-	this.participant = 0;
     }
-    
+
     public InputUser(User user) {
         //from actual backend user class
-        if(user.getAdminPrivilege()){
-            this.level = 1;
-        } else {
-            this.level = 0;
-        }        
+        this.privilegeLevel = user.getPrivilegeLevel();
         //Add firstname field here
         //Add lastname field here
         this.fname = user.getFirstName();
         this.lname = user.getLastName();
         this.pwd = user.getPassword();
-                
-        this.email = user.getEmailAddress();  
+
+        this.email = user.getEmailAddress();
         this.phone = user.getPhoneNumber().toString();
         this.street = user.getAddress().getStreet();
         this.city = user.getAddress().getCity();
         this.state = user.getAddress().getState();
         this.zipcode = user.getAddress().getZipCode();
         this.country = user.getAddress().getCountry();
-        if(user.getEventCreationPrivilege()){
-            this.eventLevel = 1;
-        } else {
-            this.eventLevel = 0;
-        }
-	this.participant = 0;
-                                
+
     }
-    
+
     public InputUser(Participant user) {
-        this.participant = 1;
-        this.level = 0;
+        this.privilegeLevel = user.getPrivilegeLevel();
         this.fname = user.getFirstName();
         this.lname = user.getLastName();
-        this.pwd = new String();
-        this.email = user.getEmailAddress();  
+        this.pwd = "";
+        this.email = user.getEmailAddress();
         this.phone = user.getPhoneNumber().toString();
         this.street = user.getAddress().getStreet();
         this.city = user.getAddress().getCity();
         this.state = user.getAddress().getState();
         this.zipcode = user.getAddress().getZipCode();
         this.country = user.getAddress().getCountry();
-        this.eventLevel = 0;
     }
-    
-    public InputUser(int uid, int level, String fname, String lname, String pwd, String email, String phone, String street, String city , String state, String zipcode, String country,
-            int eventLevel, int participant) {
+
+    public InputUser(int uid, PrivilegeLevel privilegeLevel, String fname, String lname, String pwd, String email, String phone, String street, String city, String state, String zipcode, String country) {
         //manual insertion
         this.uid = uid;
-        this.level = level;
         this.fname = fname;
         this.lname = lname;
         this.pwd = pwd;
         this.email = email;
-        
+
         this.phone = phone;
         this.street = street;
         this.city = city;
         this.state = state;
         this.zipcode = zipcode;
         this.country = country;
-        this.eventLevel = eventLevel;
-	this.participant = participant;
+
+        this.privilegeLevel = privilegeLevel;
+    }
+
+    @Deprecated
+    public InputUser(int uid, int level, String fname, String lname, String pwd, String email, String phone, String street, String city, String state, String zipcode, String country, int eventLevel, int participant) {
+        //manual insertion
+        this.uid = uid;
+        this.fname = fname;
+        this.lname = lname;
+        this.pwd = pwd;
+        this.email = email;
+
+        this.phone = phone;
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.zipcode = zipcode;
+        this.country = country;
+
+        this.privilegeLevel = PrivilegeLevel.legacyFromLevels(level, eventLevel, participant);
     }
 
     //GETTERS
@@ -133,17 +133,18 @@ public class InputUser {
         return uid;
     }
 
+    @Deprecated
     public int getLevel() {
-        return level;
+        return getPrivilegeLevel().legacyIsAdmin() ? 1 : 0;
     }
 
-    public String getFirstName() {        
+    public String getFirstName() {
         return fname;
     }
 
     public String getLastName() {
         return lname;
-    }       
+    }
 
     public String getPwd() {
         return pwd;
@@ -177,22 +178,14 @@ public class InputUser {
         return country;
     }
 
-    public int getEventLevel() {
-        return eventLevel;
-    } 
-
-    public int getParticipant() {
-	return participant;
+    public PrivilegeLevel getPrivilegeLevel() {
+        return privilegeLevel;
     }
-        
+
 
     //SETTERS
     public void setUid(int uid) {
         this.uid = uid;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
     }
 
     public void setFirstName(String fname) {
@@ -201,8 +194,8 @@ public class InputUser {
 
     public void setLastName(String lname) {
         this.lname = lname;
-    }    
-    
+    }
+
     public void setPwd(String pwd) {
         this.pwd = pwd;
     }
@@ -235,13 +228,7 @@ public class InputUser {
         this.country = country;
     }
 
-    public void setEventLevel(int eventLevel) {
-        this.eventLevel = eventLevel;
+    public void setPrivilegeLevel(PrivilegeLevel privilegeLevel) {
+        this.privilegeLevel = privilegeLevel;
     }
-
-    public void setParticipant(int participant) {
-	this.participant = participant;
-    }        
-    
-    
 }

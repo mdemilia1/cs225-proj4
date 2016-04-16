@@ -3,6 +3,8 @@ package BackEnd.UserSystem;
 
 import BackEnd.UserSystem.UserExceptions.PasswordMismatchError;
 import BackEnd.UserSystem.UserExceptions.IllegalCharacterException;
+import auth.PrivilegeLevel;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
@@ -21,14 +23,12 @@ public class User extends Participant {
     // private int UID;
 
     private String password;
-    private boolean adminPrivilege;
-    private boolean eventCreationPrivilege;
     final private char[] ILLEGAL_CHARACTERS = {'@', '/', '\\', ' '};
     
 
     public User() {
         super();
-        password = new String();
+        password = "";
     }
 
     /**
@@ -53,12 +53,10 @@ public class User extends Participant {
             
      }*/
     public User(int userID, User user) {
-        super(userID, (Participant) user);
+        super(userID, user);
 
         password = user.getPassword();
-
-        adminPrivilege = user.getAdminPrivilege();
-        eventCreationPrivilege = user.getEventCreationPrivilege();
+        setPrivilegeLevel(user.getPrivilegeLevel());
     }
 
     public User(int uid, String firstName, String lastName, String emailAddress, String pword) {
@@ -89,11 +87,7 @@ public class User extends Participant {
     }
 
     private boolean verifyPassword(String pword, String pwordMatch) {
-        if (pword.equals(pwordMatch)) {
-            return true;
-        } else {
-            return false;
-        }
+        return pword.equals(pwordMatch);
     }
 
     /**
@@ -116,7 +110,7 @@ public class User extends Participant {
      * @return Returns false if the string contains illegal characters,
      * otherwise returns true
      */
-    public boolean checkCharacters(String s) {
+    private boolean checkCharacters(String s) {
         boolean b = true;
         for (char ic : ILLEGAL_CHARACTERS) {
             for (int x = 0; x < s.length(); x++) {
@@ -132,16 +126,18 @@ public class User extends Participant {
      *
      * @param b boolean value determining if the user has admin privileges
      */
+    @Deprecated
     public void setAdminPrivilege(boolean b) {
-        adminPrivilege = b;
+        setPrivilegeLevel(PrivilegeLevel.legacyFromLevels(b, getEventCreationPrivilege()));
     }
 
     /**
      *
      * @return the user's admin privileges.
      */
+    @Deprecated
     public boolean getAdminPrivilege() {
-        return adminPrivilege;
+        return getPrivilegeLevel().legacyIsAdmin();
     }
 
     /**
@@ -149,16 +145,18 @@ public class User extends Participant {
      * @param b boolean value determining if the user has event creation
      * privileges
      */
+    @Deprecated
     public void setEventCreationPrivilege(boolean b) {
-        eventCreationPrivilege = b;
+        setPrivilegeLevel(PrivilegeLevel.legacyFromLevels(getAdminPrivilege(), b));
     }
 
     /**
      *
      * @return the user's event creation privileges
      */
+    @Deprecated
     public boolean getEventCreationPrivilege() {
-        return eventCreationPrivilege;
+        return getPrivilegeLevel().legacyIsEventCreator();
     }
 
     public boolean equals(User user) {
@@ -166,11 +164,7 @@ public class User extends Participant {
             return false;
         }
         String s = this.getEmailAddress();
-        if (s.equals(user.getEmailAddress())) {
-            return true;
-        } else {
-            return false;
-        }
+        return s.equals(user.getEmailAddress());
     }
 
     public String toString() {
@@ -179,6 +173,6 @@ public class User extends Participant {
 //                "\nAdmin Privileges: " + adminPrivilege +
 //                "\nEvent Creation Privileges: " + eventCreationPrivilege;
 //        return output;
-        return super.getFirstName() + " " + super.getLastName();
+        return getFirstName() + " " + getLastName();
     }
 }

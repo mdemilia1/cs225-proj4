@@ -1,59 +1,56 @@
 package EMS_Database;
 
+import auth.AuthorizationException;
+import exception.UpdateException;
+
 import java.util.ArrayList;
 
 /**
- *
  * @author mike
  */
 public interface Interface_CommitteeData {
-
     //SPECIAL FUNCTIONS       
-    public int createCommittee(InputCommittee committee);
+    int createCommittee(InputCommittee committee) throws AuthorizationException, UpdateException;
 
-    public int nextValidUID();
+    void removeCommittee(int uid) throws AuthorizationException, UpdateException, DoesNotExistException;
 
-    public String queryEntireTable();
-    
-    public void removeCommittee(int uid) throws DoesNotExistException;
-    
-    public double remainingMonies(int uid) throws DoesNotExistException;
-    
-    public double totalIncome(int uid) throws DoesNotExistException;
-    
-    public double totalExpense(int uid) throws DoesNotExistException;
+    double remainingMonies(int uid) throws AuthorizationException, DoesNotExistException;
+
+    double totalIncome(int uid) throws AuthorizationException, DoesNotExistException;
+
+    double totalExpense(int uid) throws AuthorizationException, DoesNotExistException;
 
     // GETTERS
-    public String getTitle(int uid) throws DoesNotExistException;
+    String getTitle(int uid) throws AuthorizationException, DoesNotExistException;
 
-    public int getChairman(int uid) throws DoesNotExistException;
+    int getChairman(int uid) throws AuthorizationException, DoesNotExistException;
 
-    public ArrayList<Integer> getBudgetAccessList(int uid) throws DoesNotExistException;
+    ArrayList<Integer> getBudgetAccessList(int uid) throws AuthorizationException, DoesNotExistException;
 
-    public ArrayList<Integer> getCommitteeMembers(int uid) throws DoesNotExistException;
+    ArrayList<Integer> getCommitteeMembers(int uid) throws AuthorizationException, DoesNotExistException;
 
-    public ArrayList<Integer> getTaskList(int uid) throws DoesNotExistException;
-    
-    public ArrayList<Integer> getIncome(int uid) throws DoesNotExistException;
-    
-    public ArrayList<Integer> getExpense(int uid) throws DoesNotExistException;
+    ArrayList<Integer> getTaskList(int uid) throws AuthorizationException, DoesNotExistException;
 
-    public double getBudget(int uid) throws DoesNotExistException;
+    ArrayList<Integer> getIncome(int uid) throws AuthorizationException, DoesNotExistException;
+
+    ArrayList<Integer> getExpense(int uid) throws AuthorizationException, DoesNotExistException;
+
+    double getBudget(int uid) throws AuthorizationException, DoesNotExistException;
 
     // SETTERS
-    public void setTitle(int uid, String title) throws DoesNotExistException;
+    void setTitle(int uid, String title) throws AuthorizationException, UpdateException, DoesNotExistException;
 
-    public void setChairman(int uid, int nuid) throws DoesNotExistException;
+    void setChairman(int uid, int nuid) throws AuthorizationException, UpdateException, DoesNotExistException;
 
-    public void setBudgetAccessList(int uid, ArrayList<Integer> accessList) throws DoesNotExistException;
+    void setBudgetAccessList(int uid, ArrayList<Integer> accessList) throws AuthorizationException, UpdateException, DoesNotExistException;
 
-    public void setCommitteeMembers(int uid, ArrayList<Integer> memberList) throws DoesNotExistException;
+    void setCommitteeMembers(int uid, ArrayList<Integer> memberList) throws AuthorizationException, UpdateException, DoesNotExistException;
 
-    public void setTaskList(int uid, ArrayList<Integer> taskList) throws DoesNotExistException;
-    
-    public void setIncome(int uid, ArrayList<Integer> income) throws DoesNotExistException;
-    
-    public void setExpense(int uid, ArrayList<Integer> expense) throws DoesNotExistException;
+    void setTaskList(int uid, ArrayList<Integer> taskList) throws AuthorizationException, UpdateException, DoesNotExistException;
 
-    public void setBudget(int uid, double budget) throws DoesNotExistException;
+    void setIncome(int uid, ArrayList<Integer> income) throws AuthorizationException, UpdateException, DoesNotExistException;
+
+    void setExpense(int uid, ArrayList<Integer> expense) throws AuthorizationException, UpdateException, DoesNotExistException;
+
+    void setBudget(int uid, double budget) throws AuthorizationException, UpdateException, DoesNotExistException;
 }

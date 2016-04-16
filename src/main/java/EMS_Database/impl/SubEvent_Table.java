@@ -2,25 +2,31 @@ package EMS_Database.impl;
 
 import EMS_Database.DoesNotExistException;
 import EMS_Database.InitDB;
-import static EMS_Database.InitDB.debugLog;
 import EMS_Database.InputSubEventData;
 import EMS_Database.Interface_SubEventData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.logging.Level;
+import auth.AuthorizationException;
+import auth.Operation;
+import auth.Permissions;
 import exception.UpdateException;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+
 /**
- *
  * @author mike
  */
 public class SubEvent_Table extends InitDB implements Interface_SubEventData {
+    private static final String tableName = "SUBEVENTS";
 
-    private String tableName = "SUBEVENTS";
+    @Override
+    protected String getTableName() {
+        return tableName;
+    }
 
     ///////////////////////SPECIAL FUNCTIONS///////////////////////////
+
     /**
      * Inserts a new row into SubEvent Table based on the parameters of
      * InputSubEventData
@@ -29,88 +35,31 @@ public class SubEvent_Table extends InitDB implements Interface_SubEventData {
      * @return an int of the UID upon successful creation.
      */
     @Override
-    public int createSubEvent(InputSubEventData subevent) {
+    public int createSubEvent(InputSubEventData subevent) throws UpdateException, AuthorizationException {
+        Permissions.get().checkPermission(tableName, null, Operation.CREATE);
 
-	try {
-	    //Creating Statement
-	    PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO SUBEVENTS VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-		int column = 0;
-	    AddAddressStmt.setString(++column, subevent.getDescription());
-	    AddAddressStmt.setString(++column, subevent.getDetails());
-	    AddAddressStmt.setString(++column, subevent.getTitle());
-	    AddAddressStmt.setInt(++column, subevent.getComplete());
-	    AddAddressStmt.setString(++column, subevent.getStreet());
-	    AddAddressStmt.setString(++column, subevent.getCity());
-	    AddAddressStmt.setString(++column, subevent.getState());
-	    AddAddressStmt.setString(++column, subevent.getZipcode());
-	    AddAddressStmt.setString(++column, subevent.getCountry());
-	    AddAddressStmt.setTimestamp(++column, subevent.getStartTime());
-	    AddAddressStmt.setTimestamp(++column, subevent.getEndTime());
+        try {
+            //Creating Statement
+            PreparedStatement AddAddressStmt = dbConnection.prepareStatement("INSERT INTO SUBEVENTS VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            int column = 0;
+            AddAddressStmt.setString(++column, subevent.getDescription());
+            AddAddressStmt.setString(++column, subevent.getDetails());
+            AddAddressStmt.setString(++column, subevent.getTitle());
+            AddAddressStmt.setInt(++column, subevent.getComplete());
+            AddAddressStmt.setString(++column, subevent.getStreet());
+            AddAddressStmt.setString(++column, subevent.getCity());
+            AddAddressStmt.setString(++column, subevent.getState());
+            AddAddressStmt.setString(++column, subevent.getZipcode());
+            AddAddressStmt.setString(++column, subevent.getCountry());
+            AddAddressStmt.setTimestamp(++column, subevent.getStartTime());
+            AddAddressStmt.setTimestamp(++column, subevent.getEndTime());
 
-	    //Execute Statement
-	    return AddAddressStmt.executeUpdate();
+            //Execute Statement
+            return AddAddressStmt.executeUpdate();
 
-	//    for (int uid : currentUIDList(tableName)) {
-	//	if (newUID == uid) {
-	//	    throw new DoesNotExistException("Problem inserting UID=" + newUID + " into database");
-	//	}
-	//   }
-        // Do we need this? - Tom
-
-	} catch (SQLException sqle) {
-	    System.err.println(sqle.getMessage());
-		//  debugLog.log(Level.SEVERE, "SUBEVENT table insertion failed. UID={0}", uid);
-		//
-		//  throw new UpdateException("Error creating sub-event", sqle);
-    }
-
-
-
-    /**
-     * A debug function to display the entire contents of this table
-     *
-     * @return the entire contents of this table as a string.
-     */
-    @Override
-    public String queryEntireTable() {
-	StringBuilder returnQuery = new StringBuilder();
-	try {
-	    PreparedStatement idQueryStmt = dbConnection.prepareStatement("SELECT * FROM SUBEVENTS");
-	    ResultSet rs = idQueryStmt.executeQuery();
-
-	    while (rs.next()) {
-		returnQuery.append(rs.getString("UID"));
-		returnQuery.append(",");
-		returnQuery.append(rs.getString("DESCRIPTION"));
-		returnQuery.append(",");
-		returnQuery.append(rs.getString("DETAILS"));
-		returnQuery.append(",");
-		returnQuery.append(rs.getString("TITLE"));
-		returnQuery.append(",");
-		returnQuery.append(rs.getInt("COMPLETE"));
-		returnQuery.append(",");
-		returnQuery.append(rs.getString("STREET"));
-		returnQuery.append(",");
-		returnQuery.append(rs.getString("CITY"));
-		returnQuery.append(",");
-		returnQuery.append(rs.getString("STATE"));
-		returnQuery.append(",");
-		returnQuery.append(rs.getString("ZIPCODE"));
-		returnQuery.append(",");
-		returnQuery.append(rs.getString("COUNTRY"));
-		returnQuery.append(",");
-		returnQuery.append(rs.getTimestamp("STARTDATE"));
-		returnQuery.append(",");
-		returnQuery.append(rs.getTimestamp("ENDDATE"));
-		returnQuery.append("\n");
-	    }
-
-	} catch (SQLException sqle) {
-	    sqle.printStackTrace();
-	    System.exit(1);
-	}
-
-	return returnQuery.toString();
+        } catch (SQLException sqle) {
+            throw new UpdateException("Error creating sub-event", sqle);
+        }
     }
 
     /**
@@ -121,142 +70,119 @@ public class SubEvent_Table extends InitDB implements Interface_SubEventData {
      * @throws DoesNotExistException if the uid does not exist in the table.
      */
     @Override
-    public void removeSubEvent(int uid) throws DoesNotExistException {
-	String table = "SUBEVENTS";
-	//checking for existance of that uid
-	boolean exists = false;
-	for (int validID : currentUIDList(table)) {
-	    if (validID == uid) {
-		exists = true;
-		break;
-	    }
-	}
-	//what to do if that uid does not exist
-	if (exists == false) {
-	    debugLog.log(Level.WARNING, "UID={0} does not exist in {1} table. Error occurred while calling removeEvent", new Object[]{uid, table});
-	    throw new DoesNotExistException("check debug log. " + table + " table error.");
-	}
-
-	try {
-	    PreparedStatement idQueryStmt = dbConnection.prepareStatement("DELETE FROM " + table + " WHERE UID=?");
-	    idQueryStmt.setInt(1, uid);
-	    idQueryStmt.executeUpdate();
-
-	} catch (SQLException sqle) {
-	    System.err.println(sqle.getMessage());
-	    System.err.println("Deleting stuff from " + table + " is dangerous...");
-	}
+    public void removeSubEvent(int uid) throws DoesNotExistException, UpdateException, AuthorizationException {
+        remove(uid);
     }
 
     ////////////////////////GETTERS/////////////////////////
     @Override
-    public String getDescription(int uid) throws DoesNotExistException {
-	return getDBString("DESCRIPTION", tableName, uid);
+    public String getDescription(int uid) throws DoesNotExistException, AuthorizationException {
+        return getDBString("DESCRIPTION", uid);
     }
 
     @Override
-    public String getDetails(int uid) throws DoesNotExistException {
-	return getDBString("DETAILS", tableName, uid);
+    public String getDetails(int uid) throws DoesNotExistException, AuthorizationException {
+        return getDBString("DETAILS", uid);
     }
 
     @Override
-    public String getTitle(int uid) throws DoesNotExistException {
-	return getDBString("TITLE", tableName, uid);
+    public String getTitle(int uid) throws DoesNotExistException, AuthorizationException {
+        return getDBString("TITLE", uid);
     }
 
     @Override
-    public String getStreet(int uid) throws DoesNotExistException {
-	return getDBString("STREET", tableName, uid);
+    public String getStreet(int uid) throws DoesNotExistException, AuthorizationException {
+        return getDBString("STREET", uid);
     }
 
     @Override
-    public String getCity(int uid) throws DoesNotExistException {
-	return getDBString("CITY", tableName, uid);
+    public String getCity(int uid) throws DoesNotExistException, AuthorizationException {
+        return getDBString("CITY", uid);
     }
 
     @Override
-    public String getState(int uid) throws DoesNotExistException {
-	return getDBString("STATE", tableName, uid);
+    public String getState(int uid) throws DoesNotExistException, AuthorizationException {
+        return getDBString("STATE", uid);
     }
 
     @Override
-    public String getZipcode(int uid) throws DoesNotExistException {
-	return getDBString("ZIPCODE", tableName, uid);
+    public String getZipcode(int uid) throws DoesNotExistException, AuthorizationException {
+        return getDBString("ZIPCODE", uid);
     }
 
     @Override
-    public String getCountry(int uid) throws DoesNotExistException {
-	return getDBString("COUNTRY", tableName, uid);
+    public String getCountry(int uid) throws DoesNotExistException, AuthorizationException {
+        return getDBString("COUNTRY", uid);
     }
 
     @Override
-    public Timestamp getStartDate(int uid) throws DoesNotExistException {
-	return getDBTimestamp("STARTDATE", tableName, uid);
+    public Timestamp getStartDate(int uid) throws DoesNotExistException, AuthorizationException {
+        return getDBTimestamp("STARTDATE", uid);
     }
 
     @Override
-    public Timestamp getEndDate(int uid) throws DoesNotExistException {
-	return getDBTimestamp("ENDDATE", tableName, uid);
+    public Timestamp getEndDate(int uid) throws DoesNotExistException, AuthorizationException {
+        return getDBTimestamp("ENDDATE", uid);
     }
 
     @Override
-    public int getComplete(int uid) throws DoesNotExistException {
-	return getDBInt("COMPLETE", tableName, uid);
+    public int getComplete(int uid) throws DoesNotExistException, AuthorizationException {
+        return getDBInt("COMPLETE", uid);
     }
 
     /////////////////////SETTERS////////////////////////////
     @Override
-    public void setDescription(int uid, String description) throws DoesNotExistException {
-	setDBString("DESCRIPTION", tableName, uid, description);
+    public void setDescription(int uid, String description) throws DoesNotExistException, UpdateException, AuthorizationException {
+        setDBString("DESCRIPTION", uid, description);
     }
 
     @Override
-    public void setDetails(int uid, String details) throws DoesNotExistException {
-	setDBString("DETAILS", tableName, uid, details);
+    public void setDetails(int uid, String details) throws DoesNotExistException, UpdateException, AuthorizationException {
+        setDBString("DETAILS", uid, details);
     }
 
     @Override
-    public void setTitle(int uid, String title) throws DoesNotExistException {
-	setDBString("TITLE", tableName, uid, title);
+    public void setTitle(int uid, String title) throws DoesNotExistException, UpdateException, AuthorizationException {
+        setDBString("TITLE", uid, title);
     }
 
     @Override
-    public void setStreet(int uid, String street) throws DoesNotExistException {
-	setDBString("STREET", tableName, uid, street);
+    public void setStreet(int uid, String street) throws DoesNotExistException, UpdateException, AuthorizationException {
+        setDBString("STREET", uid, street);
     }
 
     @Override
-    public void setCity(int uid, String city) throws DoesNotExistException {
-	setDBString("CITY", tableName, uid, city);
+    public void setCity(int uid, String city) throws DoesNotExistException, UpdateException, AuthorizationException {
+        setDBString("CITY", uid, city);
     }
 
     @Override
-    public void setState(int uid, String state) throws DoesNotExistException {
-	setDBString("STATE", tableName, uid, state);
+    public void setState(int uid, String state) throws DoesNotExistException, UpdateException, AuthorizationException {
+        setDBString("STATE", uid, state);
     }
 
     @Override
-    public void setZipcode(int uid, String zipcode) throws DoesNotExistException {
-	setDBString("ZIPCODE", tableName, uid, zipcode);
+    public void setZipcode(int uid, String zipcode) throws DoesNotExistException, UpdateException, AuthorizationException {
+        setDBString("ZIPCODE", uid, zipcode);
     }
 
     @Override
-    public void setCountry(int uid, String country) throws DoesNotExistException {
-	setDBString("COUNTRY", tableName, uid, country);
+    public void setCountry(int uid, String country) throws DoesNotExistException, UpdateException, AuthorizationException {
+        setDBString("COUNTRY", uid, country);
     }
 
     @Override
-    public void setStartDate(int uid, Timestamp time) throws DoesNotExistException {
-	setDBTimestamp("STARTDATE", tableName, uid, time);
+    public void setStartDate(int uid, Timestamp time) throws DoesNotExistException, UpdateException, AuthorizationException {
+        setDBTimestamp("STARTDATE", uid, time);
     }
 
     @Override
-    public void setEndDate(int uid, Timestamp time) throws DoesNotExistException {
-	setDBTimestamp("ENDDATE", tableName, uid, time);
+    public void setEndDate(int uid, Timestamp time) throws DoesNotExistException, UpdateException, AuthorizationException {
+        setDBTimestamp("ENDDATE", uid, time);
     }
 
     @Override
-    public void setComplete(int uid, int complete) throws DoesNotExistException {
-	setDBInt("COMPLETE", tableName, uid, complete);
+    public void setComplete(int uid, int complete) throws DoesNotExistException, UpdateException, AuthorizationException {
+        setDBInt("COMPLETE", uid, complete);
     }
 }

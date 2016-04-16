@@ -1,5 +1,8 @@
 package EMS_Database;
 
+import auth.AuthorizationException;
+import exception.UpdateException;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -8,59 +11,54 @@ import java.util.ArrayList;
  * @author mike
  */
 public interface Interface_SubEventData {
-
     // SPECIAL CASE FUNCTIONS
-    public int createSubEvent(InputSubEventData subevent);
+    int createSubEvent(InputSubEventData subevent) throws AuthorizationException, UpdateException;
 
-    public int nextValidUID();
-
-    public String queryEntireTable();
-
-    public void removeSubEvent(int uid) throws DoesNotExistException;
+    void removeSubEvent(int uid) throws AuthorizationException, UpdateException, DoesNotExistException;
 
     //GETTERS
-    public String getDescription(int uid) throws DoesNotExistException;
+    String getDescription(int uid) throws AuthorizationException, DoesNotExistException;
 
-    public String getDetails(int uid) throws DoesNotExistException;
+    String getDetails(int uid) throws AuthorizationException, DoesNotExistException;
 
-    public String getTitle(int uid) throws DoesNotExistException;
+    String getTitle(int uid) throws AuthorizationException, DoesNotExistException;
 
-    public String getStreet(int uid) throws DoesNotExistException; //location info
+    String getStreet(int uid) throws AuthorizationException, DoesNotExistException; //location info
 
-    public String getCity(int uid) throws DoesNotExistException; //location info
+    String getCity(int uid) throws AuthorizationException, DoesNotExistException; //location info
 
-    public String getState(int uid) throws DoesNotExistException; //location info
+    String getState(int uid) throws AuthorizationException, DoesNotExistException; //location info
 
-    public String getZipcode(int uid) throws DoesNotExistException; //location info
+    String getZipcode(int uid) throws AuthorizationException, DoesNotExistException; //location info
 
-    public String getCountry(int uid) throws DoesNotExistException; //location info
+    String getCountry(int uid) throws AuthorizationException, DoesNotExistException; //location info
 
-    public Timestamp getStartDate(int uid) throws DoesNotExistException;
+    Timestamp getStartDate(int uid) throws AuthorizationException, DoesNotExistException;
 
-    public Timestamp getEndDate(int uid) throws DoesNotExistException;
+    Timestamp getEndDate(int uid) throws AuthorizationException, DoesNotExistException;
 
-    public int getComplete(int uid) throws DoesNotExistException;
+    int getComplete(int uid) throws AuthorizationException, DoesNotExistException;
 
     //SETTERS
-    public void setDescription(int uid, String description) throws DoesNotExistException;
+    void setDescription(int uid, String description) throws AuthorizationException, UpdateException, DoesNotExistException;
 
-    public void setDetails(int uid, String details) throws DoesNotExistException;
+    void setDetails(int uid, String details) throws AuthorizationException, UpdateException, DoesNotExistException;
 
-    public void setTitle(int uid, String title) throws DoesNotExistException;
+    void setTitle(int uid, String title) throws AuthorizationException, UpdateException, DoesNotExistException;
 
-    public void setStreet(int uid, String street) throws DoesNotExistException; //location info
+    void setStreet(int uid, String street) throws AuthorizationException, UpdateException, DoesNotExistException; //location info
 
-    public void setCity(int uid, String city) throws DoesNotExistException; //location info
+    void setCity(int uid, String city) throws AuthorizationException, UpdateException, DoesNotExistException; //location info
 
-    public void setState(int uid, String state) throws DoesNotExistException; //location info
+    void setState(int uid, String state) throws AuthorizationException, UpdateException, DoesNotExistException; //location info
 
-    public void setZipcode(int uid, String zipcode) throws DoesNotExistException; //location info
+    void setZipcode(int uid, String zipcode) throws AuthorizationException, UpdateException, DoesNotExistException; //location info
 
-    public void setCountry(int uid, String country) throws DoesNotExistException; //location info
+    void setCountry(int uid, String country) throws AuthorizationException, UpdateException, DoesNotExistException; //location info
 
-    public void setStartDate(int uid, Timestamp time) throws DoesNotExistException;
+    void setStartDate(int uid, Timestamp time) throws AuthorizationException, UpdateException, DoesNotExistException;
 
-    public void setEndDate(int uid, Timestamp time) throws DoesNotExistException;
+    void setEndDate(int uid, Timestamp time) throws AuthorizationException, UpdateException, DoesNotExistException;
 
-    public void setComplete(int uid, int complete) throws DoesNotExistException;
+    void setComplete(int uid, int complete) throws AuthorizationException, UpdateException, DoesNotExistException;
 }

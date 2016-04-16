@@ -27,7 +27,7 @@ public class PrivilegeManager {
      * @return whether the user has sufficient privilege
      * @throws PrivilegeInsufficientException
      */
-    public static boolean hasAdminPrivilege(User loggedInUser)
+    static boolean hasAdminPrivilege(User loggedInUser)
             throws PrivilegeInsufficientException {
 
         if (loggedInUser.getAdminPrivilege()) {
@@ -45,14 +45,10 @@ public class PrivilegeManager {
      * @return whether the user has sufficient privilege
      * @throws PrivilegeInsufficientException
      */
-    public static boolean hasUserPrivilege(User loggedInUser, User selectedUser)
+    static boolean hasUserPrivilege(User loggedInUser, User selectedUser)
             throws PrivilegeInsufficientException {
 
-        if (loggedInUser.equals(selectedUser)) {
-            return true;
-        } else {
-            return hasAdminPrivilege(loggedInUser);
-        }
+        return loggedInUser.equals(selectedUser) || hasAdminPrivilege(loggedInUser);
     }
 
     /**
@@ -62,14 +58,10 @@ public class PrivilegeManager {
      * @return whether the user has event creation privileges
      * @throws PrivilegeInsufficientException
      */
-    public static boolean hasEventCreationPrivilege(User loggedInUser)
+    static boolean hasEventCreationPrivilege(User loggedInUser)
             throws PrivilegeInsufficientException {
 
-        if (loggedInUser.getEventCreationPrivilege()) {
-            return true;
-        } else {
-            return hasAdminPrivilege(loggedInUser);
-        }
+        return loggedInUser.getEventCreationPrivilege() || hasAdminPrivilege(loggedInUser);
     }
 
     /**
@@ -80,14 +72,10 @@ public class PrivilegeManager {
      * @return whether the user has event privileges
      * @throws PrivilegeInsufficientException
      */
-    public static boolean hasEventPrivilege(User loggedInUser, Event selectedEvent)
+    static boolean hasEventPrivilege(User loggedInUser, Event selectedEvent)
             throws PrivilegeInsufficientException {
 
-        if (selectedEvent.getOrganizerList().contains(loggedInUser)) {
-            return true;
-        } else {
-            return hasAdminPrivilege(loggedInUser);
-        }
+        return selectedEvent.getOrganizerList().contains(loggedInUser) || hasAdminPrivilege(loggedInUser);
     }
 
     /**
@@ -98,21 +86,15 @@ public class PrivilegeManager {
      * @return whether the user has sub event privileges
      * @throws PrivilegeInsufficientException
      */
-    public static boolean hasSubEventPrivilege(User loggedInUser, Event selectedEvent)
+    static boolean hasSubEventPrivilege(User loggedInUser, Event selectedEvent)
             throws PrivilegeInsufficientException {
-
-        boolean hasPrivilege = true;
         for (Committee committee : selectedEvent.getCommitteeList()) {
-            if (!(committee.getChair().equals(loggedInUser))) {
-                hasPrivilege = false;
+            if (committee.getChair().equals(loggedInUser)) {
+                return true;
             }
         }
 
-        if (hasPrivilege) {
-            return true;
-        } else {
-            return hasEventPrivilege(loggedInUser, selectedEvent);
-        }
+        return hasEventPrivilege(loggedInUser, selectedEvent);
     }
 
     /**
@@ -124,14 +106,10 @@ public class PrivilegeManager {
      * @return whether the user has committee privileges
      * @throws PrivilegeInsufficientException
      */
-    public static boolean hasCommitteePrivilege(User loggedInUser, Event selectedEvent, Committee selectedCommittee)
+    static boolean hasCommitteePrivilege(User loggedInUser, Event selectedEvent, Committee selectedCommittee)
             throws PrivilegeInsufficientException {
 
-        if (selectedCommittee.getChair().equals(loggedInUser)) {
-            return true;
-        } else {
-            return hasEventPrivilege(loggedInUser, selectedEvent);
-        }
+        return selectedCommittee.getChair().equals(loggedInUser) || hasEventPrivilege(loggedInUser, selectedEvent);
     }
 
     /**
@@ -144,14 +122,10 @@ public class PrivilegeManager {
      * @return whether the user has task privileges
      * @throws PrivilegeInsufficientException
      */
-    public static boolean hasTaskPrivilege(User loggedInUser, Event selectedEvent, Committee selectedCommittee, Task selectedTask)
+    static boolean hasTaskPrivilege(User loggedInUser, Event selectedEvent, Committee selectedCommittee, Task selectedTask)
             throws PrivilegeInsufficientException {
 
-        if (selectedTask.getResponsibleList().contains(loggedInUser)) {
-            return true;
-        } else {
-            return hasCommitteePrivilege(loggedInUser, selectedEvent, selectedCommittee);
-        }
+        return selectedTask.getResponsibleList().contains(loggedInUser) || hasCommitteePrivilege(loggedInUser, selectedEvent, selectedCommittee);
     }
 
     /**
@@ -163,13 +137,9 @@ public class PrivilegeManager {
      * @return whether the user has budget privileges
      * @throws PrivilegeInsufficientException
      */
-    public static boolean hasBudgetPrivilege(User loggedInUser, Event selectedEvent, Committee selectedCommittee)
+    static boolean hasBudgetPrivilege(User loggedInUser, Event selectedEvent, Committee selectedCommittee)
             throws PrivilegeInsufficientException {
 
-        if (selectedCommittee.getBudgetAccessList().contains(loggedInUser)) {
-            return true;
-        } else {
-            return hasCommitteePrivilege(loggedInUser, selectedEvent, selectedCommittee);
-        }
+        return selectedCommittee.getBudgetAccessList().contains(loggedInUser) || hasCommitteePrivilege(loggedInUser, selectedEvent, selectedCommittee);
     }
 }

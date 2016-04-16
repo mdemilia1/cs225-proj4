@@ -6,6 +6,8 @@ import BackEnd.EventSystem.TimeSchedule;
 import BackEnd.UserSystem.Location;
 import EMS_Database.DoesNotExistException;
 import EMS_Database.impl.SubEvent_Table;
+import auth.AuthorizationException;
+import exception.UpdateException;
 
 /**
  * This class serves as a liaison between the GUI and the back end and the data.
@@ -29,7 +31,7 @@ public class SubEventManager {
         subEventsTable = new SubEvent_Table();
     }
 
-    public void connectManagers(LoginManager logInManager, EventManager eventManager) {
+    void connectManagers(LoginManager logInManager, EventManager eventManager) {
         this.logInManager = logInManager;
         this.eventManager = eventManager;
     }
@@ -39,7 +41,7 @@ public class SubEventManager {
      *
      * @return the sub event table
      */
-    public SubEvent_Table getSubEventsTable() {
+    SubEvent_Table getSubEventsTable() {
         return subEventsTable;
     }
 
@@ -70,7 +72,7 @@ public class SubEventManager {
      * @throws DoesNotExistException
      */
     public void editTitle(String title)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, AuthorizationException, UpdateException {
 
         if (PrivilegeManager.hasSubEventPrivilege(
                 logInManager.getLoggedInUser(),
@@ -89,7 +91,7 @@ public class SubEventManager {
      * @throws DoesNotExistException
      */
     public void editDescription(String description)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, AuthorizationException, UpdateException {
 
         if (PrivilegeManager.hasSubEventPrivilege(
                 logInManager.getLoggedInUser(),
@@ -108,7 +110,7 @@ public class SubEventManager {
      * @throws DoesNotExistException
      */
     public void editLocation(Location location)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, AuthorizationException, UpdateException {
 
         if (PrivilegeManager.hasSubEventPrivilege(
                 logInManager.getLoggedInUser(),
@@ -132,7 +134,7 @@ public class SubEventManager {
      * @throws DoesNotExistException
      */
     public void editTimeSchedule(TimeSchedule timeSchedule)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, AuthorizationException, UpdateException {
 
         if (PrivilegeManager.hasSubEventPrivilege(
                 logInManager.getLoggedInUser(),
@@ -157,7 +159,7 @@ public class SubEventManager {
      * @throws DoesNotExistException
      */
     public void editStartDateTime(int year, int month, int day, int hour, int minute)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, AuthorizationException, UpdateException {
 
         if (PrivilegeManager.hasSubEventPrivilege(
                 logInManager.getLoggedInUser(),
@@ -180,7 +182,7 @@ public class SubEventManager {
      * @throws DoesNotExistException
      */
     public void editEndDateTime(int year, int month, int day, int hour, int minute)
-            throws PrivilegeInsufficientException, DoesNotExistException {
+            throws PrivilegeInsufficientException, DoesNotExistException, AuthorizationException, UpdateException {
 
         if (PrivilegeManager.hasSubEventPrivilege(
                 logInManager.getLoggedInUser(),

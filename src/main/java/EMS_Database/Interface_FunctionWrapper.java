@@ -1,33 +1,33 @@
 package EMS_Database;
 
+import auth.AuthorizationException;
+import exception.UpdateException;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 
-/**
- *
- * @author mike
- */
 public interface Interface_FunctionWrapper {
 
     // DB GETTERS
-    public String getDBString(String query, String table, int uid) throws DoesNotExistException;
+    String getDBString(String column, int uid) throws DoesNotExistException, AuthorizationException;
 
-    public double getDBDouble(String query, String table, int uid) throws DoesNotExistException;
+    double getDBDouble(String column, int uid) throws DoesNotExistException, AuthorizationException;
 
-    public ArrayList<Integer> getDBArrayList(String query, String table, int uid) throws DoesNotExistException;
+    ArrayList<Integer> getDBArrayList(String column, int uid) throws DoesNotExistException, AuthorizationException;
 
-    public int getDBInt(String query, String table, int uid) throws DoesNotExistException;
+    int getDBInt(String column, int uid) throws DoesNotExistException, AuthorizationException;
 
-    public Timestamp getDBTimestamp(String query, String table, int uid) throws DoesNotExistException;
+    Timestamp getDBTimestamp(String column, int uid) throws DoesNotExistException, AuthorizationException;
 
     // DB SETTERS
-    public void setDBString(String query, String table, int uid, String newValue) throws DoesNotExistException;
+    void setDBString(String column, int uid, String newValue) throws DoesNotExistException, UpdateException, AuthorizationException;
 
-    public void setDBDouble(String query, String table, int uid, double newValue) throws DoesNotExistException;
+    void setDBDouble(String column, int uid, double newValue) throws DoesNotExistException, UpdateException, AuthorizationException;
 
-    public void setDBArrayList(String query, String table, int uid, ArrayList<Integer> newValue) throws DoesNotExistException;
+    void setDBArrayList(String column, int uid, List<Integer> newValue) throws DoesNotExistException, UpdateException, AuthorizationException;
 
-    public void setDBInt(String query, String table, int uid, int newValue) throws DoesNotExistException;
+    void setDBInt(String column, int uid, int newValue) throws DoesNotExistException, UpdateException, AuthorizationException;
 
-    public void setDBTimestamp(String query, String table, int uid, Timestamp newValue) throws DoesNotExistException;
+    void setDBTimestamp(String column, int uid, Timestamp newValue) throws DoesNotExistException, UpdateException, AuthorizationException;
 }
