@@ -43,7 +43,6 @@ public class EmailPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Please type an email address in the to box.");
         } else {
             try {
-                //JOptionPane.showMessageDialog(null, "you hit enter.");
                 Email.send(manager.getLogInManager().getLoggedInUser().getEmailAddress(), toList, subjectField.getText(), messageArea.getText(), (manager.getLogInManager().getLoggedInUser().getFirstName() + " " + manager.getLogInManager().getLoggedInUser().getLastName()));
                 JOptionPane.showMessageDialog(null, "Your message has been sent.");
                 toField.setText("");
@@ -216,7 +215,6 @@ public class EmailPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_toFieldActionPerformed
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
-        System.out.println("here");
         sendOnClick();
 	/*ArrayList<String> toList = new ArrayList<String>(Arrays.asList(toField.getText().split(";")));
 	if (toField.getText().equals("")){
