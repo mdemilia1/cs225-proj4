@@ -45,7 +45,7 @@ public class UserManager {
         this.logInManager = logInManager;
     }
 
-    UserData_Table getUsersTable() {
+    public UserData_Table getUsersTable() {
         return usersTable;
     }
 
@@ -59,6 +59,10 @@ public class UserManager {
 
     public User getSelectedUser() {
         return selectedUser;
+    }
+
+    public User getUserByUID(int uid) throws AuthorizationException, DoesNotExistException {
+        return usersTable.getUser(uid);
     }
 
     private void rebuildUserList()

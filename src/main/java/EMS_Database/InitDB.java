@@ -71,15 +71,13 @@ public abstract class InitDB implements Interface_FunctionWrapper {
                     + "FNAME VARCHAR(50) DEFAULT NULL, "
                     + "LNAME VARCHAR(50) DEFAULT NULL, "
                     + "PWD VARCHAR(256) NOT NULL, "
-                    + "EMAIL VARCHAR(256) NOT NULL, "
+                    + "EMAIL VARCHAR(256) NOT NULL UNIQUE, "
                     + "PHONE VARCHAR(30) DEFAULT NULL, "
                     + "STREET VARCHAR(100) DEFAULT NULL, "
                     + "CITY VARCHAR(100) DEFAULT NULL, "
                     + "STATE VARCHAR(50) DEFAULT NULL, "
                     + "ZIPCODE VARCHAR(20) DEFAULT NULL, "
-                    + "COUNTRY VARCHAR(100) DEFAULT NULL, "
-                    + "PARTICIPANT VARCHAR(100) DEFAULT NULL, "
-                    + "EVENTLEVEL INT NOT NULL)";
+                    + "COUNTRY VARCHAR(100) DEFAULT NULL)";
 
             String createEventsTable = "CREATE TABLE IF NOT EXISTS EVENTS (UID INT PRIMARY KEY AUTOINCREMENT, "
                     + "DESCRIPTION VARCHAR(5000) DEFAULT NULL, "
@@ -145,10 +143,6 @@ public abstract class InitDB implements Interface_FunctionWrapper {
                     + "DATE TIMESTAMP, "
                     + "VALUE DOUBLE)";
 
-            String createKeyTable = "CREATE TABLE IF NOT EXISTS ROOTKEY (UID INT PRIMARY KEY, "
-                    + "MOD BIGINT, "
-                    + "EXP BIGINT)";
-
             Statement stmt = dbConnection.createStatement();
             stmt.executeUpdate(createUserTable); //takes table string as argument
             debugLog.info("USER table created successfully");
@@ -164,8 +158,6 @@ public abstract class InitDB implements Interface_FunctionWrapper {
             debugLog.info("INCOME table created successfully");
             stmt.executeUpdate(createExpenseTable);
             debugLog.info("EXPENSE table created successfully");
-            stmt.executeUpdate(createKeyTable);
-            debugLog.info("ROOTKEY table created successfully");
 
 
         } catch (SQLException sqlee) { //serious errors if this gets thrown

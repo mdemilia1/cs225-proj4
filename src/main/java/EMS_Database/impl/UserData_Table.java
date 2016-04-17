@@ -143,11 +143,7 @@ public class UserData_Table extends InitDB implements Interface_UserData {
 
     ///////////////////// GETTERS ////////////////////////////
     public User getUser(int uid) throws DoesNotExistException, AuthorizationException {
-        try {
-            for (String field : new String[]{"LEVEL", "FNAME", "LNAME", "EMAIL", "STREET", "CITY", "STATE", "ZIPCODE", "COUNTRY"}) {
-                Permissions.get().checkPermission(tableName, field, Operation.VIEW, uid);
-            }
-
+        try (Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
             PreparedStatement idQueryStmt = dbConnection.prepareStatement("SELECT * FROM USERS WHERE UID=?");
             idQueryStmt.setInt(1, uid);
             ResultSet rs = idQueryStmt.executeQuery();

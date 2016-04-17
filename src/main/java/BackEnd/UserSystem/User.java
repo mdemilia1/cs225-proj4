@@ -1,15 +1,12 @@
 package BackEnd.UserSystem;
 
 
-import BackEnd.UserSystem.UserExceptions.PasswordMismatchError;
 import BackEnd.UserSystem.UserExceptions.IllegalCharacterException;
-import auth.PrivilegeLevel;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
+import BackEnd.UserSystem.UserExceptions.PasswordMismatchError;
+import EMS_Database.DoesNotExistException;
+import auth.AuthorizationException;
+import auth.Operation;
+import auth.Permissions;
 
 /*
  * To change this template, choose Tools | Templates
@@ -40,9 +37,10 @@ public class User extends Participant {
     public User(String firstName, String lastName, String emailAddress, String pword, String pwordMatch)
             throws PasswordMismatchError, IllegalCharacterException {
         super(firstName, lastName, emailAddress);
-        setPassword(pword, pwordMatch);
-        
 
+        try (Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+            setPassword(pword, pwordMatch);
+        } catch (DoesNotExistException | AuthorizationException ignored) { }
     }
 
     /*
@@ -55,8 +53,8 @@ public class User extends Participant {
     public User(int userID, User user) {
         super(userID, user);
 
-        password = user.getPassword();
-        setPrivilegeLevel(user.getPrivilegeLevel());
+        password = user.password;
+        privilegeLevel = user.privilegeLevel;
     }
 
     public User(int uid, String firstName, String lastName, String emailAddress, String pword) {
@@ -74,7 +72,9 @@ public class User extends Participant {
      * match.
      */
     public void setPassword(String pword, String pwordMatch) throws
-            IllegalCharacterException, PasswordMismatchError{
+            IllegalCharacterException, PasswordMismatchError, DoesNotExistException, AuthorizationException {
+        Permissions.get().checkPermission("USERS", "PWD", Operation.MODIFY, getUserId());
+
         if (checkCharacters(pword)) {
             if (verifyPassword(pword, pwordMatch)) {
                 password = pword;
@@ -98,7 +98,8 @@ public class User extends Participant {
      *
      * @return password
      */
-    public String getPassword() {
+    public String getPassword() throws AuthorizationException {
+        Permissions.get().checkPermission("USERS", "PWD", Operation.VIEW, getUserId(), getPrivilegeLevel());
         return password;
     }
 
@@ -122,57 +123,17 @@ public class User extends Participant {
         return b;
     }
 
-    /**
-     *
-     * @param b boolean value determining if the user has admin privileges
-     */
-    @Deprecated
-    public void setAdminPrivilege(boolean b) {
-        setPrivilegeLevel(PrivilegeLevel.legacyFromLevels(b, getEventCreationPrivilege()));
-    }
-
-    /**
-     *
-     * @return the user's admin privileges.
-     */
-    @Deprecated
-    public boolean getAdminPrivilege() {
-        return getPrivilegeLevel().legacyIsAdmin();
-    }
-
-    /**
-     *
-     * @param b boolean value determining if the user has event creation
-     * privileges
-     */
-    @Deprecated
-    public void setEventCreationPrivilege(boolean b) {
-        setPrivilegeLevel(PrivilegeLevel.legacyFromLevels(getAdminPrivilege(), b));
-    }
-
-    /**
-     *
-     * @return the user's event creation privileges
-     */
-    @Deprecated
-    public boolean getEventCreationPrivilege() {
-        return getPrivilegeLevel().legacyIsEventCreator();
-    }
-
     public boolean equals(User user) {
-        if (user == null) {
-            return false;
-        }
-        String s = this.getEmailAddress();
-        return s.equals(user.getEmailAddress());
+        return user != null && emailAddress != null && emailAddress.equals(user.emailAddress);
+
     }
 
+    @Override
     public String toString() {
-//        String output = "\n" + super.toString() +
-//                "\nPassword: " + password +
-//                "\nAdmin Privileges: " + adminPrivilege +
-//                "\nEvent Creation Privileges: " + eventCreationPrivilege;
-//        return output;
-        return getFirstName() + " " + getLastName();
+        try {
+            return getFirstName() + " " + getLastName();
+        } catch (AuthorizationException e) {
+            return "Unknown User #" + getUserId();
+        }
     }
 }

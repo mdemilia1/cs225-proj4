@@ -1,5 +1,9 @@
 package BackEnd.UserSystem;
 
+import BackEnd.UserSystem.UserExceptions.ValidationException;
+import auth.AuthorizationException;
+import auth.Operation;
+import auth.Permissions;
 import auth.PrivilegeLevel;
 
 /**
@@ -11,16 +15,16 @@ public class Participant {
     private int UID;
     private String firstName;
     private String lastName;
-    private String emailAddress;
     private PhoneNumber phoneNumber;
     // private UserData_Table table;
     private Address address;
-    private PrivilegeLevel privilegeLevel = PrivilegeLevel.PARTICIPANT;
+    
+    // These need to be package-local to avoid redundant authorization checks.
+    String emailAddress;
+    PrivilegeLevel privilegeLevel = PrivilegeLevel.PARTICIPANT;
 
     /**
      * Default Constructor.
-     *
-     * @author Anderson Santana
      */
     public Participant() {
         firstName = "";
@@ -54,18 +58,18 @@ public class Participant {
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
-        phoneNumber = new PhoneNumber();
-        address = new Address();
+        this.phoneNumber = new PhoneNumber();
+        this.address = new Address();
     }
 
 
     public Participant(int userID, Participant participant) {
         UID = userID;
-        firstName = participant.getFirstName();
-        lastName = participant.getLastName();
-        emailAddress = participant.getEmailAddress();
-        phoneNumber = participant.getPhoneNumber();
-        address = participant.getAddress();
+        firstName = participant.firstName;
+        lastName = participant.lastName;
+        emailAddress = participant.emailAddress;
+        phoneNumber = participant.phoneNumber;
+        address = participant.address;
     }
 
 
@@ -78,7 +82,8 @@ public class Participant {
      *
      * @param firstName The participant's first name
      */
-    public void setFirstName(String firstName) {
+    public void setFirstName(String firstName) throws AuthorizationException {
+        Permissions.get().checkPermission("USERS", "FNAME", Operation.MODIFY, getUserId(), getPrivilegeLevel());
         this.firstName = firstName;
     }
 
@@ -87,7 +92,8 @@ public class Participant {
      *
      * @return The participant's first name
      */
-    public String getFirstName() {
+    public String getFirstName() throws AuthorizationException {
+        Permissions.get().checkPermission("USERS", "FNAME", Operation.VIEW, getUserId(), getPrivilegeLevel());
         return firstName;
     }
 
@@ -96,7 +102,8 @@ public class Participant {
      *
      * @param lastName The participant's last name
      */
-    public void setLastName(String lastName) {
+    public void setLastName(String lastName) throws AuthorizationException {
+        Permissions.get().checkPermission("USERS", "LNAME", Operation.MODIFY, getUserId(), getPrivilegeLevel());
         this.lastName = lastName;
     }
 
@@ -105,7 +112,8 @@ public class Participant {
      *
      * @return The participant's last name
      */
-    public String getLastName() {
+    public String getLastName() throws AuthorizationException {
+        Permissions.get().checkPermission("USERS", "LNAME", Operation.VIEW, getUserId(), getPrivilegeLevel());
         return lastName;
     }
 
@@ -114,7 +122,13 @@ public class Participant {
      *
      * @param emailAddress The participant's email address
      */
-    public void setEmailAddress(String emailAddress) {
+    public void setEmailAddress(String emailAddress) throws ValidationException, AuthorizationException {
+        Permissions.get().checkPermission("USERS", "EMAIL", Operation.MODIFY, getUserId(), getPrivilegeLevel());
+
+        if (!verifyEmailAddress(emailAddress)) {
+            throw new ValidationException("Invalid email address");
+        }
+
         this.emailAddress = emailAddress;
     }
 
@@ -123,7 +137,8 @@ public class Participant {
      *
      * @return The participant's email address
      */
-    public String getEmailAddress() {
+    public String getEmailAddress() throws AuthorizationException {
+        Permissions.get().checkPermission("USERS", "EMAIL", Operation.VIEW, getUserId(), getPrivilegeLevel());
         return emailAddress;
     }
 
@@ -136,9 +151,8 @@ public class Participant {
      * @return true
      */
     private boolean verifyEmailAddress(String emailAddress) {
-    /* This method sole purpose is listed above and is 
-     * NOT YET COMPLETE */
-        return true;
+        // Paul Buonopane
+        return emailAddress.matches("[\\w_+=-]+@[\\w.-]+\\.[a-zA-Z][\\w-]*\\w");
     }
 
     /**
@@ -146,7 +160,8 @@ public class Participant {
      *
      * @param phoneNumber The participant's phone number
      */
-    public void setPhoneNumber(PhoneNumber phoneNumber) {
+    public void setPhoneNumber(PhoneNumber phoneNumber) throws AuthorizationException {
+        Permissions.get().checkPermission("USERS", "PHONE", Operation.MODIFY, getUserId(), getPrivilegeLevel());
         this.phoneNumber = phoneNumber;
     }
 
@@ -155,7 +170,8 @@ public class Participant {
      *
      * @return The participant's phone number
      */
-    public PhoneNumber getPhoneNumber() {
+    public PhoneNumber getPhoneNumber() throws AuthorizationException {
+        Permissions.get().checkPermission("USERS", "PHONE", Operation.VIEW, getUserId(), getPrivilegeLevel());
         return phoneNumber;
     }
 
@@ -164,16 +180,24 @@ public class Participant {
      *
      * @param address The participant's address
      */
-    public void setAddress(Address address) {
+    public void setAddress(Address address) throws AuthorizationException {
+        for (String field : new String[] { "STREET", "CITY", "STATE", "ZIPCODE", "COUNTRY" }) {
+            Permissions.get().checkPermission("USERS", field, Operation.MODIFY, getUserId(), getPrivilegeLevel());
+        }
+
         this.address = address;
     }
 
     /**
      * It returns the participant's address.
      *
-     * @returns The participant's address
+     * @return The participant's address
      */
-    public Address getAddress() {
+    public Address getAddress() throws AuthorizationException {
+        for (String field : new String[] { "STREET", "CITY", "STATE", "ZIPCODE", "COUNTRY" }) {
+            Permissions.get().checkPermission("USERS", field, Operation.VIEW, getUserId(), getPrivilegeLevel());
+        }
+
         return address;
     }
 
@@ -230,11 +254,14 @@ public class Participant {
                 address;
     }
 
-    public PrivilegeLevel getPrivilegeLevel() {
+    public PrivilegeLevel getPrivilegeLevel() throws AuthorizationException {
+        Permissions.get().checkPermission("USERS", "LEVEL", Operation.VIEW, getUserId(), privilegeLevel);
         return privilegeLevel;
     }
 
-    public void setPrivilegeLevel(PrivilegeLevel privilegeLevel) {
+    public void setPrivilegeLevel(PrivilegeLevel privilegeLevel) throws AuthorizationException {
+        Permissions.get().checkPermission("USERS", "LEVEL", Operation.MODIFY, getUserId(), this.privilegeLevel);
+        Permissions.get().checkPermission("USERS", "LEVEL", Operation.MODIFY, getUserId(), privilegeLevel);
         this.privilegeLevel = privilegeLevel;
     }
 }
