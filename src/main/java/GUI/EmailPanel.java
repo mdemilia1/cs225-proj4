@@ -8,10 +8,6 @@ import BackEnd.ManagerSystem.MainManager;
 import BackEnd.ManagerSystem.ManagerExceptions.PrivilegeInsufficientException;
 import Email.Email;
 import GUI.Dialog.EmailSelectionDialog;
-
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
