@@ -44,3 +44,10 @@ deploy:
       repo: massbay-cs/cs225-proj4
       tags: true
       jdk: oraclejdk8
+notifications:
+  webhooks:
+    urls:
+      - 'https://webhooks.gitter.im/e/17587450686e90b3d599'
+    on_success: always
+    on_failure: always
+    on_start: never
