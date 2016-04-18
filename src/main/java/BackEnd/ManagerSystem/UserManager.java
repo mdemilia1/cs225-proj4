@@ -8,6 +8,7 @@ import BackEnd.UserSystem.Participant;
 import BackEnd.UserSystem.UserExceptions.PasswordMismatchError;
 import BackEnd.UserSystem.PhoneNumber;
 import BackEnd.UserSystem.User;
+import BackEnd.UserSystem.UserExceptions.ValidationException;
 import EMS_Database.DoesNotExistException;
 import EMS_Database.InputUser;
 import EMS_Database.impl.UserData_Table;
@@ -149,7 +150,7 @@ public class UserManager {
     }
 
     public void editEmailAddress(String emailAddress)
-            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
+            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException, ValidationException {
 
         User loggedInUser = logInManager.getLoggedInUser();
         if (PrivilegeManager.hasUserPrivilege(loggedInUser, selectedUser)) {

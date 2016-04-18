@@ -40,7 +40,9 @@ public class User extends Participant {
 
         try (Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
             setPassword(pword, pwordMatch);
-        } catch (DoesNotExistException | AuthorizationException ignored) { }
+        } catch (AuthorizationException ignored) {
+            // This exception can't logically occur.
+        }
     }
 
     /*
@@ -72,8 +74,8 @@ public class User extends Participant {
      * match.
      */
     public void setPassword(String pword, String pwordMatch) throws
-            IllegalCharacterException, PasswordMismatchError, DoesNotExistException, AuthorizationException {
-        Permissions.get().checkPermission("USERS", "PWD", Operation.MODIFY, getUserId());
+            IllegalCharacterException, PasswordMismatchError, AuthorizationException {
+        Permissions.get().checkPermission("USERS", "PWD", Operation.MODIFY, getUserId(), getPrivilegeLevel());
 
         if (checkCharacters(pword)) {
             if (verifyPassword(pword, pwordMatch)) {
