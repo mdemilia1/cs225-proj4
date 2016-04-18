@@ -25,7 +25,7 @@
 		"gpgSign": false
 	},
 	"files": [
-		{"matrixParams": {"override": 1}, "includePattern": "([A-Z][A-Z_-]*[A-Z](?:\\.(?:md|txt))?)", "uploadPattern": "$1"i    },
+		{"matrixParams": {"override": 1}, "includePattern": "([A-Z][A-Z_-]*[A-Z](?:\\.(?:md|txt))?)", "uploadPattern": "$1"     },
 		{"matrixParams": {"override": 1}, "includePattern": "package/(.*\\.jar)",                     "uploadPattern": "jars/$1"}
 	],
 	"publish": true
