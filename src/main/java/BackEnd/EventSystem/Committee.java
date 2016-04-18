@@ -1,6 +1,8 @@
 package BackEnd.EventSystem;
 
 import BackEnd.UserSystem.User;
+import auth.AuthorizationException;
+import auth.Permissions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,13 +48,18 @@ public class Committee implements Reportable {
     }
 
     public Committee(int committee_id, Committee committee) {
-        this.COMMITTEE_ID = committee_id;
-        title = committee.getTitle();
-        memberList = committee.getMemberList();
-        budgetAccessList = committee.getBudgetAccessList();
-        chair = committee.getChair();
-        taskList = committee.getTaskList();
-        budget = committee.getBudget();
+        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+            this.COMMITTEE_ID = committee_id;
+            title = committee.getTitle();
+            memberList = committee.getMemberList();
+            budgetAccessList = committee.getBudgetAccessList();
+            chair = committee.getChair();
+            taskList = committee.getTaskList();
+            budget = committee.getBudget();
+        }
+        catch(AuthorizationException ignored){
+
+        }
     }
 
     /**
@@ -60,7 +67,7 @@ public class Committee implements Reportable {
      *
      * @return True if the committee has finished all tasks, and false if it has not.
      */
-    boolean isFinished() {
+    boolean isFinished() throws AuthorizationException {
         boolean completed = true;
 
         for (Task task : taskList)
@@ -70,7 +77,7 @@ public class Committee implements Reportable {
         return completed;
     }
 
-    int[] getTaskCompletion() {
+    int[] getTaskCompletion() throws AuthorizationException {
         int completed = 0;
         int total = taskList.size();
         for (Task aTaskList : taskList) {
@@ -86,7 +93,7 @@ public class Committee implements Reportable {
      *
      * @return COMMITTEE_ID The committee ID.
      */
-    public int getCOMMITTEE_ID() {
+    public int getCOMMITTEE_ID() throws AuthorizationException {
         return COMMITTEE_ID;
     }
 
@@ -95,7 +102,7 @@ public class Committee implements Reportable {
      *
      * @param title The committee title.
      */
-    public void setTitle(String title) {
+    public void setTitle(String title) throws AuthorizationException {
         this.title = title;
     }
 
@@ -104,7 +111,7 @@ public class Committee implements Reportable {
      *
      * @return title The committee's title.
      */
-    public String getTitle() {
+    public String getTitle() throws AuthorizationException {
         return title;
     }
 
@@ -113,7 +120,7 @@ public class Committee implements Reportable {
      *
      * @param memberList
      */
-    public void setMemberList(ArrayList<User> memberList) {
+    public void setMemberList(ArrayList<User> memberList) throws AuthorizationException {
         this.memberList = memberList;
     }
 
@@ -122,11 +129,11 @@ public class Committee implements Reportable {
      *
      * @return memberList
      */
-    public ArrayList<User> getMemberList() {
+    public ArrayList<User> getMemberList() throws AuthorizationException {
         return memberList;
     }
 
-    public ArrayList<User> getMemberListWithChair() throws NullPointerException {
+    public ArrayList<User> getMemberListWithChair() throws NullPointerException, AuthorizationException {
         for (User member : memberList)
             if (member.equals(chair))
                 return memberList;
@@ -139,23 +146,23 @@ public class Committee implements Reportable {
         return memberList;
     }
 
-    public void setBudgetAccessList(ArrayList<User> budgetAccessList) {
+    public void setBudgetAccessList(ArrayList<User> budgetAccessList) throws AuthorizationException {
         this.budgetAccessList = budgetAccessList;
     }
 
-    public ArrayList<User> getBudgetAccessList() {
+    public ArrayList<User> getBudgetAccessList() throws AuthorizationException {
         return budgetAccessList;
     }
 
-    public void setChair(User user) {
+    public void setChair(User user) throws AuthorizationException {
         chair = user;
     }
 
-    public User getChair() {
+    public User getChair() throws AuthorizationException {
         return chair;
     }
 
-    public int getCompletePercent() {
+    public int getCompletePercent() throws AuthorizationException {
         int pct;
         float complete = 0.0f;
         float total = taskList.size();
@@ -168,23 +175,23 @@ public class Committee implements Reportable {
         return pct;
     }
 
-    public void setTaskList(ArrayList<Task> taskList) {
+    public void setTaskList(ArrayList<Task> taskList) throws AuthorizationException {
         this.taskList = taskList;
     }
 
-    public ArrayList<Task> getTaskList() {
+    public ArrayList<Task> getTaskList() throws AuthorizationException {
         return taskList;
     }
 
-    public void setBudget(Budget budget) {
+    public void setBudget(Budget budget) throws AuthorizationException {
         this.budget = budget;
     }
 
-    public Budget getBudget() {
+    public Budget getBudget() throws AuthorizationException {
         return budget;
     }
 
-    public boolean equals(Committee committee) {
+    public boolean equals(Committee committee) throws AuthorizationException {
         return this.getCOMMITTEE_ID() == committee.getCOMMITTEE_ID()
                 && this.getTitle().equalsIgnoreCase(committee.getTitle())
                 && this.getMemberList().equals(committee.getMemberList())
@@ -204,7 +211,7 @@ public class Committee implements Reportable {
         return title;
     }
 
-    private void buildReportComponent(List<String> component, List<User> users) {
+    private void buildReportComponent(List<String> component, List<User> users) throws AuthorizationException {
         for (User user : users) {
             component.add("" + user.getFirstName());
             component.add("" + user.getLastName());
@@ -221,7 +228,7 @@ public class Committee implements Reportable {
     }
 
     @Override
-    public ArrayList<Object> getReport() {
+    public ArrayList<Object> getReport() throws AuthorizationException {
         ArrayList<Object> report = new ArrayList<>();
         List<String> member = new ArrayList<>();
         List<String> budgetAccess = new ArrayList<>();

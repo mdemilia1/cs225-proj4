@@ -1,6 +1,8 @@
 package BackEnd.EventSystem;
 
 import BackEnd.UserSystem.Location;
+import auth.AuthorizationException;
+import auth.Permissions;
 
 /**
  *
@@ -27,45 +29,50 @@ public class ScheduleItem {
     }
     
     public ScheduleItem(ScheduleItem scheduleItem){
-        title = scheduleItem.getTitle();
-        description = scheduleItem.getDescription();
-        location = scheduleItem.getLocation();
-        timeSchedule = scheduleItem.getTimeSchedule();
+        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+            title = scheduleItem.getTitle();
+            description = scheduleItem.getDescription();
+            location = scheduleItem.getLocation();
+            timeSchedule = scheduleItem.getTimeSchedule();
+        }
+        catch(AuthorizationException ignored){
+
+        }
     }
     
-    public void setTitle(String title){
+    public void setTitle(String title) throws AuthorizationException {
         this.title = title;
     }
     
-    public String getTitle(){
+    public String getTitle() throws AuthorizationException {
         return title;
     }
     
-    public void setDescription(String description) {
+    public void setDescription(String description) throws AuthorizationException {
         this.description = description;
     }
     
-    public String getDescription() {
+    public String getDescription() throws AuthorizationException {
         return description;
     }
     
-    public void setLocation(Location location) {
+    public void setLocation(Location location) throws AuthorizationException {
         this.location = location;
     }
     
-    public Location getLocation() {
+    public Location getLocation() throws AuthorizationException {
         return location;
     }
     
-    public void setTimeSchedule(TimeSchedule timeSchedule) {
+    public void setTimeSchedule(TimeSchedule timeSchedule) throws AuthorizationException {
         this.timeSchedule = timeSchedule;
     }
     
-    public TimeSchedule getTimeSchedule() {
+    public TimeSchedule getTimeSchedule() throws AuthorizationException {
         return timeSchedule;
     }
     
-    public boolean equals(ScheduleItem scheduleItem) {
+    public boolean equals(ScheduleItem scheduleItem) throws AuthorizationException {
         if (this.getTitle().equalsIgnoreCase(scheduleItem.getTitle()) &&
                 this.getDescription().equalsIgnoreCase(scheduleItem.getDescription()) 
                 && this.getLocation().equals(scheduleItem.getLocation())

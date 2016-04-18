@@ -4,6 +4,8 @@
  */
 package BackEnd.EventSystem;
 
+import auth.AuthorizationException;
+
 import java.util.ArrayList;
 
 /**
@@ -12,5 +14,5 @@ import java.util.ArrayList;
  * @author Julian Kuk
  */
 public interface Reportable {
-    public ArrayList<Object> getReport();
+    public ArrayList<Object> getReport() throws AuthorizationException;
 }

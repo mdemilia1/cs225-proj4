@@ -1,6 +1,10 @@
 package BackEnd.EventSystem;
 
 import java.util.ArrayList;
+import auth.AuthorizationException;
+import auth.Operation;
+import auth.Permissions;
+import auth.PrivilegeLevel;
 
 /**
  *
@@ -18,32 +22,43 @@ public class Budget implements Reportable{
     }
     
     public Budget(Budget budget){
-        incomeList = budget.getIncomeList();
-        expenseList = budget.getExpenseList();
+        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+            incomeList = budget.getIncomeList();
+        }
+        catch(AuthorizationException ignored){
+
+        }
+        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+            expenseList = budget.getExpenseList();
+        }
+        catch(AuthorizationException ignored){
+
+        }
+
     }
 
-    public void setIncomeList(ArrayList<Income> incomeList) {
+    public void setIncomeList(ArrayList<Income> incomeList) throws AuthorizationException {
         this.incomeList = incomeList;
     }
 
-    public void setExpenseList(ArrayList<Expense> expenseList) {
+    public void setExpenseList(ArrayList<Expense> expenseList) throws AuthorizationException {
         this.expenseList = expenseList;
     }
 
-    public ArrayList<Income> getIncomeList() {
+    public ArrayList<Income> getIncomeList() throws AuthorizationException {
         return incomeList;
     }
 
-    public ArrayList<Expense> getExpenseList() {
+    public ArrayList<Expense> getExpenseList() throws AuthorizationException{
         return expenseList;
     }
     
     
-    public double getTotalBudget() {
+    public double getTotalBudget() throws AuthorizationException {
         return getTotalIncome() - getTotalExpense();
     }
     
-    public double getTotalIncome() {
+    public double getTotalIncome() throws AuthorizationException {
         double total = 0;
         for (int i = 0; i < incomeList.size(); i++) {
             total += incomeList.get(i).getValue();
@@ -51,7 +66,7 @@ public class Budget implements Reportable{
         return total;
     }
 
-    public double getTotalExpense() {
+    public double getTotalExpense() throws AuthorizationException {
 
         double total = 0;
         for (int i = 0; i < expenseList.size(); i++) {
@@ -85,7 +100,7 @@ public class Budget implements Reportable{
     }
     
     @Override
-    public ArrayList<Object> getReport() {
+    public ArrayList<Object> getReport() throws AuthorizationException {
         
         ArrayList<Object> report = new ArrayList<Object>();
         ArrayList<String> income = new ArrayList<String>();

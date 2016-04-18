@@ -1,5 +1,8 @@
 package BackEnd.EventSystem;
 
+import auth.AuthorizationException;
+import auth.Permissions;
+
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -19,11 +22,14 @@ public class TimeSchedule {
     }
     
     public TimeSchedule(TimeSchedule timeSchedule){
-        startDateTime = timeSchedule.getStartDateTimeCalendar();
-        endDateTime = timeSchedule.getEndDateTimeCalendar();
+        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+            startDateTime = timeSchedule.getStartDateTimeCalendar();
+            endDateTime = timeSchedule.getEndDateTimeCalendar();
+        }
+        catch(AuthorizationException ignored){}
     }
     
-    public void setStartDateTime(int year, int month, int day, int hour, int minute) throws IllegalArgumentException {
+    public void setStartDateTime(int year, int month, int day, int hour, int minute) throws IllegalArgumentException, AuthorizationException {
         if (year >= 2013 && year <= 9999)
             startDateTime.set(Calendar.YEAR, year);
         else
@@ -50,19 +56,19 @@ public class TimeSchedule {
             throw new IllegalArgumentException("Invalid minute entered.");
     }
     
-    public void setStartDateTime(Timestamp startDateTime){
+    public void setStartDateTime(Timestamp startDateTime) throws AuthorizationException{
         this.startDateTime.setTimeInMillis(startDateTime.getTime());
     }
     
-    public Calendar getStartDateTimeCalendar() {
+    public Calendar getStartDateTimeCalendar() throws AuthorizationException {
         return startDateTime;
     }
     
-    public Timestamp getStartDateTimeTimestamp() {
+    public Timestamp getStartDateTimeTimestamp() throws AuthorizationException {
         return new Timestamp(startDateTime.getTimeInMillis());
     }
     
-    public void setEndDateTime(int year, int month, int day, int hour, int minute) throws IllegalArgumentException {
+    public void setEndDateTime(int year, int month, int day, int hour, int minute) throws IllegalArgumentException, AuthorizationException {
         if (year >= 2013 && year <= 9999)
             endDateTime.set(Calendar.YEAR, year);
         else
@@ -89,19 +95,19 @@ public class TimeSchedule {
             throw new IllegalArgumentException("Invalid minute entered.");
     }
     
-    public void setEndDateTime(Timestamp endDateTime){
+    public void setEndDateTime(Timestamp endDateTime) throws AuthorizationException {
         this.endDateTime.setTimeInMillis(endDateTime.getTime());
     }
     
-    public Calendar getEndDateTimeCalendar() {
+    public Calendar getEndDateTimeCalendar() throws AuthorizationException {
         return endDateTime;
     }
     
-    public Timestamp getEndDateTimeTimestamp() {
+    public Timestamp getEndDateTimeTimestamp() throws AuthorizationException {
         return new Timestamp(endDateTime.getTimeInMillis());
     }
     
-    public boolean equals(TimeSchedule timeSchedule) {
+    public boolean equals(TimeSchedule timeSchedule) throws AuthorizationException {
         if (this.getStartDateTimeCalendar().equals(timeSchedule.getStartDateTimeCalendar()) 
                 && this.getEndDateTimeCalendar().equals(timeSchedule.getEndDateTimeCalendar()))
             return true;

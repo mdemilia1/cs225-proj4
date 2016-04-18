@@ -4,6 +4,9 @@
  */
 package BackEnd.EventSystem;
 
+import auth.AuthorizationException;
+import auth.Permissions;
+
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -24,39 +27,50 @@ public class BudgetItem {
     }
     
     public BudgetItem(double value, String description) {
-        setValue(value);
+        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+            setValue(value);
+        }
+        catch(AuthorizationException ignored){
+
+        }
         this.description = description;
         date = new Timestamp(0);
     }
     
     public BudgetItem(int budgetItemID, double value, String description) {
         BUDGET_ITEM_ID = budgetItemID;
-        setValue(value);
+        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+            setValue(value);
+        }
+        catch(AuthorizationException ignored){}
         this.description = description;
         date = new Timestamp(0);
     }
     
     public BudgetItem(int budgetItemID, BudgetItem budgetItem){
         this.BUDGET_ITEM_ID = budgetItemID;
-        setValue(budgetItem.getValue());
-        this.description = budgetItem.getDescription();
-        this.date = budgetItem.getDate();
+        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+            setValue(budgetItem.getValue());
+            this.description = budgetItem.getDescription();
+            this.date = budgetItem.getDate();
+        }
+        catch(AuthorizationException ignored){}
     }
     
 
-    public void setValue(double value) {
+    public void setValue(double value) throws AuthorizationException {
         this.value = Math.abs(value);
     }
 
-    public void setDescription(String description) {
+    public void setDescription(String description) throws AuthorizationException {
         this.description = description;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Timestamp date) throws AuthorizationException {
         this.date = date;
     }
     
-    public void setDate(int year, int month, int day, int hour, int minute) throws IllegalArgumentException {
+    public void setDate(int year, int month, int day, int hour, int minute) throws IllegalArgumentException, AuthorizationException {
         Calendar calendar = new GregorianCalendar();
         if (year >= 2013 && year <= 9999)
             calendar.set(Calendar.YEAR, year);
@@ -85,19 +99,19 @@ public class BudgetItem {
         date = new Timestamp(calendar.getTimeInMillis());
     }
     
-    public int getBUDGET_ITEM_ID(){
+    public int getBUDGET_ITEM_ID() throws AuthorizationException {
         return BUDGET_ITEM_ID;
     }
     
-    public double getValue() {
+    public double getValue() throws AuthorizationException {
         return value;
     }
 
-    public String getDescription() {
+    public String getDescription() throws AuthorizationException {
         return description;
     }
 
-    public Timestamp getDate() {
+    public Timestamp getDate() throws AuthorizationException {
         return date;
     }
     

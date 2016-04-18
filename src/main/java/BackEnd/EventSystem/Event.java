@@ -2,6 +2,9 @@ package BackEnd.EventSystem;
 
 import BackEnd.UserSystem.User;
 import BackEnd.UserSystem.Participant;
+import auth.AuthorizationException;
+import auth.Permissions;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -37,13 +40,18 @@ public class Event extends ScheduleItem implements Reportable {
     public Event(int eventID, Event event){
         super((ScheduleItem)event);
         EVENT_ID = eventID;
-        organizerList = event.getOrganizerList();
-        subEventList = event.getSubEventList();
-        committeeList = event.getCommitteeList();
-        participantList = event.getParticipantList();
+        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+            organizerList = event.getOrganizerList();
+            subEventList = event.getSubEventList();
+            committeeList = event.getCommitteeList();
+            participantList = event.getParticipantList();
+        }
+        catch(AuthorizationException ignored){
+
+        }
     }
     
-    public boolean isReady() {
+    public boolean isReady() throws AuthorizationException{
         boolean eventReady = true;
         
         for (Committee committee : committeeList)
@@ -57,47 +65,47 @@ public class Event extends ScheduleItem implements Reportable {
         EVENT_ID = event_id;
     }
     
-    public int getEVENT_ID() {
+    public int getEVENT_ID() throws AuthorizationException {
         return EVENT_ID;
     }
     
-    public void setOrganizerList(ArrayList<User> organizerList) {
+    public void setOrganizerList(ArrayList<User> organizerList) throws AuthorizationException {
         this.organizerList = organizerList;
     }
     
-    public ArrayList<User> getOrganizerList() {
+    public ArrayList<User> getOrganizerList() throws AuthorizationException {
         return organizerList;
     }
     
-    public void setSubEventList(ArrayList<SubEvent> subEventList) {
+    public void setSubEventList(ArrayList<SubEvent> subEventList) throws AuthorizationException {
         this.subEventList = subEventList;
     }
     
-    public ArrayList<SubEvent> getSubEventList() {
+    public ArrayList<SubEvent> getSubEventList() throws AuthorizationException {
         return subEventList;
     }
     
-    public void setCommitteeList(ArrayList<Committee> committeeList) {
+    public void setCommitteeList(ArrayList<Committee> committeeList) throws AuthorizationException {
         this.committeeList = committeeList;
     }
     
-    public ArrayList<Committee> getCommitteeList() {
+    public ArrayList<Committee> getCommitteeList() throws AuthorizationException {
         return committeeList;
     }
     
-    public void setParticipantList(ArrayList<Participant> participantList) {
+    public void setParticipantList(ArrayList<Participant> participantList) throws AuthorizationException {
         this.participantList = participantList;
     }
     
-    public ArrayList<Participant> getParticipantList() {
+    public ArrayList<Participant> getParticipantList() throws AuthorizationException {
         return participantList;
     }
     
-    public double getTotalEventBudget(){
+    public double getTotalEventBudget() throws AuthorizationException {
         return getTotalEventIncome() - getTotalEventExpense();
     }
     
-    public double getTotalEventIncome(){
+    public double getTotalEventIncome() throws AuthorizationException{
         double income = 0;
         for (int i = 0; i < committeeList.size(); i++){
             income += committeeList.get(i).getBudget().getTotalIncome();
@@ -105,7 +113,7 @@ public class Event extends ScheduleItem implements Reportable {
         return income;
     }
     
-    public double getTotalEventExpense(){
+    public double getTotalEventExpense() throws AuthorizationException{
         double expense = 0;
         for (int i = 0; i < committeeList.size(); i++){
             expense += committeeList.get(i).getBudget().getTotalExpense();
@@ -113,7 +121,7 @@ public class Event extends ScheduleItem implements Reportable {
         return expense;
     }
     
-    public int getTotalTaskProgress(){
+    public int getTotalTaskProgress() throws AuthorizationException{
         double completed = 0;
         double total = 0;
         int[] taskCompletion = new int[2];
@@ -125,7 +133,7 @@ public class Event extends ScheduleItem implements Reportable {
         return (int)(100 * completed / total);
     }
     
-    public boolean equals(Event event) {
+    public boolean equals(Event event) throws AuthorizationException {
         if (this.getEVENT_ID() == event.getEVENT_ID()
                 && this.getOrganizerList().equals(event.getOrganizerList())
                 && this.getSubEventList().equals(event.getSubEventList())
@@ -137,13 +145,17 @@ public class Event extends ScheduleItem implements Reportable {
     }
     
     public String toString() {
-        return "Event Title: " + getTitle() +
-               "Event Description: \n" + super.getDescription() + "\n\n" + super.getLocation().toString() + 
-               "\n\n" + super.getTimeSchedule().toString();
+        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+            return "Event Title: " + getTitle() +
+                    "Event Description: \n" + super.getDescription() + "\n\n" + super.getLocation().toString() +
+                    "\n\n" + super.getTimeSchedule().toString();
+        }
+        catch(AuthorizationException ignored){}
+        return null;
     }
     
     @Override
-    public ArrayList<Object> getReport() {
+    public ArrayList<Object> getReport() throws AuthorizationException{
         ArrayList<Object> report = new ArrayList<Object>();
         ArrayList<String> organizer = new ArrayList<String>();
         ArrayList<String> subEvent = new ArrayList<String>();
@@ -182,8 +194,8 @@ public class Event extends ScheduleItem implements Reportable {
             committee.add("" + committeeList.get(i).getChair().getAddress().getState());
             committee.add("" + committeeList.get(i).getChair().getAddress().getStreet());
             committee.add("" + committeeList.get(i).getChair().getAddress().getZipCode());
-            committee.add("" + committeeList.get(i).getChair().getAdminPrivilege());
-            committee.add("" + committeeList.get(i).getChair().getEventCreationPrivilege());
+            //committee.add("" + committeeList.get(i).getChair().getAdminPrivilege());
+            //committee.add("" + committeeList.get(i).getChair().getEventCreationPrivilege());
             committee.add("" + committeeList.get(i).getChair().getPhoneNumber());
             committee.add("" + committeeList.get(i).getChair().getUserId());
 

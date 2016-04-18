@@ -1,5 +1,8 @@
 package BackEnd.EventSystem;
 
+import auth.AuthorizationException;
+import auth.Permissions;
+
 import java.util.ArrayList;
 
 /**
@@ -27,15 +30,15 @@ public class SubEvent extends ScheduleItem implements Reportable {
         SUB_EVENT_ID = subEventID;
     }
     
-    private void setSUB_EVENT_ID(int sub_event_id) {
+    private void setSUB_EVENT_ID(int sub_event_id) throws AuthorizationException {
         SUB_EVENT_ID = sub_event_id;
     }
     
-    public int getSUB_EVENT_ID() {
+    public int getSUB_EVENT_ID() throws AuthorizationException {
         return SUB_EVENT_ID;
     }
     
-    public boolean equals(SubEvent subEvent) {
+    public boolean equals(SubEvent subEvent) throws AuthorizationException{
         if (this.getSUB_EVENT_ID() == subEvent.getSUB_EVENT_ID())
             return true;
         else
@@ -43,11 +46,15 @@ public class SubEvent extends ScheduleItem implements Reportable {
     }
     
     public String toString() {
-        return "Sub-Event Description: \n" + super.getDescription();
+        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+            return "Sub-Event Description: \n" + super.getDescription();
+        }
+        catch(AuthorizationException ignored){}
+        return null;
     }
     
     @Override
-    public ArrayList<Object> getReport() {
+    public ArrayList<Object> getReport() throws AuthorizationException {
         ArrayList<Object> report = new ArrayList<Object>();
             report.add("" + this.getTitle());
             report.add("" + this.getDescription());

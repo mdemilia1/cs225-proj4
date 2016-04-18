@@ -4,6 +4,9 @@
  */
 package BackEnd.EventSystem;
 
+import auth.AuthorizationException;
+import auth.Permissions;
+
 import java.util.ArrayList;
 
 /**
@@ -23,28 +26,31 @@ public class CalendarEvent {
      */
     public CalendarEvent(int d, ArrayList<SubEvent> sList)
     {
-        setDay(d);
-        setSubEventList(sList);
+        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+            setDay(d);
+            setSubEventList(sList);
+        }
+        catch(AuthorizationException ignored){}
     }
 
     /**
      * Sets the day that this CalendarEvent is on.
      */
-    public void setDay(int d) {
+    public void setDay(int d) throws AuthorizationException {
         day = d;
     }
 
     /**
      * Sets the list of subEvents to be on this day.
      */
-    public void setSubEventList(ArrayList<SubEvent> sList) {
+    public void setSubEventList(ArrayList<SubEvent> sList) throws AuthorizationException {
         subEventList = sList;
     }
     
     /**
      * Returns the day this CalendarEvent represents
      */
-    public int getDay()
+    public int getDay() throws AuthorizationException
     {
         return day;
     }
@@ -52,7 +58,7 @@ public class CalendarEvent {
     /**
      * Returns the list of subEvents for this day
      */
-    public ArrayList<SubEvent> getSubEventList()
+    public ArrayList<SubEvent> getSubEventList() throws AuthorizationException
     {
         return subEventList;
     }
@@ -69,11 +75,17 @@ public class CalendarEvent {
             events += "" + day;
             if (subEventList.size() <= 3) {
                 for (int i = 0; i < subEventList.size(); i++) {
-                    events += "\n" + subEventList.get(i).getTitle();
+                    try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+                        events += "\n" + subEventList.get(i).getTitle();
+                    }
+                    catch(AuthorizationException ignored){}
                 }
             } else {
                 for (int i = 0; i < 3; i++) {
-                    events += "\n" + subEventList.get(i).getTitle();
+                    try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+                        events += "\n" + subEventList.get(i).getTitle();
+                    }
+                    catch(AuthorizationException ignored){}
                 }
                 events += "\n...";
             }

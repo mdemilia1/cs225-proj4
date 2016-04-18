@@ -1,6 +1,9 @@
 package BackEnd.EventSystem;
 
 import BackEnd.UserSystem.User;
+import auth.AuthorizationException;
+import auth.Permissions;
+
 import java.util.ArrayList;
 
 /**
@@ -27,35 +30,38 @@ public class Task extends ScheduleItem implements Reportable {
     public Task(int task_id, Task task){
         super((ScheduleItem)task);
         TASK_ID = task_id;
-        responsibleList = task.getResponsibleList();
-        completed = task.getCompleted();
+        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+            responsibleList = task.getResponsibleList();
+            completed = task.getCompleted();
+        }
+        catch (AuthorizationException ignored){}
     }
     
-    private void setTASK_ID(int task_id) {
+    private void setTASK_ID(int task_id) throws AuthorizationException {
         TASK_ID = task_id;
     }
     
-    public int getTASK_ID() {
+    public int getTASK_ID() throws AuthorizationException {
         return TASK_ID;
     }
     
-    public void setResponsibleList(ArrayList<User> responsibleList) {
+    public void setResponsibleList(ArrayList<User> responsibleList) throws AuthorizationException {
         this.responsibleList = responsibleList;
     }
     
-    public ArrayList<User> getResponsibleList() {
+    public ArrayList<User> getResponsibleList() throws AuthorizationException {
         return responsibleList;
     }
     
-    public void setCompleted(boolean completed) {
+    public void setCompleted(boolean completed) throws AuthorizationException {
         this.completed = completed;
     }
     
-    public boolean getCompleted() {
+    public boolean getCompleted() throws AuthorizationException {
         return completed;
     }
     
-    public boolean equals(Task task) {
+    public boolean equals(Task task) throws AuthorizationException {
         if (this.getTASK_ID() == task.getTASK_ID() 
                 && this.getResponsibleList().equals(task.getResponsibleList()) 
                 && this.getCompleted() == task.getCompleted())
@@ -66,12 +72,16 @@ public class Task extends ScheduleItem implements Reportable {
 
      public String toString() {
 	 //return "Task Description: \n" + super.getDescription() + "\nTask Complete: " + completed;
-	 return super.getTitle();
+     try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+         return super.getTitle();
+     }
+         catch(AuthorizationException ignored){}
+         return null;
      }
 
     
      @Override
-    public ArrayList<Object> getReport() {
+    public ArrayList<Object> getReport() throws AuthorizationException {
         ArrayList<Object> report = new ArrayList<Object>();
         ArrayList<String> responsible = new ArrayList<String>();
         
