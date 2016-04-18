@@ -524,6 +524,7 @@ public class Main extends javax.swing.JPanel {
     private void ChangeHomeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChangeHomeButtonActionPerformed
         CardLayout cl = (CardLayout) (SwitchingPanelHolder.getLayout());
         cl.show(SwitchingPanelHolder, "home");
+        mainPanel.switchToCal(); //forces panel to display Calendar
     }//GEN-LAST:event_ChangeHomeButtonActionPerformed
 
     private void changeUserManagementButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeUserManagementButtonActionPerformed

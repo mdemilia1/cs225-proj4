@@ -1,0 +1,11 @@
+# vim: ft=yaml sw=2 ts=2 sts=2 et
+engines:
+  fixme:
+    enabled: true
+ratings:
+  paths:
+    - 'src/main/java/**.java'
+exclude_paths:
+  - db/
+  - UML/
+  - original/

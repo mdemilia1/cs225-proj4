@@ -1,0 +1,53 @@
+# vim: ft=yaml sw=2 ts=2 sts=2
+sudo: false
+language: java
+jdk:
+- oraclejdk8
+#- openjdk8  # Not yet supported: https://docs.travis-ci.com/user/languages/java
+git:
+  depth: 1
+branches:
+  except:
+  - authorization  # TODO: Remove once stable
+cache:
+  timeout: 60
+  directories:
+  - "$HOME/.m2"
+
+install: true
+script: 'mvn package -B'
+deploy:
+  - provider: releases
+    api_key:
+      secure: q3oUtv41M/p3V3Q7vcLhDU2Hox/BO6wiuV9IBvR1Hzvc09VGeLnP/j3P+d9zIJOxKBUijeABX56rB3gkdgv/Afrg33CW51Bjf5hgCRXyRSVWQhHBgj5YXNcQfiT95ErfSXn73DoauMRejdyk/fHQ0IpAYddpzTceneFrAEIl9M/93GDTHnLhUedLjx+htp4sx9i3xq3XVBNy6ow40wxaDBXIRkasiyGK/1lhStf2qn60hmhIY/w7KdytiZzmNvDIgxaTr0qA2lzuvnMwT+SnGErqYaSG5kJbJBAiJbgRYuDXtTzheUlXVnh75I3Gz1y+Bnpnul0OrK7CoP059zta1/cvKpIVKCa9s+QZVCqpulygHV9iaiYda7POrO/F5FbAsk5rnsj0tMaY100lbHajKJK6z+ClpqYkmCcIlvr4/GTiqgO/YCU0R3vHXEteBDXLseN+iSgFmnDx5qJHUvtGS9aS5U1n3PxWnWVx/hGXMB8n9xSW17FXk02uf3a4GZeG7/USB9JqkIhz/D+TUBUY/in0bM+ed7DrdCuXEmbeZ5bLRyPy+pf9QbJWob7N6BgCBDfYWXUDoUFelT0GTVZAbM1lMiW+bt1ka6NmPkTOp4e/c6155/9VKGBOms2kpX48AQcfEPy4OL4V/Uea/R6S7M4D/Exu0ORi64lMbn2EDrk=
+    file: package/Spring2016-proj4.jar
+    on:
+      repo: massbay-cs/cs225-proj4
+      tags: true
+      jdk: oraclejdk8
+  - provider: bintray
+    file: bintray-dev.json
+    user:
+      secure: "s4kMA24L4ehTwdaIqNGEVs1NAA6t/Iv4pucAYB42x0F/kfgf/1NCRJugTPiGCX6UAAiMx6aF7wd8u38JNKNbGmlwUYvPiqAYJZ6mHH+p99Tyr/5JpVA+3Qk4FxgOsFRcTJj2S8nQp1wiZAuyZG+hQ9ad/fXeg7Ix+Mi71/5f1XNUHfKaernow4KSFRk8NonPQfEsF6CWDQ638sUg8FAOY7F8U8mUGF7X3ls9wfrUbCLc5JWU6cd+wYuSSSjTCJ0BBI0ksOsxuUBkc9HPWGyBQ9QaXiDtMkRMydow7U/IYr4EZysxmbozURZySSnlOWLJ22vd3yUt4THCCkbYefvOV8v9JxVkgGtZkLKhgA6f1iM0V/NP2/hnTZ/LQgTWgSTVpPT7bCz6daWPQAFCrXoI9RpSGp2gwyGaTaHI6jPApvF1tBc9cq4cDV5/pc7mpQYNFJpmzNZy23c+j8o+nAut3vHjKFhjSEtbBCJZpucmqk+aJ+sdJ7qX0Xi69dSW2rWdVV5rJ+5q92Bvv2Ihun1fLxtY7k9OgqBVKUgkGVLmWfuRTZd9lCu9cpDKiV3qv12hPz47EwQa/woawDA7wKMLLiOo0jzyWbVhwZk9XyEp4f/MC0DMt6t/1QAzncXgI9JvjHpxm8qz/va1UfNs3sVMm+5sRXw9uQFToLn2ilhVbgI="
+    key:
+      secure: "j18hhqGi3qMfC/tDyGcmdpDbJDtFafErxGPRJqgP/iUJmL2Wfl9R9N8uDBgJYUx5cPcuXYovgqanN0nh93O8AbS/wOAmVN/LLpFSqMXsQh6Nusf4NBQNIj1gZ9pYQGENznbhdXPV0Unz1KgasjS+xDO+7V8U/QjFVmEVAitnFlPgri3aj8YJIhhdZ782hoLbPdL9ib7ddxE6Ors2nb/dXy8NCkwXdc1KuLgbJBB2JII4AIyt63x2/r5zmRZUAAQBw7t1YI6a3orGZj5zfQRiDn9uUKfa98PIzDOUnadpdGTZbqjbr9/M3L/sPb0ZPOILqeuS/xgf9flgLYAjl3zlT8HkzlyRugbaGbefDz7xRwcGE0afaUyTjgzSYmtxPlZYpo/FFPhdgS6gu/m7ziMQv1PuO4Nz2KRROEz7GVvOHa5SU7i1tdZEu5vXqjylYrJrlWuUIDk8XDOk04Z2+s8AOnMPhPqYW8QHy6qrqN9f7EY9FZks+M7gdBzzPWFaBP8OL7ZZNbNpQIalcWqkhtMNTHmCtGN0XQB2OU48bHJTGX6O8+fkKquD4bxRuOJUbMQyX3UqSn8Cqt9hBkf+qgs4FzWIKxdoEoPaMxj238Qw9bqS3Kl0UALDAisR0OY59bT8AoDgqJWAkIoYCrV9rahvcNMI58jDaits0V3bNLuGdx0="
+    on:
+      repo: massbay-cs/cs225-proj4
+      jdk: oraclejdk8
+  - provider: bintray
+    file: bintray-stable.json
+    user:
+      secure: "s4kMA24L4ehTwdaIqNGEVs1NAA6t/Iv4pucAYB42x0F/kfgf/1NCRJugTPiGCX6UAAiMx6aF7wd8u38JNKNbGmlwUYvPiqAYJZ6mHH+p99Tyr/5JpVA+3Qk4FxgOsFRcTJj2S8nQp1wiZAuyZG+hQ9ad/fXeg7Ix+Mi71/5f1XNUHfKaernow4KSFRk8NonPQfEsF6CWDQ638sUg8FAOY7F8U8mUGF7X3ls9wfrUbCLc5JWU6cd+wYuSSSjTCJ0BBI0ksOsxuUBkc9HPWGyBQ9QaXiDtMkRMydow7U/IYr4EZysxmbozURZySSnlOWLJ22vd3yUt4THCCkbYefvOV8v9JxVkgGtZkLKhgA6f1iM0V/NP2/hnTZ/LQgTWgSTVpPT7bCz6daWPQAFCrXoI9RpSGp2gwyGaTaHI6jPApvF1tBc9cq4cDV5/pc7mpQYNFJpmzNZy23c+j8o+nAut3vHjKFhjSEtbBCJZpucmqk+aJ+sdJ7qX0Xi69dSW2rWdVV5rJ+5q92Bvv2Ihun1fLxtY7k9OgqBVKUgkGVLmWfuRTZd9lCu9cpDKiV3qv12hPz47EwQa/woawDA7wKMLLiOo0jzyWbVhwZk9XyEp4f/MC0DMt6t/1QAzncXgI9JvjHpxm8qz/va1UfNs3sVMm+5sRXw9uQFToLn2ilhVbgI="
+    key:
+      secure: "j18hhqGi3qMfC/tDyGcmdpDbJDtFafErxGPRJqgP/iUJmL2Wfl9R9N8uDBgJYUx5cPcuXYovgqanN0nh93O8AbS/wOAmVN/LLpFSqMXsQh6Nusf4NBQNIj1gZ9pYQGENznbhdXPV0Unz1KgasjS+xDO+7V8U/QjFVmEVAitnFlPgri3aj8YJIhhdZ782hoLbPdL9ib7ddxE6Ors2nb/dXy8NCkwXdc1KuLgbJBB2JII4AIyt63x2/r5zmRZUAAQBw7t1YI6a3orGZj5zfQRiDn9uUKfa98PIzDOUnadpdGTZbqjbr9/M3L/sPb0ZPOILqeuS/xgf9flgLYAjl3zlT8HkzlyRugbaGbefDz7xRwcGE0afaUyTjgzSYmtxPlZYpo/FFPhdgS6gu/m7ziMQv1PuO4Nz2KRROEz7GVvOHa5SU7i1tdZEu5vXqjylYrJrlWuUIDk8XDOk04Z2+s8AOnMPhPqYW8QHy6qrqN9f7EY9FZks+M7gdBzzPWFaBP8OL7ZZNbNpQIalcWqkhtMNTHmCtGN0XQB2OU48bHJTGX6O8+fkKquD4bxRuOJUbMQyX3UqSn8Cqt9hBkf+qgs4FzWIKxdoEoPaMxj238Qw9bqS3Kl0UALDAisR0OY59bT8AoDgqJWAkIoYCrV9rahvcNMI58jDaits0V3bNLuGdx0="
+    on:
+      repo: massbay-cs/cs225-proj4
+      tags: true
+      jdk: oraclejdk8
+notifications:
+  webhooks:
+    urls:
+      - 'https://webhooks.gitter.im/e/534cd283189faf48c650'
+    on_success: always
+    on_failure: always
+    on_start: never
