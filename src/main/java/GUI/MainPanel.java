@@ -101,7 +101,16 @@ public class MainPanel extends javax.swing.JPanel {
     public void setNonAdminOrganizerView() {
         cp.hideEventButtons();
     }
-
+    
+    /**
+     * @Added by Catherine
+     */
+    public void switchToCal()
+    {
+        CardLayout cl = (CardLayout) (calendarSwitchingPanel.getLayout());
+        cl.show(calendarSwitchingPanel, "calendar");
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
