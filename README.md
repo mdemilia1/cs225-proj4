@@ -7,7 +7,7 @@
 | `master` build status | [![Build status][travis-status-master]][travis]                    |
 | Latest stable version | [![Latest stable version][bintray-stable-version]][bintray-stable] |
 | Latest dev version    | [![Latest dev version][bintray-dev-version]][bintray-dev]          |
-| To-do comments        | [![Issue Count][codeclimate-status-climate]](https://codeclimate.com/github/massbay-cs/cs225-proj4)
+| To-do comment count   | [![To-do count][codeclimate-issues-status]][codeclimate-issues]    |
 
 # Tools #
 
@@ -18,6 +18,7 @@
 * Binary repository manager:
 	* [Bintray][bintray]: has both stable and dev versions
 	* [GitHub Releases][github-releases]: only has stable versions
+* Code quality: [CodeClimate][codeclimate]
 
 If you're looking for **downloads**, try [Bintray][bintray].
 
@@ -60,4 +61,6 @@ From IntelliJ: see [the corresponding wiki page][github-wiki-intellij]
 [bintray-dev-version]:       https://api.bintray.com/packages/massbay-cs/cs225-proj4/cs225-proj4-dev/images/download.svg "Latest dev version"
 [bintray-stable]:            https://bintray.com/massbay-cs/cs225-proj4/cs225-proj4-stable/_latestVersion "Latest stable version"
 [bintray-stable-version]:    https://api.bintray.com/packages/massbay-cs/cs225-proj4/cs225-proj4-stable/images/download.svg "Latest stable version"
-[codeclimate-status-issues]: https://codeclimate.com/github/massbay-cs/cs225-proj4/badges/issue_count.svg "CodeClimate issues"
+[codeclimate]:               https://codeclimate.com/github/massbay-cs/cs225-proj4 "CodeClimate"
+[codeclimate-issues]:        https://codeclimate.com/github/massbay-cs/cs225-proj4/issues "To-do comments"
+[codeclimate-issues-status]: https://codeclimate.com/github/massbay-cs/cs225-proj4/badges/issue_count.svg "To-do comments"
