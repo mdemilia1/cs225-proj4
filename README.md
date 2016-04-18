@@ -65,4 +65,4 @@ From IntelliJ: see [the corresponding wiki page][github-wiki-intellij]
 [codeclimate]:               https://codeclimate.com/github/massbay-cs/cs225-proj4 "CodeClimate"
 [codeclimate-issues]:        https://codeclimate.com/github/massbay-cs/cs225-proj4/issues "To-do comments"
 [codeclimate-issues-status]: https://codeclimate.com/github/massbay-cs/cs225-proj4/badges/issue_count.svg "To-do comments"
-[gitter]:                    https://gitter.im/massbay-cs "Team chat"
+[gitter]:                    https://gitter.im/massbay-cs/cs225-proj4 "Team chat"
