@@ -1,3 +1,5 @@
+*Original project: [MassBayCS225/EMS][github-orig]*
+
 # Status #
 
 | Type                  | Status                                                             |
@@ -45,14 +47,13 @@ From IntelliJ: see [the corresponding wiki page][github-wiki-intellij]
 
 
 [github]:                 https://github.com/massbay-cs/cs225-proj4 "GitHub"
+[github-orig]:            https://github.com/MassBayCS225/EMS "Original project on GitHub"
 [github-issues]:          https://github.com/massbay-cs/cs225-proj4/issues "Issues"
 [github-wiki]:            https://github.com/massbay-cs/cs225-proj4/wiki "Wiki"
 [github-wiki-intellij]:   https://github.com/massbay-cs/cs225-proj4/wiki/IntelliJ "Development: IntelliJ"
 [github-releases]:        https://github.com/massbay-cs/cs225-proj4/releases "GitHub Releases"
-
 [travis]:                 https://travis-ci.org/massbay-cs/cs225-proj4 "Travis CI"
 [travis-status-master]:   https://travis-ci.org/massbay-cs/cs225-proj4.svg?branch=master "Build status: master"
-
 [bintray]:                https://bintray.com/massbay-cs/cs225-proj4 "Bintray"
 [bintray-dev]:            https://bintray.com/massbay-cs/cs225-proj4/cs225-proj4-dev/_latestVersion "Latest dev version"
 [bintray-dev-version]:    https://api.bintray.com/packages/massbay-cs/cs225-proj4/cs225-proj4-dev/images/download.svg "Latest dev version"
