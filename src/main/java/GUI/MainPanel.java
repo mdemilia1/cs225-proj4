@@ -104,6 +104,8 @@ public class MainPanel extends javax.swing.JPanel {
     
     /**
      * @Added by Catherine
+     * Switches the current panel to the calendar
+     * This is connected to the home button in Main.java
      */
     public void switchToCal()
     {
