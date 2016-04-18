@@ -1,6 +1,6 @@
 {
 	"package": {
-		"name": "cs225-proj4",
+		"name": "cs225-proj4-dev",
 		"repo": "cs225-proj4",
 		"subject": "massbay-cs",
 		"desc": "MassBay CS225: Project 4",
@@ -19,9 +19,6 @@
 		"desc": "WIP",
 		"released": "",
 		"vcs_tag": "",
-		"attributes": [
-			{"name": "maturity", "values" : ["Experimental"], "type": "string"}
-		],
 		"gpgSign": false
 	},
 	"files": [
