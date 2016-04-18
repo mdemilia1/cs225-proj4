@@ -2,12 +2,9 @@
 engines:
   fixme:
     enabled: true
-  markdownlint:
-    enabled: true
 ratings:
   paths:
     - 'src/main/java/**.java'
-    - '**.md'
 exclude_paths:
   - db/
   - UML/
