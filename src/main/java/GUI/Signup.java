@@ -15,6 +15,7 @@ import BackEnd.UserSystem.UserExceptions.ZipCodeInvalidFormatException;
 import BackEnd.UserSystem.UserExceptions.ZipCodeInvalidLengthException;
 import BackEnd.UserSystem.PhoneNumber;
 import BackEnd.UserSystem.User;
+import exception.UpdateException;
 
 import java.awt.*;
 import java.util.Vector;
@@ -408,7 +409,9 @@ public class Signup extends javax.swing.JPanel {
                 || new String(reenterPassWordField.getPassword()).equals("")) {
             String message = "Please fill out all the required fields.";
             JOptionPane.showMessageDialog(this, message);
-        } else {
+        }
+        
+        else {
 
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
@@ -417,32 +420,36 @@ public class Signup extends javax.swing.JPanel {
             String password = new String(passwordField.getPassword());
             String reenterPassword = new String(reenterPassWordField.getPassword());
 
-
             if (streetField.getText().equals(STREET_FIELD)) {
                 street = "";
             } else {
                 street = streetField.getText();
             }
+
             if (cityField.getText().equals(CITY_FIELD)) {
                 city = "";
             } else {
                 city = cityField.getText();
             }
+            
             if (stateField.getText().equals(STATE_FIELD)) {
                 state = "";
             } else {
                 state = stateField.getText();
             }
+            
             if (zipCodeField.getText().equals(ZIP_CODE_FIELD)) {
                 zipCode = "";
             } else {
                 zipCode = zipCodeField.getText();
             }
+            
             if (countryField.getText().equals(COUNTRY_FIELD)) {
                 country = "";
             } else {
                 country = countryField.getText();
             }
+            
             if (phoneNumberField.getText().equals(PHONE_NUMBER_FIELD)) {
                 phoneNumber = "";
             } else {
@@ -462,24 +469,37 @@ public class Signup extends javax.swing.JPanel {
                 if (userManager.getUserList().isEmpty()) {
                     newUser.setAdminPrivilege(true);
                 }
+   
                 try {
                     newUser = userManager.createUser(newUser);
                     parentDialog.dispose();
-                } catch (DuplicateEmailException error) {
+                }
+                catch (DuplicateEmailException error) {
                     JOptionPane.showMessageDialog(this, "Email address already exists in the system");
                 }
-            } catch (PasswordMismatchError error) {
+            }
+            catch (PasswordMismatchError error) {
                 JOptionPane.showMessageDialog(this, "Passwords do not match.");
-            } catch (IllegalCharacterException error) {
+            }
+            catch (IllegalCharacterException error) {
                 JOptionPane.showMessageDialog(this, "Illegal characters found.");
-            } catch (PhoneNumberInvalidLengthException error) {
+            }
+            catch (PhoneNumberInvalidLengthException error) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid phone number.");
-            } catch (PhoneNumberNonNumericException error) {
+            }
+            catch (PhoneNumberNonNumericException error) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid phone number.");
-            } catch (ZipCodeInvalidFormatException error) {
+            }
+            catch (ZipCodeInvalidFormatException error) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid zip code.");
-            } catch (ZipCodeInvalidLengthException error) {
+            }
+            catch (ZipCodeInvalidLengthException error) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid zip code.");
+            }
+            catch (UpdateException error)
+            {
+                JOptionPane.showMessageDialog(this, "Cannot save this user.");
+                System.out.println("User update error in Signup: " + error.getMessage());
             }
         }
     }//GEN-LAST:event_signupButtonActionPerformed

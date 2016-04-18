@@ -12,6 +12,7 @@ import BackEnd.ManagerSystem.ManagerExceptions.PrivilegeInsufficientException;
 import EMS_Database.DoesNotExistException;
 import GUI.Dialog.EditSubEventDialog;
 import GUI.Dialog.NewSubEventDialog;
+import exception.UpdateException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -91,8 +92,6 @@ public class CalendarPanel extends javax.swing.JPanel {
             }
         });
     
-    
-
         populateCalendar();
         lastYearButton.setEnabled(false);
     }
@@ -515,9 +514,10 @@ public class CalendarPanel extends javax.swing.JPanel {
                 populateCalendar();
                 updateDetailsList((CalendarEvent) calendarTable.getValueAt(selectedRow, selectedColumn));
             }
-            catch (Exception e)
+            catch (UpdateException error)
             {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Unable to add event.");
+                System.out.println("Update event error in Calendar Panel: " + error.getMessage());
             }
         }
     }//GEN-LAST:event_addEventButtonActionPerformed
@@ -531,10 +531,17 @@ public class CalendarPanel extends javax.swing.JPanel {
             if (choice == JOptionPane.YES_OPTION) {
                 try {
                     manager.getEventManager().deleteSubEvent(selectedSubEvent);
-                } catch (PrivilegeInsufficientException ex) {
+                }
+                catch (PrivilegeInsufficientException ex) {
                     Logger.getLogger(UserManagementPanel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (DoesNotExistException ex) {
+                }
+                catch (DoesNotExistException ex) {
                     Logger.getLogger(UserManagementPanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                catch (UpdateException error)
+                {
+                    JOptionPane.showMessageDialog(this, "Unable to remove event.");
+                    System.out.println("Event deletion error in Calendar Panel: " + error.getMessage());
                 }
                 populateCalendar();
                 updateDetailsList((CalendarEvent) calendarTable.getValueAt(selectedRow, selectedColumn));

@@ -11,6 +11,7 @@ import BackEnd.ManagerSystem.MainManager;
 import GUI.Dialog.NewExpenseDialog;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import exception.UpdateException;
 
 /**
  *
@@ -173,9 +174,10 @@ public class CommitteeBudgetExpense extends javax.swing.JPanel {
                 Expense e = ned.createExpense();
                 manager.getBudgetManager().createExpense(e);
             }
-            catch (Exception e)
+            catch (UpdateException error)
             {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Cannot add this entry.");
+                System.out.println("Expense update error in Committee Expense: " + error.getMessage());
             }
         }
         updateInfo();
@@ -191,11 +193,12 @@ public class CommitteeBudgetExpense extends javax.swing.JPanel {
         else{
             Expense expense = manager.getCommitteeManager().getSelectedCommittee().getBudget().getExpenseList().get(selection);
             
-            try{
+            try {
                 manager.getBudgetManager().deleteExpense(expense);
             }
-            catch(Exception e){
-                e.printStackTrace();
+            catch(UpdateException error) {
+                JOptionPane.showMessageDialog(this, "Unable to delete.");
+                System.out.println("Deletion error in Committee Expense: " + error.getMessage());
             }
             updateInfo();
         }

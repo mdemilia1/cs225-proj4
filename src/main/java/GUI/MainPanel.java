@@ -12,6 +12,7 @@ import BackEnd.UserSystem.Participant;
 import BackEnd.UserSystem.User;
 import EMS_Database.DoesNotExistException;
 import EMS_Database.DuplicateInsertionException;
+import exception.UpdateException;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -173,14 +174,21 @@ public class MainPanel extends javax.swing.JPanel {
                     eventManager.removeOrganizer(loggedInUser);
                     JOptionPane.showMessageDialog(null, "Successfully unregistered.");
                     registerForEventButton.setText(REGISTER);
-                } else {
+                }
+                else {
                     eventManager.createParticipant(loggedInUser);
                     eventManager.addOrganizer(loggedInUser);
                     JOptionPane.showMessageDialog(null, "Registration successful!");
                     registerForEventButton.setText(UNREGISTER);
                 }
-            } catch (DoesNotExistException e) {
+            }
+            catch (DoesNotExistException e) {
                 e.printStackTrace();
+            }
+            catch (UpdateException error)
+            {
+                JOptionPane.showMessageDialog(this, "Unable to register.");
+                System.out.println("Registration update error in MainPanel: " + error.getMessage());
             }
         }
     }

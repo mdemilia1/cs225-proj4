@@ -9,6 +9,7 @@ import BackEnd.EventSystem.Committee;
 import BackEnd.EventSystem.Income;
 import BackEnd.ManagerSystem.MainManager;
 import GUI.Dialog.NewIncomeDialog;
+import exception.UpdateException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -175,9 +176,10 @@ public class CommitteeBudgetIncome extends javax.swing.JPanel {
                 Income i = nid.createIncome();
                 manager.getBudgetManager().createIncome(i);
             }
-            catch (Exception e)
+            catch (UpdateException error)
             {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Cannot add this entry.");
+                System.out.println("Income update error in Committee Income: " + error.getMessage());
             }
         }
         updateInfo();    
@@ -196,8 +198,9 @@ public class CommitteeBudgetIncome extends javax.swing.JPanel {
             try{
                 manager.getBudgetManager().deleteIncome(income);
             }
-            catch(Exception e){
-                e.printStackTrace();
+            catch(UpdateException error){
+                JOptionPane.showMessageDialog(this, "Unable to delete.");
+                System.out.println("Deletion error in Committee Income: " + error.getMessage());
             }
             updateInfo();
         }

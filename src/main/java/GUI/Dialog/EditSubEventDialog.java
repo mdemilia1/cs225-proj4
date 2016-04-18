@@ -11,9 +11,11 @@ import BackEnd.ManagerSystem.ManagerExceptions.PrivilegeInsufficientException;
 import BackEnd.UserSystem.Location;
 import EMS_Database.DoesNotExistException;
 import GUI.DesignDefault;
+import exception.UpdateException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -205,10 +207,17 @@ public class EditSubEventDialog extends javax.swing.JDialog {
 
             confirm = true;
             this.dispose();
-        } catch (PrivilegeInsufficientException ex) {
+        }
+        catch (PrivilegeInsufficientException ex) {
             Logger.getLogger(EditSubEventDialog.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DoesNotExistException ex) {
+        }
+        catch (DoesNotExistException ex) {
             Logger.getLogger(EditSubEventDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch (UpdateException error)
+        {
+            JOptionPane.showMessageDialog(this, "Cannot save this SubEvent.");
+            System.out.println("Subevent update error in EditSubEventDialog: " + error.getMessage());
         }
     }//GEN-LAST:event_saveSubEventButtonActionPerformed
 

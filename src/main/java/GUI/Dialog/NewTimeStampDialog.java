@@ -368,10 +368,6 @@ public class NewTimeStampDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton closeButton;

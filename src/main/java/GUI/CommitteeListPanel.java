@@ -9,6 +9,7 @@ import BackEnd.EventSystem.Committee;
 import BackEnd.EventSystem.Event;
 import BackEnd.UserSystem.User;
 import BackEnd.ManagerSystem.MainManager;
+import exception.UpdateException;
 import java.awt.CardLayout;
 /**
  *
@@ -238,8 +239,9 @@ public class CommitteeListPanel extends javax.swing.JPanel {
                         manager.getEventManager().createCommittee(
                         cd.createCommittee()));
             }
-            catch (Exception e) {
-                e.printStackTrace();
+            catch (UpdateException error) {
+                JOptionPane.showMessageDialog(this, "Unable to create committee.");
+                System.out.println("Committee creation error in CommitteList Panel: " + error.getMessage());
             }
             updateInfo();
             committeeList.setSelectedIndex(
@@ -258,16 +260,18 @@ public class CommitteeListPanel extends javax.swing.JPanel {
             if (choice == JOptionPane.YES_OPTION) {
                 try {
                     manager.getEventManager().deleteCommittee(c);
-                } catch (Exception e) {
-                    System.out.println(e);
-                    e.printStackTrace();
+                }
+                catch (UpdateException error) {
+                    JOptionPane.showMessageDialog(this, "Unable to delete.");
+                    System.out.println("Committee deletion error in CommitteeListPanel: " + error.getMessage());
                 }
                 int lastSelect = committeeList.getSelectedIndex();
                 updateInfo();
                 if (committeeList.getModel().getSize() > 0) {
                     if (lastSelect > 1) {
                         committeeList.setSelectedIndex(lastSelect - 1);
-                    } else {
+                    }
+                    else {
                         committeeList.setSelectedIndex(0);
                     }
                 }

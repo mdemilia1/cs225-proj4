@@ -11,6 +11,7 @@ import BackEnd.EventSystem.TimeSchedule;
 import BackEnd.ManagerSystem.MainManager;
 import GUI.Dialog.LoginDialog;
 import GUI.Dialog.SignupDialog;
+import exception.UpdateException;
 import java.awt.Component;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
@@ -107,9 +108,10 @@ public class Home extends javax.swing.JFrame {
                                 year, month, day, hour, minute);
                 }
             }
-            catch (Exception e)
+            catch (UpdateException error)
             {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Unable to create event.");
+                System.out.println("Update main event error in Home: " + error.getMessage());
             }
     }
     public void loadEvent()
@@ -158,7 +160,8 @@ public class Home extends javax.swing.JFrame {
             if (loggedInUser.getAdminPrivilege()) {
                 add(main);
                 activePanel = (Component) main;
-            } else {
+            }
+            else {
                 ArrayList<User> committeeChairList = new ArrayList<User>();
                 ArrayList<Committee> committeeList = selectedEvent.getCommitteeList();
                 for (int i = 0; i < committeeList.size(); i++) {
