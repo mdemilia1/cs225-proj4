@@ -18,11 +18,11 @@
 
 If you're looking for **downloads**, try [Bintray][bintray].
 
-If you want to check the current status of a branch or pull request, including whether it's building correctly, use [Travis CI][travis].
+If you want to check the **current status** of a branch or pull request, including whether it's building correctly, use [Travis CI][travis].
 
 # System requirements #
 
-* Runtime
+* Running
 	* Java SE 8 or greater (typically fulfilled by Oracle JRE or OpenJDK JRE)
 	* Java EE 7 or greater (typically fulfilled by GlassFish)
 	* Swing (ships with Oracle JRE and non-headless builds of OpenJDK JRE)
