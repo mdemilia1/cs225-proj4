@@ -1,0 +1,13 @@
+# vim: ft=yaml sw=2 ts=2 sts=2 et
+
+language: java
+jdk:
+  - oraclejdk8
+  #- openjdk8  # Not yet supported: https://docs.travis-ci.com/user/languages/java
+git:
+  depth: 1
+branches:
+  except:
+    - authorization  # TODO: Remove once stable
+sudo: false
+install: true
