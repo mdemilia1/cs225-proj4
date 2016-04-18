@@ -12,7 +12,7 @@
         "licenses": ["AGPL-V3"],
         "labels": ["massbay", "education", "java"],
         "public_download_numbers": false,
-        "public_stats": false,
+        "public_stats": false
     },
     "version": {
         "name": "1.0.0-dev",
@@ -20,7 +20,7 @@
         "released": "",
         "vcs_tag": "",
         "attributes": [
-            {"name": "maturity", "values" : ["Experimental"], "type": "string"},
+            {"name": "maturity", "values" : ["Experimental"], "type": "string"}
         ],
         "gpgSign": false
     },
