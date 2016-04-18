@@ -1,13 +1,10 @@
 # Status #
 
-Build status:  
-[![Build status][travis-status]][travis]
-
-Latest stable version:  
-[![Latest stable version][bintray-stable-version]][bintray-stable]
-
-Latest development version:  
-[![Latest dev version][bintray-dev-version]][bintray-dev]
+| Type                  | Status                                                             |
+|:----------------------|:-------------------------------------------------------------------|
+| `master` build status | [![Build status][travis-status-master]][travis]                    |
+| Latest stable version | [![Latest stable version][bintray-stable-version]][bintray-stable] |
+| Latest dev version    | [![Latest dev version][bintray-dev-version]][bintray-dev]          |
 
 # Tools #
 
@@ -45,6 +42,8 @@ From the command line, with Maven 3 installed in `$PATH`/`%PATH%`:
 
 From IntelliJ: see [the corresponding wiki page][github-wiki-intellij]
 
+
+
 [github]:                 https://github.com/massbay-cs/cs225-proj4 "GitHub"
 [github-issues]:          https://github.com/massbay-cs/cs225-proj4/issues "Issues"
 [github-wiki]:            https://github.com/massbay-cs/cs225-proj4/wiki "Wiki"
@@ -52,7 +51,7 @@ From IntelliJ: see [the corresponding wiki page][github-wiki-intellij]
 [github-releases]:        https://github.com/massbay-cs/cs225-proj4/releases "GitHub Releases"
 
 [travis]:                 https://travis-ci.org/massbay-cs/cs225-proj4 "Travis CI"
-[travis-status]:          https://travis-ci.org/massbay-cs/cs225-proj4.svg?branch=master "Build status"
+[travis-status-master]:   https://travis-ci.org/massbay-cs/cs225-proj4.svg?branch=master "Build status: master"
 
 [bintray]:                https://bintray.com/massbay-cs/cs225-proj4 "Bintray"
 [bintray-dev]:            https://bintray.com/massbay-cs/cs225-proj4/cs225-proj4-dev/_latestVersion "Latest dev version"
