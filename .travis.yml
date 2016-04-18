@@ -47,7 +47,7 @@ deploy:
 notifications:
   webhooks:
     urls:
-      - 'https://webhooks.gitter.im/e/17587450686e90b3d599'
+      - 'https://webhooks.gitter.im/e/534cd283189faf48c650'
     on_success: always
     on_failure: always
     on_start: never
