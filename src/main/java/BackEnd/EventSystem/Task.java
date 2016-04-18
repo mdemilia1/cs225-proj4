@@ -84,8 +84,7 @@ public class Task extends ScheduleItem implements Reportable {
             responsible.add("" + responsibleList.get(i).getAddress().getState());
             responsible.add("" + responsibleList.get(i).getAddress().getStreet());
             responsible.add("" + responsibleList.get(i).getAddress().getZipCode());
-            responsible.add("" + responsibleList.get(i).getAdminPrivilege());
-            responsible.add("" + responsibleList.get(i).getEventCreationPrivilege());
+            responsible.add("" + responsibleList.get(i).getPrivilegeLevel().name());
             responsible.add("" + responsibleList.get(i).getPhoneNumber());
             responsible.add("" + responsibleList.get(i).getUserId());
             
