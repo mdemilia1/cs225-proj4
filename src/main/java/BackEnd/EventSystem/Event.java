@@ -3,6 +3,7 @@ package BackEnd.EventSystem;
 import BackEnd.UserSystem.User;
 import BackEnd.UserSystem.Participant;
 import auth.AuthorizationException;
+import auth.Operation;
 import auth.Permissions;
 
 import java.text.DecimalFormat;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Ketty Lezama
+ * @author Dave
  */
 
 public class Event extends ScheduleItem implements Reportable {
@@ -38,7 +39,7 @@ public class Event extends ScheduleItem implements Reportable {
     }
     
     public Event(int eventID, Event event){
-        super((ScheduleItem)event);
+        super(event);
         EVENT_ID = eventID;
         try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
             organizerList = event.getOrganizerList();
@@ -50,54 +51,64 @@ public class Event extends ScheduleItem implements Reportable {
 
         }
     }
-    
+
+    //This is never used? What's it for?
     public boolean isReady() throws AuthorizationException{
         boolean eventReady = true;
         
         for (Committee committee : committeeList)
-            if (committee.isFinished() == false)
+            if (!committee.isFinished())
                 eventReady = false;
         
         return eventReady;
     }
-    
+    //This Isn't used, probably isn't needed at all
     private void setEVENT_ID(int event_id) {
         EVENT_ID = event_id;
     }
     
     public int getEVENT_ID() throws AuthorizationException {
+        Permissions.get().checkPermission("EVENT","UID", Operation.VIEW);
         return EVENT_ID;
     }
     
     public void setOrganizerList(ArrayList<User> organizerList) throws AuthorizationException {
+        Permissions.get().checkPermission("EVENT","ORGANIZER",Operation.MODIFY);
         this.organizerList = organizerList;
     }
     
     public ArrayList<User> getOrganizerList() throws AuthorizationException {
+        Permissions.get().checkPermission("EVENT","ORGANIZER",Operation.VIEW);
         return organizerList;
     }
     
     public void setSubEventList(ArrayList<SubEvent> subEventList) throws AuthorizationException {
+        Permissions.get().checkPermission("EVENT","SUBEVENT",Operation.MODIFY);
         this.subEventList = subEventList;
     }
     
     public ArrayList<SubEvent> getSubEventList() throws AuthorizationException {
+        Permissions.get().checkPermission("EVENT","SUBEVENT",Operation.VIEW);
         return subEventList;
     }
     
     public void setCommitteeList(ArrayList<Committee> committeeList) throws AuthorizationException {
+        Permissions.get().checkPermission("EVENT","COMMITTEE",Operation.MODIFY);
         this.committeeList = committeeList;
     }
     
     public ArrayList<Committee> getCommitteeList() throws AuthorizationException {
+        Permissions.get().checkPermission("EVENT","COMMITTEE",Operation.VIEW);
         return committeeList;
     }
     
     public void setParticipantList(ArrayList<Participant> participantList) throws AuthorizationException {
+        Permissions.get().checkPermission("EVENT","PARTICIPANT",Operation.MODIFY);
         this.participantList = participantList;
     }
     
     public ArrayList<Participant> getParticipantList() throws AuthorizationException {
+        Permissions.get().checkPermission("EVENT","PARTICIPANT",Operation.VIEW);
         return participantList;
     }
     
@@ -107,16 +118,16 @@ public class Event extends ScheduleItem implements Reportable {
     
     public double getTotalEventIncome() throws AuthorizationException{
         double income = 0;
-        for (int i = 0; i < committeeList.size(); i++){
-            income += committeeList.get(i).getBudget().getTotalIncome();
+        for (int i = 0; i < getCommitteeList().size(); i++){
+            income += getCommitteeList().get(i).getBudget().getTotalIncome();
         }
         return income;
     }
     
     public double getTotalEventExpense() throws AuthorizationException{
         double expense = 0;
-        for (int i = 0; i < committeeList.size(); i++){
-            expense += committeeList.get(i).getBudget().getTotalExpense();
+        for (int i = 0; i < getCommitteeList().size(); i++){
+            expense += getCommitteeList().get(i).getBudget().getTotalExpense();
         }
         return expense;
     }
@@ -125,8 +136,8 @@ public class Event extends ScheduleItem implements Reportable {
         double completed = 0;
         double total = 0;
         int[] taskCompletion = new int[2];
-        for (int i = 0; i < committeeList.size(); i++){
-            taskCompletion = committeeList.get(i).getTaskCompletion();
+        for (int i = 0; i < getCommitteeList().size(); i++){
+            taskCompletion = getCommitteeList().get(i).getTaskCompletion();
             completed += taskCompletion[0];
             total += taskCompletion[1];
         }
@@ -165,62 +176,62 @@ public class Event extends ScheduleItem implements Reportable {
 
         int numOfOrganizers = 0;
 
-        for (int i = 0; i < organizerList.size(); i++) {
+        for (int i = 0; i < getOrganizerList().size(); i++) {
             numOfOrganizers++;
-            if (i == organizerList.size() - 1) {
+            if (i == getOrganizerList().size() - 1) {
                 organizer.add("" + numOfOrganizers);
             }
 
         }
-        for (int i = 0; i < subEventList.size(); i++) {
-            subEvent.add("" + subEventList.get(i).getTitle());
-            subEvent.add("" + subEventList.get(i).getDescription());
-            subEvent.add("" + subEventList.get(i).getLocation());
-            subEvent.add("" + subEventList.get(i).getTimeSchedule().getStartDateTimeCalendar());
-            subEvent.add("" + subEventList.get(i).getTimeSchedule().getEndDateTimeCalendar());
+        for (int i = 0; i < getSubEventList().size(); i++) {
+            subEvent.add("" + getSubEventList().get(i).getTitle());
+            subEvent.add("" + getSubEventList().get(i).getDescription());
+            subEvent.add("" + getSubEventList().get(i).getLocation());
+            subEvent.add("" + getSubEventList().get(i).getTimeSchedule().getStartDateTimeCalendar());
+            subEvent.add("" + getSubEventList().get(i).getTimeSchedule().getEndDateTimeCalendar());
         }
         int numOfMembers = 0;
         int numOfTasks = 0;
-        for (int i = 0; i < committeeList.size(); i++) {
-            committee.add("" + committeeList.get(i).getTitle());
-            committee.add("" + committeeList.get(i).getBudget().getTotalIncome());
-            committee.add("" + committeeList.get(i).getBudget().getTotalExpense());
-            committee.add("" + committeeList.get(i).getBudget().getTotalIncome());
-            committee.add("" + committeeList.get(i).getChair().getFirstName());
-            committee.add("" + committeeList.get(i).getChair().getLastName());
-            committee.add("" + committeeList.get(i).getChair().getEmailAddress());
-            committee.add("" + committeeList.get(i).getChair().getAddress().getCity());
-            committee.add("" + committeeList.get(i).getChair().getAddress().getCountry());
-            committee.add("" + committeeList.get(i).getChair().getAddress().getState());
-            committee.add("" + committeeList.get(i).getChair().getAddress().getStreet());
-            committee.add("" + committeeList.get(i).getChair().getAddress().getZipCode());
+        for (int i = 0; i < getCommitteeList().size(); i++) {
+            committee.add("" + getCommitteeList().get(i).getTitle());
+            committee.add("" + getCommitteeList().get(i).getBudget().getTotalIncome());
+            committee.add("" + getCommitteeList().get(i).getBudget().getTotalExpense());
+            committee.add("" + getCommitteeList().get(i).getBudget().getTotalIncome());
+            committee.add("" + getCommitteeList().get(i).getChair().getFirstName());
+            committee.add("" + getCommitteeList().get(i).getChair().getLastName());
+            committee.add("" + getCommitteeList().get(i).getChair().getEmailAddress());
+            committee.add("" + getCommitteeList().get(i).getChair().getAddress().getCity());
+            committee.add("" + getCommitteeList().get(i).getChair().getAddress().getCountry());
+            committee.add("" + getCommitteeList().get(i).getChair().getAddress().getState());
+            committee.add("" + getCommitteeList().get(i).getChair().getAddress().getStreet());
+            committee.add("" + getCommitteeList().get(i).getChair().getAddress().getZipCode());
             //committee.add("" + committeeList.get(i).getChair().getAdminPrivilege());
             //committee.add("" + committeeList.get(i).getChair().getEventCreationPrivilege());
-            committee.add("" + committeeList.get(i).getChair().getPhoneNumber());
-            committee.add("" + committeeList.get(i).getChair().getUserId());
+            committee.add("" + getCommitteeList().get(i).getChair().getPhoneNumber());
+            committee.add("" + getCommitteeList().get(i).getChair().getUserId());
 
 
-            for (int j = 0; j < committeeList.get(i).getMemberList().size(); j++) {
+            for (int j = 0; j < getCommitteeList().get(i).getMemberList().size(); j++) {
                 numOfMembers++;
-                if (j == committeeList.get(i).getMemberList().size() - 1) {
+                if (j == getCommitteeList().get(i).getMemberList().size() - 1) {
                     committee.add("" + numOfMembers);
                 }
             }
-            committee.add("" + committeeList.get(i).isFinished());
+            committee.add("" + getCommitteeList().get(i).isFinished());
             
-            for (int j = 0; j < committeeList.get(i).getTaskList().size(); j++) {
+            for (int j = 0; j < getCommitteeList().get(i).getTaskList().size(); j++) {
                 numOfTasks++;
-                if (j == committeeList.get(i).getTaskList().size() - 1) {
+                if (j == getCommitteeList().get(i).getTaskList().size() - 1) {
                     committee.add("" + numOfTasks);
                 }
             }
-            committee.add("" + committeeList.get(i).isFinished());
+            committee.add("" + getCommitteeList().get(i).isFinished());
 
         }
         int numOfParticipants = 0;
-        for (int i = 0; i < participantList.size(); i++) {
+        for (int i = 0; i < getParticipantList().size(); i++) {
             numOfParticipants++;
-            if (i == participantList.size() - 1) {
+            if (i == getParticipantList().size() - 1) {
                 participant.add("" + numOfParticipants);
             }
         }
