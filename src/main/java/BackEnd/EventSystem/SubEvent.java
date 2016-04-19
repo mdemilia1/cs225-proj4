@@ -1,6 +1,8 @@
 package BackEnd.EventSystem;
 
+import BackEnd.UserSystem.Location;
 import auth.AuthorizationException;
+import auth.Operation;
 import auth.Permissions;
 
 import java.util.ArrayList;
@@ -26,16 +28,54 @@ public class SubEvent extends ScheduleItem implements Reportable {
     }
     
     public SubEvent(int subEventID, SubEvent subEvent){
-        super((ScheduleItem)subEvent);
+        super(subEvent);
         SUB_EVENT_ID = subEventID;
     }
     
-    private void setSUB_EVENT_ID(int sub_event_id) throws AuthorizationException {
-        SUB_EVENT_ID = sub_event_id;
-    }
-    
+
     public int getSUB_EVENT_ID() throws AuthorizationException {
+        Permissions.get().checkPermission("SUBEVENTS","UID", Operation.VIEW);
         return SUB_EVENT_ID;
+    }
+
+    public void setTitle(String title) throws AuthorizationException {
+        Permissions.get().checkPermission("SUBEVENTS","TITLE", Operation.MODIFY);
+        super.setTitle(title);
+    }
+
+    public String getTitle() throws AuthorizationException {
+        Permissions.get().checkPermission("SUBEVENTS","TITLE", Operation.VIEW);
+        return super.getTitle();
+    }
+
+    public void setDescription(String description) throws AuthorizationException {
+        Permissions.get().checkPermission("SUBEVENTS","DESCRIPTION", Operation.MODIFY);
+        super.setDescription(description);
+    }
+
+    public String getDescription() throws AuthorizationException {
+        Permissions.get().checkPermission("SUBEVENTS","DESCRIPTION", Operation.VIEW);
+        return super.getDescription();
+    }
+
+    public void setLocation(Location location) throws AuthorizationException {
+        //Should only have to check one Field type of "Location" right?
+        Permissions.get().checkPermission("SUBEVENTS","STREET", Operation.MODIFY);
+        super.setLocation(location);
+    }
+
+    public Location getLocation() throws AuthorizationException {
+        //See setLocation
+        Permissions.get().checkPermission("SUBEVENTS","STREET", Operation.VIEW);
+        return super.getLocation();
+    }
+
+    public void setTimeSchedule(TimeSchedule timeSchedule) throws AuthorizationException {
+        super.setTimeSchedule(timeSchedule);
+    }
+
+    public TimeSchedule getTimeSchedule() throws AuthorizationException {
+        return super.getTimeSchedule();
     }
     
     public boolean equals(SubEvent subEvent) throws AuthorizationException{
@@ -46,11 +86,11 @@ public class SubEvent extends ScheduleItem implements Reportable {
     }
     
     public String toString() {
-        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
-            return "Sub-Event Description: \n" + super.getDescription();
+        try{
+            return "Sub-Event Description: \n" + getDescription();
         }
-        catch(AuthorizationException ignored){}
-        return null;
+        catch(AuthorizationException check){ return "Unauthorized Access";}
+
     }
     
     @Override
