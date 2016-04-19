@@ -2,6 +2,7 @@ package BackEnd.EventSystem;
 
 import BackEnd.UserSystem.User;
 import auth.AuthorizationException;
+import auth.Operation;
 import auth.Permissions;
 
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class Committee implements Reportable {
     boolean isFinished() throws AuthorizationException {
         boolean completed = true;
 
-        for (Task task : taskList)
+        for (Task task : getTaskList())
             if (!task.getCompleted())
                 completed = false;
 
@@ -79,8 +80,8 @@ public class Committee implements Reportable {
 
     int[] getTaskCompletion() throws AuthorizationException {
         int completed = 0;
-        int total = taskList.size();
-        for (Task aTaskList : taskList) {
+        int total = getTaskList().size();
+        for (Task aTaskList : getTaskList()) {
             if (aTaskList.getCompleted()) {
                 completed++;
             }
@@ -94,6 +95,7 @@ public class Committee implements Reportable {
      * @return COMMITTEE_ID The committee ID.
      */
     public int getCOMMITTEE_ID() throws AuthorizationException {
+        Permissions.get().checkPermission("COMMITTEE","UID", Operation.VIEW);
         return COMMITTEE_ID;
     }
 
@@ -103,6 +105,7 @@ public class Committee implements Reportable {
      * @param title The committee title.
      */
     public void setTitle(String title) throws AuthorizationException {
+        Permissions.get().checkPermission("COMMITTEE","TITLE", Operation.MODIFY);
         this.title = title;
     }
 
@@ -112,15 +115,17 @@ public class Committee implements Reportable {
      * @return title The committee's title.
      */
     public String getTitle() throws AuthorizationException {
+        Permissions.get().checkPermission("COMMITTEE","TITLE", Operation.VIEW);
         return title;
     }
 
     /**
      * Stores a list of committee members.
      *
-     * @param memberList
+     * @param memberList The array list of UIDs for members
      */
     public void setMemberList(ArrayList<User> memberList) throws AuthorizationException {
+        Permissions.get().checkPermission("COMMITTEE","MEMBERS", Operation.MODIFY);
         this.memberList = memberList;
     }
 
@@ -130,10 +135,13 @@ public class Committee implements Reportable {
      * @return memberList
      */
     public ArrayList<User> getMemberList() throws AuthorizationException {
+        Permissions.get().checkPermission("COMMITTEE","MEMBERS", Operation.VIEW);
         return memberList;
     }
 
     public ArrayList<User> getMemberListWithChair() throws NullPointerException, AuthorizationException {
+        Permissions.get().checkPermission("COMMITTEE","MEMBERS", Operation.VIEW);
+        Permissions.get().checkPermission("COMMITTEE","CHAIR", Operation.VIEW);
         for (User member : memberList)
             if (member.equals(chair))
                 return memberList;
@@ -147,22 +155,27 @@ public class Committee implements Reportable {
     }
 
     public void setBudgetAccessList(ArrayList<User> budgetAccessList) throws AuthorizationException {
+        Permissions.get().checkPermission("COMMITTEE","BUDGETACCESS", Operation.MODIFY);
         this.budgetAccessList = budgetAccessList;
     }
 
     public ArrayList<User> getBudgetAccessList() throws AuthorizationException {
+        Permissions.get().checkPermission("COMMITTEE","BUDGETACCESS", Operation.VIEW);
         return budgetAccessList;
     }
 
     public void setChair(User user) throws AuthorizationException {
+        Permissions.get().checkPermission("COMMITTEE","CHAIRMAN", Operation.MODIFY);
         chair = user;
     }
 
     public User getChair() throws AuthorizationException {
+        Permissions.get().checkPermission("COMMITTEE","CHAIRMAN", Operation.VIEW);
         return chair;
     }
 
     public int getCompletePercent() throws AuthorizationException {
+        Permissions.get().checkPermission("COMMITTEE","TASKS", Operation.VIEW);
         int pct;
         float complete = 0.0f;
         float total = taskList.size();
@@ -176,18 +189,22 @@ public class Committee implements Reportable {
     }
 
     public void setTaskList(ArrayList<Task> taskList) throws AuthorizationException {
+        Permissions.get().checkPermission("COMMITTEE","TASKS", Operation.MODIFY);
         this.taskList = taskList;
     }
 
     public ArrayList<Task> getTaskList() throws AuthorizationException {
+        Permissions.get().checkPermission("COMMITTEE","TASKS", Operation.VIEW);
         return taskList;
     }
 
     public void setBudget(Budget budget) throws AuthorizationException {
+        Permissions.get().checkPermission("COMMITTEE","BUDGET", Operation.MODIFY);
         this.budget = budget;
     }
 
     public Budget getBudget() throws AuthorizationException {
+        Permissions.get().checkPermission("COMMITTEE","BUDGET", Operation.VIEW);
         return budget;
     }
 
@@ -208,7 +225,13 @@ public class Committee implements Reportable {
 //            taskDescriptions += task.toString() + "\n";
 //            
 //        return "Committee Title: " + title + "\nTotal Budget: $" + budget.getTotalBudget() + "\nTask List: \n" + taskDescriptions;
-        return title;
+        try {
+            Permissions.get().checkPermission("COMMITTEE","TITLE", Operation.VIEW);
+            return getTitle();
+        }
+        catch (AuthorizationException check){
+            return "Access Not Granted";
+        }
     }
 
     private void buildReportComponent(List<String> component, List<User> users) throws AuthorizationException {
@@ -235,28 +258,6 @@ public class Committee implements Reportable {
 
         buildReportComponent(member, memberList);
         buildReportComponent(budgetAccess, budgetAccessList);
-
-        /*
-        for(int i = 0; i < taskList.size();i++) {
-            task.add("" + taskList.get(i).getDescription());
-            task.add("" + taskList.get(i).getTitle());
-            task.add("" + taskList.get(i).getCompleted());
-            task.add("" + taskList.get(i).getLocation().getCity());
-            task.add("" + taskList.get(i).getLocation().getCountry());
-            task.add("" + taskList.get(i).getLocation().getState());
-            task.add("" + taskList.get(i).getLocation().getStreet());
-            task.add("" + taskList.get(i).getLocation().getZipCode());
-            task.add("" + taskList.get(i).getLocation().getDetails());
-            task.add("" + taskList.get(i).getTimeSchedule().getEndDateTimeCalendar());
-            task.add("" + taskList.get(i).getTimeSchedule().getStartDateTimeCalendar());
-            for(int j = 0; j < taskList.get(i).getResponsibleList().size();j++) {
-                task.add("" + taskList.get(i).getResponsibleList().get(j).getEmailAddress());
-                task.add("" + taskList.get(i).getResponsibleList().get(j).getFirstName());
-                task.add("" + taskList.get(i).getResponsibleList().get(j).getLastName());
-                task.add("" + taskList.get(i).getResponsibleList().get(j).getAddress().getCity());
-            }
-        }
-        */
 
         report.add(budget);
         report.add(member);
