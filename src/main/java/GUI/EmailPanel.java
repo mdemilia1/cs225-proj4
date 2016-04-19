@@ -28,12 +28,30 @@ public class EmailPanel extends javax.swing.JPanel {
      * Creates new form EmailPanel
      */
     public EmailPanel() throws PrivilegeInsufficientException {
-	dd = DesignDefault.getInstance();
-                   initComponents();
-	manager = MainManager.getInstance();
-	// welcomeLabel.setText("Welcome " + manager.getLogInManager().getLoggedInUser().getFirstName() + " " + manager.getLogInManager().getLoggedInUser().getLastName());
-	setVisible(true);
-                   this.setBackground(dd.getPanelBGColor());
+	    dd = DesignDefault.getInstance();
+        initComponents();
+	    manager = MainManager.getInstance();
+	    // welcomeLabel.setText("Welcome " + manager.getLogInManager().getLoggedInUser().getFirstName() + " " + manager.getLogInManager().getLoggedInUser().getLastName());
+	    setVisible(true);
+        this.setBackground(dd.getPanelBGColor());
+    }
+
+    public void sendOnClick()
+    {
+        ArrayList<String> toList = new ArrayList<String>(Arrays.asList(toField.getText().split(";")));
+        if (toField.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Please type an email address in the to box.");
+        } else {
+            try {
+                Email.send(manager.getLogInManager().getLoggedInUser().getEmailAddress(), toList, subjectField.getText(), messageArea.getText(), (manager.getLogInManager().getLoggedInUser().getFirstName() + " " + manager.getLogInManager().getLoggedInUser().getLastName()));
+                JOptionPane.showMessageDialog(null, "Your message has been sent.");
+                toField.setText("");
+                subjectField.setText("");
+                messageArea.setText("");
+            } catch (Exception ex) {
+                Logger.getLogger(EmailPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     /**
@@ -54,6 +72,7 @@ public class EmailPanel extends javax.swing.JPanel {
         messageScrollPane = new javax.swing.JScrollPane();
         messageArea = new javax.swing.JTextArea();
         sendButton = new javax.swing.JButton();
+
         discardButton = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(128, 128, 128));
@@ -196,12 +215,14 @@ public class EmailPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_toFieldActionPerformed
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
-	ArrayList<String> toList = new ArrayList<String>(Arrays.asList(toField.getText().split(";")));
+        sendOnClick();
+	/*ArrayList<String> toList = new ArrayList<String>(Arrays.asList(toField.getText().split(";")));
 	if (toField.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Please type an email address in the to box.");   
         }
         else{
             try {
+                //JOptionPane.showMessageDialog(null, "you hit enter.");
                 Email.send(manager.getLogInManager().getLoggedInUser().getEmailAddress(), toList, subjectField.getText(), messageArea.getText(), (manager.getLogInManager().getLoggedInUser().getFirstName() + " " + manager.getLogInManager().getLoggedInUser().getLastName()));
                 JOptionPane.showMessageDialog(null, "Your message has been sent.");
                 toField.setText("");
@@ -210,13 +231,15 @@ public class EmailPanel extends javax.swing.JPanel {
             } catch (Exception ex) {
                 Logger.getLogger(EmailPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        }*/
     }//GEN-LAST:event_sendButtonActionPerformed
 
     private void discardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discardButtonActionPerformed
 	toField.setText("");
 	subjectField.setText("");
 	messageArea.setText("");
+        //hide panel on discard
+        this.setVisible(false);
     }//GEN-LAST:event_discardButtonActionPerformed
 
     private void addCommitteeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCommitteeActionPerformed

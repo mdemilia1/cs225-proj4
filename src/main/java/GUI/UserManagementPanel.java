@@ -102,11 +102,15 @@ public class UserManagementPanel extends javax.swing.JPanel {
     private PhoneNumber setPhoneNumberToSystemValue() {
         PhoneNumber tempPhoneNumber = new PhoneNumber();
         
-        if (phoneNumberField.getText().equals(PHONE_NUMBER_FIELD))
+        if (phoneNumberField.getText().equals(PHONE_NUMBER_FIELD)) {
             tempPhoneNumber = new PhoneNumber("");
-        else
-            tempPhoneNumber = new PhoneNumber(phoneNumberField.getText());            
-        
+            System.out.println("here i am");
+        }
+
+        else {
+            tempPhoneNumber = new PhoneNumber(phoneNumberField.getText());
+        }
+
         return tempPhoneNumber;
     }
     
@@ -492,6 +496,7 @@ public class UserManagementPanel extends javax.swing.JPanel {
     private void saveChangesButtonPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveChangesButtonPerformed
         // TODO add your handling code here:
         int choice = JOptionPane.showConfirmDialog(null, "Do you want to save these changes?");
+        selectedUser = manager.getUserManager().getSelectedUser();
         if(choice == JOptionPane.YES_OPTION)
         {
             try 
@@ -515,6 +520,7 @@ public class UserManagementPanel extends javax.swing.JPanel {
                 }
             } catch (PrivilegeInsufficientException ex) 
             {
+                
                 Logger.getLogger(UserManagementPanel.class.getName()).log(Level.SEVERE, null, ex);
             } 
             catch (DoesNotExistException ex) 

@@ -187,10 +187,10 @@ public class PhoneNumber{
      *   throws an exception
      */
     private boolean verifyPhoneNumberLength(String digits){
-          if(digits.length() > TOTAL_NUMBER_LENGTH || 
-                  digits.length() < TOTAL_NUMBER_LENGTH)
-              throw new PhoneNumberInvalidLengthException(
-                    "Invalid phone number length");
+          if(digits.length() > TOTAL_NUMBER_LENGTH || digits.length() < TOTAL_NUMBER_LENGTH)
+          {
+              throw new PhoneNumberInvalidLengthException("Invalid phone number length");
+          }
           else return true;
     }
     
