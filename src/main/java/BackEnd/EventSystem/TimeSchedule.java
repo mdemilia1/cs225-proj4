@@ -1,6 +1,7 @@
 package BackEnd.EventSystem;
 
 import auth.AuthorizationException;
+import auth.Operation;
 import auth.Permissions;
 
 import java.sql.Timestamp;
@@ -30,6 +31,7 @@ public class TimeSchedule {
     }
     
     public void setStartDateTime(int year, int month, int day, int hour, int minute) throws IllegalArgumentException, AuthorizationException {
+        Permissions.get().checkPermission("SUBEVENTS","STARTDATE", Operation.MODIFY);
         if (year >= 2013 && year <= 9999)
             startDateTime.set(Calendar.YEAR, year);
         else
@@ -57,18 +59,22 @@ public class TimeSchedule {
     }
     
     public void setStartDateTime(Timestamp startDateTime) throws AuthorizationException{
+        Permissions.get().checkPermission("SUBEVENTS","STARTDATE", Operation.MODIFY);
         this.startDateTime.setTimeInMillis(startDateTime.getTime());
     }
     
     public Calendar getStartDateTimeCalendar() throws AuthorizationException {
+        Permissions.get().checkPermission("SUBEVENTS","STARTDATE", Operation.VIEW);
         return startDateTime;
     }
     
     public Timestamp getStartDateTimeTimestamp() throws AuthorizationException {
+        Permissions.get().checkPermission("SUBEVENTS","STARTDATE", Operation.VIEW);
         return new Timestamp(startDateTime.getTimeInMillis());
     }
     
     public void setEndDateTime(int year, int month, int day, int hour, int minute) throws IllegalArgumentException, AuthorizationException {
+        Permissions.get().checkPermission("SUBEVENTS","ENDDATE", Operation.MODIFY);
         if (year >= 2013 && year <= 9999)
             endDateTime.set(Calendar.YEAR, year);
         else
@@ -96,14 +102,17 @@ public class TimeSchedule {
     }
     
     public void setEndDateTime(Timestamp endDateTime) throws AuthorizationException {
+        Permissions.get().checkPermission("SUBEVENTS","ENDDATE", Operation.MODIFY);
         this.endDateTime.setTimeInMillis(endDateTime.getTime());
     }
     
     public Calendar getEndDateTimeCalendar() throws AuthorizationException {
+        Permissions.get().checkPermission("SUBEVENTS","ENDDATE", Operation.VIEW);
         return endDateTime;
     }
     
     public Timestamp getEndDateTimeTimestamp() throws AuthorizationException {
+        Permissions.get().checkPermission("SUBEVENTS","ENDDATE", Operation.VIEW);
         return new Timestamp(endDateTime.getTimeInMillis());
     }
     
@@ -116,10 +125,15 @@ public class TimeSchedule {
     }
     
     public String toString() {
-        return "Start Date & Time: " + startDateTime.get(Calendar.MONTH) + "/" + startDateTime.get(Calendar.DAY_OF_MONTH) +
-                "/" + startDateTime.get(Calendar.YEAR) + " " + String.format("%02d", startDateTime.get(Calendar.HOUR_OF_DAY)) + ":" +
-                String.format("%02d", startDateTime.get(Calendar.MINUTE)) + "\nEnd Date & Time: " + endDateTime.get(Calendar.MONTH) +
-                "/" + endDateTime.get(Calendar.DAY_OF_MONTH) + "/" + endDateTime.get(Calendar.YEAR) + " " + 
-                String.format("%02d", endDateTime.get(Calendar.HOUR_OF_DAY)) + ":" + String.format("%02d", endDateTime.get(Calendar.MINUTE));
+        try {
+            return "Start Date & Time: " + getStartDateTimeCalendar().get(Calendar.MONTH) + "/" + getStartDateTimeCalendar().get(Calendar.DAY_OF_MONTH) +
+                    "/" + getStartDateTimeCalendar().get(Calendar.YEAR) + " " + String.format("%02d", getStartDateTimeCalendar().get(Calendar.HOUR_OF_DAY)) + ":" +
+                    String.format("%02d", getStartDateTimeCalendar().get(Calendar.MINUTE)) + "\nEnd Date & Time: " + getEndDateTimeCalendar().get(Calendar.MONTH) +
+                    "/" + getEndDateTimeCalendar().get(Calendar.DAY_OF_MONTH) + "/" + getEndDateTimeCalendar().get(Calendar.YEAR) + " " +
+                    String.format("%02d", getEndDateTimeCalendar().get(Calendar.HOUR_OF_DAY)) + ":" + String.format("%02d", getEndDateTimeCalendar().get(Calendar.MINUTE));
+        }
+        catch (AuthorizationException check){
+            return "Unauthorized Access";
+        }
     }
 }
