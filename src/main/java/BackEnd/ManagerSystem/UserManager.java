@@ -17,11 +17,13 @@ import auth.Permissions;
 import auth.PrivilegeLevel;
 import exception.UpdateException;
 
+import java.awt.*;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
+import javax.swing.*;
 
 /**
  *
@@ -159,7 +161,8 @@ public class UserManager {
             }
         }
         catch (ValidationException e) {
-            e.getMessage();
+            JOptionPane.showMessageDialog(new JFrame("Error"),e.getMessage());
+            return;
         }
     }
 

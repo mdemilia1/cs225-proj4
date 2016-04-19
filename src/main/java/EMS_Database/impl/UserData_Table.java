@@ -11,6 +11,7 @@ import auth.*;
 import exception.ReadException;
 import exception.UpdateException;
 
+import javax.swing.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -153,15 +154,16 @@ public class UserData_Table extends InitDB implements Interface_UserData {
             Address address = new Address();
 
             if (rs.next()) {
-                user.setPrivilegeLevel(PrivilegeLevel.fromID(rs.getInt("LEVEL")));
-                user.setFirstName(rs.getString("FNAME"));
-                user.setLastName(rs.getString("LNAME"));
                 try {
                     user.setEmailAddress(rs.getString("EMAIL"));
                 }
                 catch (ValidationException e) {
-                    e.getMessage();
+                    JOptionPane.showMessageDialog(new JFrame("Error"),e.getMessage());
+                    return user;
                 }
+                user.setPrivilegeLevel(PrivilegeLevel.fromID(rs.getInt("LEVEL")));
+                user.setFirstName(rs.getString("FNAME"));
+                user.setLastName(rs.getString("LNAME"));
                 user.setPhoneNumber(null);
                 address.setStreet(rs.getString("STREET"));
                 address.setCity(rs.getString("CITY"));
