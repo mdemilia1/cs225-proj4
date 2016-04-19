@@ -151,11 +151,15 @@ public class UserManager {
 
     public void editEmailAddress(String emailAddress)
             throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException, ValidationException {
-
-        User loggedInUser = logInManager.getLoggedInUser();
-        if (PrivilegeManager.hasUserPrivilege(loggedInUser, selectedUser)) {
-            selectedUser.setEmailAddress(emailAddress);
-            usersTable.setEmail(selectedUser.getUserId(), emailAddress);
+        try {
+            User loggedInUser = logInManager.getLoggedInUser();
+            if (PrivilegeManager.hasUserPrivilege(loggedInUser, selectedUser)) {
+                selectedUser.setEmailAddress(emailAddress);
+                usersTable.setEmail(selectedUser.getUserId(), emailAddress);
+            }
+        }
+        catch (ValidationException e) {
+            e.getMessage();
         }
     }
 

@@ -2,6 +2,7 @@ package EMS_Database.impl;
 
 import BackEnd.UserSystem.Address;
 import BackEnd.UserSystem.User;
+import BackEnd.UserSystem.UserExceptions.ValidationException;
 import EMS_Database.DoesNotExistException;
 import EMS_Database.InitDB;
 import EMS_Database.InputUser;
@@ -155,7 +156,12 @@ public class UserData_Table extends InitDB implements Interface_UserData {
                 user.setPrivilegeLevel(PrivilegeLevel.fromID(rs.getInt("LEVEL")));
                 user.setFirstName(rs.getString("FNAME"));
                 user.setLastName(rs.getString("LNAME"));
-                user.setEmailAddress(rs.getString("EMAIL"));
+                try {
+                    user.setEmailAddress(rs.getString("EMAIL"));
+                }
+                catch (ValidationException e) {
+                    e.getMessage();
+                }
                 user.setPhoneNumber(null);
                 address.setStreet(rs.getString("STREET"));
                 address.setCity(rs.getString("CITY"));
