@@ -2,12 +2,16 @@
 
 # Status #
 
-| Type                  | Status                                                             |
-|:----------------------|:-------------------------------------------------------------------|
-| `master` build status | [![Build status][travis-status-master]][travis]                    |
-| Latest stable version | [![Latest stable version][bintray-stable-version]][bintray-stable] |
-| Latest dev version    | [![Latest dev version][bintray-dev-version]][bintray-dev]          |
-| To-do comment count   | [![To-do count][codeclimate-issues-status]][codeclimate-issues]    |
+| Type                     | Status                                                             |
+|:-------------------------|:-------------------------------------------------------------------|
+| `master` build status    | [![Build status: master][travis-status-master]][travis]            |
+| `frontend` build status  | [![Build status: frontend][travis-status-frontend]][travis]        |
+| `backend` build status\* | [![Build status: backend][travis-status-backend]][travis]          |
+| Latest stable version    | [![Latest stable version][bintray-stable-version]][bintray-stable] |
+| Latest dev version       | [![Latest dev version][bintray-dev-version]][bintray-dev]          |
+| To-do comment count      | [![To-do count][codeclimate-issues-status]][codeclimate-issues]    |
+
+\* Not yet expected to build without failure.
 
 # Tools #
 
@@ -57,6 +61,8 @@ From IntelliJ: see [the corresponding wiki page][github-wiki-intellij]
 [github-releases]:           https://github.com/massbay-cs/cs225-proj4/releases "GitHub Releases"
 [travis]:                    https://travis-ci.org/massbay-cs/cs225-proj4 "Travis CI"
 [travis-status-master]:      https://travis-ci.org/massbay-cs/cs225-proj4.svg?branch=master "Build status: master"
+[travis-status-frontend]:    https://travis-ci.org/massbay-cs/cs225-proj4.svg?branch=frontend "Build status: frontend"
+[travis-status-backend]:     https://travis-ci.org/massbay-cs/cs225-proj4.svg?branch=backend "Build status: backend"
 [bintray]:                   https://bintray.com/massbay-cs/cs225-proj4 "Bintray"
 [bintray-dev]:               https://bintray.com/massbay-cs/cs225-proj4/cs225-proj4-dev/_latestVersion "Latest dev version"
 [bintray-dev-version]:       https://api.bintray.com/packages/massbay-cs/cs225-proj4/cs225-proj4-dev/images/download.svg "Latest dev version"
