@@ -9,7 +9,6 @@ git:
 branches:
   except:
   - authorization
-  - backend
 cache:
   timeout: 60
   directories:
