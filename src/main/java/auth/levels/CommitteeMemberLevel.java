@@ -197,7 +197,76 @@ public class CommitteeMemberLevel extends Level {
 
     @Override
     protected void checkPermissionSubEvents(Context context) throws AuthorizationException {
-        checkPermissionEvents(context);
+        switch (context.getFieldForSwitch()){
+            case "DESCRIPTION":
+                context
+                        .cannotModify()
+                        .cannotCreate()
+                        .cannotDelete();
+                break;
+            case "DETAILS":
+                context
+                        .cannotModify()
+                        .cannotCreate()
+                        .cannotDelete();
+                break;
+            case "TITLE":
+                context
+                        .cannotModify()
+                        .cannotCreate()
+                        .cannotDelete();
+                break;
+            case "COMPLETE":
+                context
+                        .cannotModify()
+                        .cannotCreate()
+                        .cannotDelete();
+                break;
+            case "STREET":
+                context
+                        .cannotModify()
+                        .cannotCreate()
+                        .cannotDelete();
+                break;
+            case "CITY":
+                context
+                        .cannotModify()
+                        .cannotCreate()
+                        .cannotDelete();
+                break;
+            case "STATE":
+                context
+                        .cannotModify()
+                        .cannotCreate()
+                        .cannotDelete();
+                break;
+            case "ZIPCODE":
+                context
+                        .cannotModify()
+                        .cannotCreate()
+                        .cannotDelete();
+                break;
+            case "COUNTRY":
+                context
+                        .cannotModify()
+                        .cannotCreate()
+                        .cannotDelete();
+                break;
+            case "STARTDATE":
+                context
+                        .cannotModify()
+                        .cannotCreate()
+                        .cannotDelete();
+                break;
+            case "ENDDATE":
+                context
+                        .cannotModify()
+                        .cannotCreate()
+                        .cannotDelete();
+                break;
+            default:
+                throw new UnknownFieldException(context);
+        }
     }
 
     @Override
