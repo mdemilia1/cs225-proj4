@@ -3,12 +3,15 @@
  * and open the template in the editor.
  */
 package GUI;
+import BackEnd.ManagerSystem.ManagerExceptions.PrivilegeInsufficientException;
+import EMS_Database.DoesNotExistException;
 import GUI.Dialog.NewCommitteeDialog;
 import javax.swing.*;
 import BackEnd.EventSystem.Committee;
 import BackEnd.EventSystem.Event;
 import BackEnd.UserSystem.User;
 import BackEnd.ManagerSystem.MainManager;
+import auth.AuthorizationException;
 import exception.UpdateException;
 import java.awt.CardLayout;
 /**
@@ -26,7 +29,8 @@ public class CommitteeListPanel extends javax.swing.JPanel {
     private DesignDefault dd;
     private CardLayout cl;
     
-    public CommitteeListPanel() {
+    public CommitteeListPanel() throws AuthorizationException, PrivilegeInsufficientException,
+        DoesNotExistException{
         dd = DesignDefault.getInstance();
         initComponents();
         manager = MainManager.getInstance();
@@ -57,7 +61,7 @@ public class CommitteeListPanel extends javax.swing.JPanel {
     }
     
     public void updateInfo()
-    {
+        throws AuthorizationException{
         DefaultListModel model = new DefaultListModel();
         for(Committee c : manager.getEventManager().getSelectedEvent().getCommitteeList()){
             model.addElement(c);
@@ -92,7 +96,8 @@ public class CommitteeListPanel extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents() throws AuthorizationException,
+            PrivilegeInsufficientException, DoesNotExistException{
 
         committeeListScrollPane = new javax.swing.JScrollPane();
         committeeList = new javax.swing.JList();
@@ -115,8 +120,10 @@ public class CommitteeListPanel extends javax.swing.JPanel {
         committeeList.setMaximumSize(new java.awt.Dimension(100, 370));
         committeeList.setPreferredSize(new java.awt.Dimension(100, 370));
         committeeList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                committeeListValueChanged(evt);
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt){
+                try{
+                    committeeListValueChanged(evt);
+                }catch ( AuthorizationException ignored ){}
             }
         });
         committeeListScrollPane.setViewportView(committeeList);
@@ -129,8 +136,12 @@ public class CommitteeListPanel extends javax.swing.JPanel {
         addCommitteeButton.setSize(dd.getSmallButtonDimension());
         addCommitteeButton.setText("Add Committee");
         addCommitteeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addCommitteeButtonActionPerformed(evt);
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+                try {
+                    addCommitteeButtonActionPerformed(evt);
+                }catch (AuthorizationException ignore){
+                }catch (PrivilegeInsufficientException alsoIgnore){
+                }catch (DoesNotExistException ignoreThisToo){}
             }
         });
 
@@ -139,7 +150,11 @@ public class CommitteeListPanel extends javax.swing.JPanel {
         removeCommitteeButton.setText("Remove Committee");
         removeCommitteeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removeCommitteeButtonActionPerformed(evt);
+                try {
+                    removeCommitteeButtonActionPerformed(evt);
+                }catch (AuthorizationException ignore){
+                }catch (PrivilegeInsufficientException alsoIgnore){
+                }catch (DoesNotExistException ignoreThisToo){}
             }
         });
 
@@ -195,7 +210,8 @@ public class CommitteeListPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void committeeListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_committeeListValueChanged
+    private void committeeListValueChanged(javax.swing.event.ListSelectionEvent evt)
+        throws AuthorizationException {//GEN-FIRST:event_committeeListValueChanged
         // TODO add your handling code here:
         Event selectedEvent = manager.getEventManager().getSelectedEvent();
         User loggedInUser = manager.getLogInManager().getLoggedInUser();
@@ -204,7 +220,7 @@ public class CommitteeListPanel extends javax.swing.JPanel {
             Committee c = selectedEvent.getCommitteeList().get(committeeList.getSelectedIndex());
             manager.getCommitteeManager().setSelectedCommittee(c);
             
-            if (!loggedInUser.getAdminPrivilege() 
+            if (!loggedInUser.getPrivilegeLevel().isAdmin()
                     && !selectedEvent.getOrganizerList().contains(loggedInUser)
                     && !c.getChair().equals(loggedInUser)) {
                 if (c.getBudgetAccessList().contains(loggedInUser)) {
@@ -228,7 +244,9 @@ public class CommitteeListPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_committeeListValueChanged
 
-    private void addCommitteeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCommitteeButtonActionPerformed
+    private void addCommitteeButtonActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException, PrivilegeInsufficientException,
+            DoesNotExistException{//GEN-FIRST:event_addCommitteeButtonActionPerformed
         // TODO add your handling code here:
         NewCommitteeDialog cd = new NewCommitteeDialog((JFrame)SwingUtilities.windowForComponent(this), true);
         cd.setVisible(true);
@@ -250,7 +268,9 @@ public class CommitteeListPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_addCommitteeButtonActionPerformed
 
-    private void removeCommitteeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeCommitteeButtonActionPerformed
+    private void removeCommitteeButtonActionPerformed(java.awt.event.ActionEvent evt)
+    throws AuthorizationException, PrivilegeInsufficientException,
+        DoesNotExistException{//GEN-FIRST:event_removeCommitteeButtonActionPerformed
         // TODO add your handling code here:
         
         if (committeeList.getSelectedIndex() >= 0) {

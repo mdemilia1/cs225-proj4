@@ -2,6 +2,7 @@ package EMS_Database;
 
 import BackEnd.UserSystem.Participant;
 import BackEnd.UserSystem.User;
+import auth.AuthorizationException;
 import auth.PrivilegeLevel;
 
 /**
@@ -58,7 +59,7 @@ public class InputUser {
         this.country = "default country";
     }
 
-    public InputUser(User user) {
+    public InputUser(User user) throws AuthorizationException{
         //from actual backend user class
         this.privilegeLevel = user.getPrivilegeLevel();
         //Add firstname field here
@@ -77,7 +78,7 @@ public class InputUser {
 
     }
 
-    public InputUser(Participant user) {
+    public InputUser(Participant user) throws AuthorizationException{
         this.privilegeLevel = user.getPrivilegeLevel();
         this.fname = user.getFirstName();
         this.lname = user.getLastName();
