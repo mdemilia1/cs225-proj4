@@ -4,6 +4,7 @@ import BackEnd.ManagerSystem.ManagerExceptions.LogInIncorrectException;
 import BackEnd.UserSystem.Participant;
 import BackEnd.UserSystem.User;
 import EMS_Database.DoesNotExistException;
+import auth.AuthorizationException;
 
 import java.util.ArrayList;
 
@@ -24,13 +25,13 @@ public class LoginManager {
     }
 
     public void setLoggedInUser(String emailAddress, String password)
-            throws LogInIncorrectException {
+            throws AuthorizationException, LogInIncorrectException {
         User user = checkEmailAddress(emailAddress);
         checkPassword(user, password);
         loggedInUser = user;
     }
 
-    private User checkEmailAddress(String emailAddress) throws LogInIncorrectException {
+    private User checkEmailAddress(String emailAddress) throws AuthorizationException, LogInIncorrectException {
         for (Participant anUserList : userList) {
             if (anUserList.getEmailAddress().equalsIgnoreCase(emailAddress)) {
                 return (User) anUserList;
@@ -41,7 +42,7 @@ public class LoginManager {
 
     // TODO: This is an extremely bad way to check a password.  [Paul Buonopane]
     private boolean checkPassword(User user, String password) throws
-            LogInIncorrectException {
+            AuthorizationException, LogInIncorrectException {
 
         if (user.getPassword().equals(password)) {
             return true;

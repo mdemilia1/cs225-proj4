@@ -75,7 +75,10 @@ public enum PrivilegeLevel {
         return "LEVEL = " + PARTICIPANT.id();
     }
 
-
+    /**
+    checks if the privilege level is above or equal to a committee leader
+     **/
+    public boolean isCommitteeLeader(){ return compareTo(COMMITTEE_LEADER) >= 0; }
     //
     // Don't use any of this.  [Paul Buonopane]
     //

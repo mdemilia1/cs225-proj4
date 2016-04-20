@@ -4,7 +4,10 @@ import BackEnd.ManagerSystem.ManagerExceptions.PrivilegeInsufficientException;
 import BackEnd.EventSystem.Committee;
 import BackEnd.EventSystem.Event;
 import BackEnd.EventSystem.Task;
+import BackEnd.UserSystem.Participant;
 import BackEnd.UserSystem.User;
+import auth.AuthorizationException;
+import auth.levels.AdminLevel;
 
 /**
  * This class serves as a collection of static methods that help manage whether
@@ -28,9 +31,9 @@ public class PrivilegeManager {
      * @throws PrivilegeInsufficientException
      */
     static boolean hasAdminPrivilege(User loggedInUser)
-            throws PrivilegeInsufficientException {
+            throws AuthorizationException, PrivilegeInsufficientException {
 
-        if (loggedInUser.getAdminPrivilege()) {
+        if (loggedInUser.getPrivilegeLevel().isAdmin() ) {
             return true;
         } else {
             throw new PrivilegeInsufficientException(PRIVILEGE_INSUFFICIENT);
@@ -46,7 +49,7 @@ public class PrivilegeManager {
      * @throws PrivilegeInsufficientException
      */
     static boolean hasUserPrivilege(User loggedInUser, User selectedUser)
-            throws PrivilegeInsufficientException {
+            throws AuthorizationException, PrivilegeInsufficientException {
 
         return loggedInUser.equals(selectedUser) || hasAdminPrivilege(loggedInUser);
     }
@@ -59,9 +62,9 @@ public class PrivilegeManager {
      * @throws PrivilegeInsufficientException
      */
     static boolean hasEventCreationPrivilege(User loggedInUser)
-            throws PrivilegeInsufficientException {
+            throws AuthorizationException, PrivilegeInsufficientException {
 
-        return loggedInUser.getEventCreationPrivilege() || hasAdminPrivilege(loggedInUser);
+        return loggedInUser.getPrivilegeLevel().isCommitteeLeader() || hasAdminPrivilege(loggedInUser);
     }
 
     /**
@@ -73,7 +76,7 @@ public class PrivilegeManager {
      * @throws PrivilegeInsufficientException
      */
     static boolean hasEventPrivilege(User loggedInUser, Event selectedEvent)
-            throws PrivilegeInsufficientException {
+            throws AuthorizationException, PrivilegeInsufficientException {
 
         return selectedEvent.getOrganizerList().contains(loggedInUser) || hasAdminPrivilege(loggedInUser);
     }
@@ -87,7 +90,7 @@ public class PrivilegeManager {
      * @throws PrivilegeInsufficientException
      */
     static boolean hasSubEventPrivilege(User loggedInUser, Event selectedEvent)
-            throws PrivilegeInsufficientException {
+            throws AuthorizationException, PrivilegeInsufficientException {
         for (Committee committee : selectedEvent.getCommitteeList()) {
             if (committee.getChair().equals(loggedInUser)) {
                 return true;
@@ -107,7 +110,7 @@ public class PrivilegeManager {
      * @throws PrivilegeInsufficientException
      */
     static boolean hasCommitteePrivilege(User loggedInUser, Event selectedEvent, Committee selectedCommittee)
-            throws PrivilegeInsufficientException {
+            throws AuthorizationException, PrivilegeInsufficientException {
 
         return selectedCommittee.getChair().equals(loggedInUser) || hasEventPrivilege(loggedInUser, selectedEvent);
     }
@@ -123,7 +126,7 @@ public class PrivilegeManager {
      * @throws PrivilegeInsufficientException
      */
     static boolean hasTaskPrivilege(User loggedInUser, Event selectedEvent, Committee selectedCommittee, Task selectedTask)
-            throws PrivilegeInsufficientException {
+            throws AuthorizationException, PrivilegeInsufficientException {
 
         return selectedTask.getResponsibleList().contains(loggedInUser) || hasCommitteePrivilege(loggedInUser, selectedEvent, selectedCommittee);
     }
@@ -138,8 +141,9 @@ public class PrivilegeManager {
      * @throws PrivilegeInsufficientException
      */
     static boolean hasBudgetPrivilege(User loggedInUser, Event selectedEvent, Committee selectedCommittee)
-            throws PrivilegeInsufficientException {
+            throws AuthorizationException, PrivilegeInsufficientException {
 
-        return selectedCommittee.getBudgetAccessList().contains(loggedInUser) || hasCommitteePrivilege(loggedInUser, selectedEvent, selectedCommittee);
+        return selectedCommittee.getBudgetAccessList().contains(loggedInUser) ||
+                hasCommitteePrivilege(loggedInUser, selectedEvent, selectedCommittee);
     }
 }
