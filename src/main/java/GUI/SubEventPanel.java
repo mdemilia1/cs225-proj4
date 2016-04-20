@@ -9,6 +9,8 @@ import BackEnd.EventSystem.SubEvent;
 import BackEnd.EventSystem.TimeSchedule;
 import BackEnd.UserSystem.Location;
 import GUI.Dialog.NewTimeStampDialog;
+import auth.AuthorizationException;
+
 import java.util.Calendar;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -25,7 +27,7 @@ public class SubEventPanel extends javax.swing.JPanel {
     /**
      * Creates new form SubEventPanel
      */
-    public SubEventPanel(SubEvent e) {
+    public SubEventPanel(SubEvent e) throws AuthorizationException{
         initComponents();
         se = e;
         if (e.getTimeSchedule() != null)
@@ -64,7 +66,7 @@ public class SubEventPanel extends javax.swing.JPanel {
         startDateLabel.setText("Start Date: " + tempTimeSchedule.getStartDateTimeTimestamp().toString());
     }
     
-    public SubEvent createEvent()
+    public SubEvent createEvent() throws AuthorizationException
     {
         SubEvent e = new SubEvent(nameField.getText());
         e.setTimeSchedule(tempTimeSchedule);
@@ -106,7 +108,10 @@ public class SubEventPanel extends javax.swing.JPanel {
         editTimeScheduleButton.setText("edit");
         editTimeScheduleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editTimeScheduleButtonActionPerformed(evt);
+
+                try{
+                    editTimeScheduleButtonActionPerformed(evt);
+                }catch (AuthorizationException ignore){}
             }
         });
 
@@ -167,7 +172,8 @@ public class SubEventPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void editTimeScheduleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editTimeScheduleButtonActionPerformed
+    private void editTimeScheduleButtonActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_editTimeScheduleButtonActionPerformed
         // TODO add your handling code here:
         NewTimeStampDialog ntsd = new NewTimeStampDialog(null, true, tempTimeSchedule);
         ntsd.setVisible(true);
@@ -178,7 +184,7 @@ public class SubEventPanel extends javax.swing.JPanel {
         updateLabels();
     }//GEN-LAST:event_editTimeScheduleButtonActionPerformed
 
-    private void updateLabels()
+    private void updateLabels() throws AuthorizationException
     {
         dueDateLabel.setText("Due date: " + tempTimeSchedule.getEndDateTimeTimestamp().toString());
         startDateLabel.setText("Start date: " + tempTimeSchedule.getStartDateTimeTimestamp().toString());

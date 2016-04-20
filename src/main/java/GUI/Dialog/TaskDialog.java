@@ -7,6 +7,8 @@ package GUI.Dialog;
 import BackEnd.EventSystem.Task;
 import GUI.DesignDefault;
 import GUI.TaskPanel;
+import auth.AuthorizationException;
+
 import javax.swing.JOptionPane;
 
 /**
@@ -41,7 +43,7 @@ public class TaskDialog extends javax.swing.JDialog {
     { return confirm; }
     
     public Task createTask()
-    {
+        throws AuthorizationException{
         return taskPanel.createTask();
     }
     
@@ -69,7 +71,10 @@ public class TaskDialog extends javax.swing.JDialog {
         saveButton.setText("Save");
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveButtonActionPerformed(evt);
+
+                try{
+                    saveButtonActionPerformed(evt);
+                }catch( AuthorizationException ignored){}
             }
         });
 
@@ -128,7 +133,8 @@ public class TaskDialog extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
 
-    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt)
+            throws AuthorizationException{//GEN-FIRST:event_saveButtonActionPerformed
         // TODO add your handling code here:
         Task t = createTask();
         if(t.getTitle().trim().length() == 0 || t.getTitle().trim().equals("(none)"))

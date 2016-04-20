@@ -7,8 +7,12 @@ package GUI;
 import BackEnd.EventSystem.Event;
 import BackEnd.ManagerSystem.MainManager;
 import BackEnd.ManagerSystem.ManagerExceptions.PrivilegeInsufficientException;
+import EMS_Database.DoesNotExistException;
 import GUI.Reportable.EventReport;
+import auth.AuthorizationException;
+
 import java.awt.CardLayout;
+import java.util.zip.DataFormatException;
 
 /**
  *
@@ -29,7 +33,8 @@ public class Main extends javax.swing.JPanel {
     /**
      * Creates new form Main
      */
-    public Main(Home home) throws PrivilegeInsufficientException {
+    public Main(Home home) throws PrivilegeInsufficientException,
+            AuthorizationException, DoesNotExistException {
         this.home = home;
         dd = DesignDefault.getInstance();
         initComponents();

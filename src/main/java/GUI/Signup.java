@@ -15,6 +15,8 @@ import BackEnd.UserSystem.UserExceptions.ZipCodeInvalidFormatException;
 import BackEnd.UserSystem.UserExceptions.ZipCodeInvalidLengthException;
 import BackEnd.UserSystem.PhoneNumber;
 import BackEnd.UserSystem.User;
+import auth.AuthorizationException;
+import auth.PrivilegeLevel;
 import exception.UpdateException;
 
 import java.awt.*;
@@ -467,7 +469,7 @@ public class Signup extends javax.swing.JPanel {
                 newUser.setPhoneNumber(new PhoneNumber(phoneNumber));
 
                 if (userManager.getUserList().isEmpty()) {
-                    newUser.setAdminPrivilege(true);
+                    newUser.setPrivilegeLevel(PrivilegeLevel.ADMIN);
                 }
    
                 try {
@@ -500,6 +502,9 @@ public class Signup extends javax.swing.JPanel {
             {
                 JOptionPane.showMessageDialog(this, "Cannot save this user.");
                 System.out.println("User update error in Signup: " + error.getMessage());
+            }
+            catch (AuthorizationException error){
+                JOptionPane.showMessageDialog(this, "You are not authorized to do this.");
             }
         }
     }//GEN-LAST:event_signupButtonActionPerformed

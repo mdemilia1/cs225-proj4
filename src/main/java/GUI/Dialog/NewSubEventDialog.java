@@ -7,6 +7,8 @@ package GUI.Dialog;
 import BackEnd.EventSystem.SubEvent;
 import BackEnd.ManagerSystem.MainManager;
 import GUI.SubEventPanel;
+import auth.AuthorizationException;
+
 import javax.swing.JOptionPane;
 
 /**
@@ -61,7 +63,10 @@ public class NewSubEventDialog extends javax.swing.JDialog {
         saveButton.setText("Save");
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveButtonActionPerformed(evt);
+
+                try{
+                    saveButtonActionPerformed(evt);
+                }catch (AuthorizationException ignore){}
             }
         });
 
@@ -115,7 +120,8 @@ public class NewSubEventDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_saveButtonActionPerformed
         // TODO add your handling code here:
         SubEvent se = sep.createEvent();
         

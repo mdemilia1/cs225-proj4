@@ -8,9 +8,15 @@ import BackEnd.EventSystem.Budget;
 import BackEnd.EventSystem.Committee;
 import BackEnd.EventSystem.Expense;
 import BackEnd.ManagerSystem.MainManager;
+import BackEnd.ManagerSystem.ManagerExceptions.PrivilegeInsufficientException;
+import EMS_Database.DoesNotExistException;
+import EMS_Database.DuplicateInsertionException;
 import GUI.Dialog.NewExpenseDialog;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.bind.DataBindingException;
+
+import auth.AuthorizationException;
 import exception.UpdateException;
 
 /**
@@ -25,14 +31,14 @@ public class CommitteeBudgetExpense extends javax.swing.JPanel {
     private MainManager manager;
     private Budget selectedBudget;
     
-    public CommitteeBudgetExpense() {
+    public CommitteeBudgetExpense() throws AuthorizationException{
         manager = MainManager.getInstance();
         selectedBudget = manager.getBudgetManager().getSelectedBudget();
         initComponents();
         updateInfo();
     }
     
-    public void updateInfo()
+    public void updateInfo() throws AuthorizationException
     {
         DefaultTableModel model = getTableModel();
         model.setRowCount(0);
@@ -62,7 +68,7 @@ public class CommitteeBudgetExpense extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents() throws AuthorizationException{
 
         expensesLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -114,14 +120,19 @@ public class CommitteeBudgetExpense extends javax.swing.JPanel {
         addExpenseButton.setText("Add Expense");
         addExpenseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addExpenseButtonActionPerformed(evt);
+
+                try{
+                    addExpenseButtonActionPerformed(evt);
+                }catch (AuthorizationException ignore ){}
             }
         });
 
         deleteExpenseButton.setText("Delete Expense");
         deleteExpenseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteExpenseButtonActionPerformed(evt);
+                try{
+                    deleteExpenseButtonActionPerformed(evt);
+                }catch (AuthorizationException ignore ){}
             }
         });
 
@@ -164,7 +175,8 @@ public class CommitteeBudgetExpense extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addExpenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addExpenseButtonActionPerformed
+    private void addExpenseButtonActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_addExpenseButtonActionPerformed
         NewExpenseDialog ned = new NewExpenseDialog(null, true);
         ned.setVisible(true);
         if(ned.getConfirm())
@@ -178,12 +190,15 @@ public class CommitteeBudgetExpense extends javax.swing.JPanel {
             {
                 JOptionPane.showMessageDialog(this, "Cannot add this entry.");
                 System.out.println("Expense update error in Committee Expense: " + error.getMessage());
-            }
+            }catch (PrivilegeInsufficientException ex){
+            }catch (DoesNotExistException dataEx){
+            }catch (DuplicateInsertionException dupEx){}
         }
         updateInfo();
     }//GEN-LAST:event_addExpenseButtonActionPerformed
 
-    private void deleteExpenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteExpenseButtonActionPerformed
+    private void deleteExpenseButtonActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_deleteExpenseButtonActionPerformed
         int selection = expensesTable.getSelectedRow();
         
         if(selection < 0){
@@ -199,7 +214,10 @@ public class CommitteeBudgetExpense extends javax.swing.JPanel {
             catch(UpdateException error) {
                 JOptionPane.showMessageDialog(this, "Unable to delete.");
                 System.out.println("Deletion error in Committee Expense: " + error.getMessage());
-            }
+            }catch (AuthorizationException ex){
+            }catch (PrivilegeInsufficientException pEx){
+            }catch (DoesNotExistException DNEex){}
+
             updateInfo();
         }
     }//GEN-LAST:event_deleteExpenseButtonActionPerformed

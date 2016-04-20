@@ -15,6 +15,8 @@ import GUI.Dialog.BudgetDialog;
 import GUI.Dialog.FindMemberDialog;
 import GUI.Dialog.NewTaskDialog;
 import GUI.Reportable.CommitteeReport;
+import auth.AuthorizationException;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.util.Calendar;
@@ -108,43 +110,57 @@ public class CommitteePanel extends javax.swing.JPanel {
 
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel1MouseClicked(evt);
+                try {
+                    jLabel1MouseClicked(evt);
+                }catch( AuthorizationException ignore ){}
             }
         });
 
         removeTaskLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                removeTaskLabelMouseClicked(evt);
+                try {
+                    removeTaskLabelMouseClicked(evt);
+                }catch (AuthorizationException ignore){}
             }
         });
 
         addTaskLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                addTaskLabelMouseClicked(evt);
+                try {
+                    addTaskLabelMouseClicked(evt);
+                }catch (AuthorizationException ignore){}
             }
         });
 
         removeMemberLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                removeMemberLabelMouseClicked(evt);
+                try {
+                    removeMemberLabelMouseClicked(evt);
+                }catch (AuthorizationException ignore ){}
             }
         });
 
         addMemberLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                addMemberLabelMouseClicked(evt);
+                try {
+                    addMemberLabelMouseClicked(evt);
+                }catch (AuthorizationException ignore ){}
             }
         });
 
         removeBudgetAccessLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                removeBudgetAccessLabelMouseClicked(evt);
+                try {
+                    removeBudgetAccessLabelMouseClicked(evt);
+                }catch (AuthorizationException authEx){}
             }
         });
 
         addBudgetAccessLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                addBudgetAccessLabelMouseClicked(evt);
+                try {
+                    addBudgetAccessLabelMouseClicked(evt);
+                }catch (AuthorizationException authEx){}
             }
         });
 
@@ -186,7 +202,10 @@ public class CommitteePanel extends javax.swing.JPanel {
         });
         taskList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                taskListMouseClicked(evt);
+
+                try{
+                    taskListMouseClicked(evt);
+                }catch (AuthorizationException authEx){}
             }
         });
         taskScrollPane.setViewportView(taskList);
@@ -201,7 +220,9 @@ public class CommitteePanel extends javax.swing.JPanel {
         budgetButton.setText("View Budget");
         budgetButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                budgetButtonActionPerformed(evt);
+                try{
+                    budgetButtonActionPerformed(evt);
+                }catch (AuthorizationException authEx){}
             }
         });
 
@@ -212,7 +233,9 @@ public class CommitteePanel extends javax.swing.JPanel {
         committeeHeadChangeButton.setText("change");
         committeeHeadChangeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                committeeHeadChangeButtonActionPerformed(evt);
+                try{
+                    committeeHeadChangeButtonActionPerformed(evt);
+                }catch (AuthorizationException authEx){}
             }
         });
 
@@ -221,7 +244,9 @@ public class CommitteePanel extends javax.swing.JPanel {
         removeTaskButton.setText("Remove Task");
         removeTaskButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removeTaskButtonActionPerformed(evt);
+                try{
+                    removeTaskButtonActionPerformed(evt);
+                }catch (AuthorizationException authEx){}
             }
         });
 
@@ -230,7 +255,9 @@ public class CommitteePanel extends javax.swing.JPanel {
         addTaskButton.setText("Add Task");
         addTaskButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addTaskButtonActionPerformed(evt);
+                try{
+                    addTaskButtonActionPerformed(evt);
+                }catch (AuthorizationException authEx){}
             }
         });
 
@@ -239,7 +266,9 @@ public class CommitteePanel extends javax.swing.JPanel {
         addMemberButton.setText("Add Member");
         addMemberButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addMemberButtonActionPerformed(evt);
+                try{
+                    addMemberButtonActionPerformed(evt);
+                }catch (AuthorizationException authEx){}
             }
         });
 
@@ -248,7 +277,9 @@ public class CommitteePanel extends javax.swing.JPanel {
         removeMemberButton.setText("Remove Member");
         removeMemberButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removeMemberButtonActionPerformed(evt);
+                try{
+                    removeMemberButtonActionPerformed(evt);
+                }catch (AuthorizationException authEx){}
             }
         });
 
@@ -257,7 +288,9 @@ public class CommitteePanel extends javax.swing.JPanel {
         addToBudgetButton.setText("+ Budget Access");
         addToBudgetButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addToBudgetButtonActionPerformed(evt);
+                try{
+                    addToBudgetButtonActionPerformed(evt);
+                }catch (AuthorizationException authEx){}
             }
         });
 
@@ -266,7 +299,9 @@ public class CommitteePanel extends javax.swing.JPanel {
         removeMemberFromBudgetButton.setText("- Budget Access");
         removeMemberFromBudgetButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removeMemberFromBudgetButtonActionPerformed(evt);
+                try{
+                    removeMemberFromBudgetButtonActionPerformed(evt);
+                }catch (AuthorizationException authEx){}
             }
         });
 
@@ -374,13 +409,13 @@ public class CommitteePanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
  
     public void setCommittee(Committee c)
-    {
+        throws AuthorizationException{
         manager.getCommitteeManager().setSelectedCommittee(c);
         updateInfo();
     }
     
     public void updateInfo()
-    {
+        throws AuthorizationException{
         Committee c = manager.getCommitteeManager().getSelectedCommittee();
         if(c.getTitle() != null)
         {
@@ -403,7 +438,8 @@ public class CommitteePanel extends javax.swing.JPanel {
         
     }
     
-    private void budgetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_budgetButtonActionPerformed
+    private void budgetButtonActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_budgetButtonActionPerformed
         // TODO add your handling code here:
         manager.getBudgetManager().setSelectedBudget(manager.getCommitteeManager().getSelectedCommittee().getBudget());
         BudgetDialog bd = new BudgetDialog((JFrame)SwingUtilities.windowForComponent(this), true);
@@ -411,7 +447,7 @@ public class CommitteePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_budgetButtonActionPerformed
 
     public void addTaskToList(Task t)
-    {
+        throws AuthorizationException{
                 TimeSchedule ts = t.getTimeSchedule();
                 User u = manager.getLogInManager().getLoggedInUser();
                 Event e = manager.getEventManager().getSelectedEvent();
@@ -441,7 +477,8 @@ public class CommitteePanel extends javax.swing.JPanel {
                 }
     }
     
-    private void taskListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_taskListMouseClicked
+    private void taskListMouseClicked(java.awt.event.MouseEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_taskListMouseClicked
         // TODO add your handling code here:
         Event selectedEvent = manager.getEventManager().getSelectedEvent();
         Committee selectedCommittee = manager.getCommitteeManager().getSelectedCommittee();
@@ -449,7 +486,7 @@ public class CommitteePanel extends javax.swing.JPanel {
         
         if(evt.getClickCount() == 2)
         {
-            if (loggedInUser.getAdminPrivilege() || selectedEvent.getOrganizerList().contains(loggedInUser) ||
+            if (loggedInUser.getPrivilegeLevel().isAdmin() || selectedEvent.getOrganizerList().contains(loggedInUser) ||
                 selectedCommittee.getChair().equals(loggedInUser)) {
                 manager.getTaskManager().setSelectedTask(manager.getCommitteeManager().getSelectedCommittee().getTaskList().get(taskList.getMaxSelectionIndex()));
                 TaskDialog td = new TaskDialog((JFrame) SwingUtilities.windowForComponent(this), true);
@@ -470,7 +507,8 @@ public class CommitteePanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_taskListMouseClicked
 
-    private void removeMemberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeMemberButtonActionPerformed
+    private void removeMemberButtonActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_removeMemberButtonActionPerformed
         User selectedUser = (User) memberList.getSelectedValue();
         
         if (manager.getCommitteeManager().getSelectedCommittee().getChair().equals(selectedUser)) {
@@ -493,7 +531,8 @@ public class CommitteePanel extends javax.swing.JPanel {
         updateInfo();
     }//GEN-LAST:event_removeMemberButtonActionPerformed
 
-    private void removeTaskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeTaskButtonActionPerformed
+    private void removeTaskButtonActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_removeTaskButtonActionPerformed
 
         if (taskList.getSelectedIndex() >= 0) {
             try {
@@ -530,7 +569,8 @@ public class CommitteePanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_removeTaskButtonActionPerformed
 
-    private void addMemberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMemberButtonActionPerformed
+    private void addMemberButtonActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_addMemberButtonActionPerformed
         // TODO add your handling code here:
         FindMemberDialog fmd = new FindMemberDialog((JFrame)SwingUtilities.windowForComponent(this), true);
         fmd.setVisible(true);
@@ -556,7 +596,8 @@ public class CommitteePanel extends javax.swing.JPanel {
         updateInfo();
     }//GEN-LAST:event_addMemberButtonActionPerformed
 
-    private void addTaskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTaskButtonActionPerformed
+    private void addTaskButtonActionPerformed(java.awt.event.ActionEvent evt)
+    throws AuthorizationException{//GEN-FIRST:event_addTaskButtonActionPerformed
         // TODO add your handling code here:
         NewTaskDialog ntd = new NewTaskDialog((JFrame)SwingUtilities.windowForComponent(this), true);
         ntd.setVisible(true);
@@ -596,7 +637,8 @@ public class CommitteePanel extends javax.swing.JPanel {
         updateInfo();
     }//GEN-LAST:event_addTaskButtonActionPerformed
 
-    private void committeeHeadChangeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_committeeHeadChangeButtonActionPerformed
+    private void committeeHeadChangeButtonActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_committeeHeadChangeButtonActionPerformed
         // TODO add your handling code here:
         FindMemberDialog fmd = new FindMemberDialog((JFrame)SwingUtilities.windowForComponent(this), true);
         fmd.setVisible(true);
@@ -614,7 +656,8 @@ public class CommitteePanel extends javax.swing.JPanel {
         updateInfo();
     }//GEN-LAST:event_committeeHeadChangeButtonActionPerformed
 
-    private void addToBudgetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToBudgetButtonActionPerformed
+    private void addToBudgetButtonActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_addToBudgetButtonActionPerformed
         // TODO add your handling code here:
         if(memberList.getSelectedIndex() >= 0)
         {
@@ -644,7 +687,8 @@ public class CommitteePanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_memberListValueChanged
 
-    private void removeMemberFromBudgetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeMemberFromBudgetButtonActionPerformed
+    private void removeMemberFromBudgetButtonActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_removeMemberFromBudgetButtonActionPerformed
         // TODO add your handling code here:
         User selectedUser = (User) memberList.getSelectedValue();
 
@@ -665,7 +709,8 @@ public class CommitteePanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_removeMemberFromBudgetButtonActionPerformed
 
-    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_jLabel1MouseClicked
         // TODO add your handling code here:
         FindMemberDialog fmd = new FindMemberDialog((JFrame)SwingUtilities.windowForComponent(this), true);
         fmd.setVisible(true);
@@ -683,7 +728,8 @@ public class CommitteePanel extends javax.swing.JPanel {
         updateInfo();
     }//GEN-LAST:event_jLabel1MouseClicked
 
-    private void addMemberLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMemberLabelMouseClicked
+    private void addMemberLabelMouseClicked(java.awt.event.MouseEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_addMemberLabelMouseClicked
         // TODO add your handling code here:
         FindMemberDialog fmd = new FindMemberDialog((JFrame)SwingUtilities.windowForComponent(this), true);
         fmd.setVisible(true);
@@ -709,7 +755,8 @@ public class CommitteePanel extends javax.swing.JPanel {
         updateInfo();
     }//GEN-LAST:event_addMemberLabelMouseClicked
 
-    private void removeMemberLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removeMemberLabelMouseClicked
+    private void removeMemberLabelMouseClicked(java.awt.event.MouseEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_removeMemberLabelMouseClicked
         // TODO add your handling code here:
         if(manager.getCommitteeManager().getSelectedCommittee().getChair().equals((User)memberList.getSelectedValue())) 
         {
@@ -737,7 +784,8 @@ public class CommitteePanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_removeMemberLabelMouseClicked
 
-    private void addTaskLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addTaskLabelMouseClicked
+    private void addTaskLabelMouseClicked(java.awt.event.MouseEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_addTaskLabelMouseClicked
         // TODO add your handling code here:
            NewTaskDialog ntd = new NewTaskDialog((JFrame)SwingUtilities.windowForComponent(this), true);
         ntd.setVisible(true);
@@ -777,7 +825,8 @@ public class CommitteePanel extends javax.swing.JPanel {
         updateInfo();
     }//GEN-LAST:event_addTaskLabelMouseClicked
 
-    private void removeTaskLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removeTaskLabelMouseClicked
+    private void removeTaskLabelMouseClicked(java.awt.event.MouseEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_removeTaskLabelMouseClicked
         // TODO add your handling code here:
         if(taskList.getSelectedIndex() >= 0)
         {
@@ -802,7 +851,8 @@ public class CommitteePanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_removeTaskLabelMouseClicked
 
-    private void removeBudgetAccessLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removeBudgetAccessLabelMouseClicked
+    private void removeBudgetAccessLabelMouseClicked(java.awt.event.MouseEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_removeBudgetAccessLabelMouseClicked
         // TODO add your handling code here:
         if(memberList.getSelectedIndex() >= 0)
         {
@@ -824,7 +874,8 @@ public class CommitteePanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_removeBudgetAccessLabelMouseClicked
 
-    private void addBudgetAccessLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addBudgetAccessLabelMouseClicked
+    private void addBudgetAccessLabelMouseClicked(java.awt.event.MouseEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_addBudgetAccessLabelMouseClicked
         // TODO add your handling code here:
         if(memberList.getSelectedIndex() >= 0)
         {
@@ -889,40 +940,34 @@ public class CommitteePanel extends javax.swing.JPanel {
   * 
   ****************************************************************/
     class MembersCellRenderer extends JLabel implements ListCellRenderer {
-         public MembersCellRenderer() 
-         {
+         public MembersCellRenderer() {
             setOpaque(true);
          }
           public Component getListCellRendererComponent(JList list,
                                                    Object value,
                                                    int index,
                                                    boolean isSelected,
-                                                   boolean cellHasFocus) 
+                                                   boolean cellHasFocus)
           {
               this.setFont(dd.getStandardText());
-              if(value instanceof User)
-              {
-                User u = (User)value;
-                if(manager.getCommitteeManager().getSelectedCommittee().getChair().equals(u))
-                {
-                     setText(u.toString()+"(C)");
-                     setBackground(Color.GREEN);
-                }
-                else if(manager.getCommitteeManager().getSelectedCommittee().getBudgetAccessList().contains(u))
-                {
-                     setText(u.toString()+"*");
-                     setBackground(Color.ORANGE);
-                }
-              
-                else
-                {
-                     setText(u.toString());
-                    setBackground(Color.WHITE);
-                }
-                if(isSelected)
-                {
-                     setBackground(dd.getListSelectionColor());
-                }
+              if(value instanceof User) {
+                  User u = (User) value;
+                  try {
+                      if (manager.getCommitteeManager().getSelectedCommittee().getChair().equals(u)) {
+                          setText(u.toString() + "(C)");
+                          setBackground(Color.GREEN);
+                      } else if (manager.getCommitteeManager().getSelectedCommittee().getBudgetAccessList().contains(u)) {
+                          setText(u.toString() + "*");
+                          setBackground(Color.ORANGE);
+                      } else {
+                          setText(u.toString());
+                          setBackground(Color.WHITE);
+                      }
+                      if (isSelected) {
+                          setBackground(dd.getListSelectionColor());
+                      }
+                  } catch (AuthorizationException authEx) {
+                  }
               }
               return this;
           }
@@ -944,6 +989,7 @@ public class CommitteePanel extends javax.swing.JPanel {
               if(value instanceof Task)
               {
                 Task t = (Task)value;
+                  try{
                 if(t.getCompleted())
                 {
                      setText(t.toString());
@@ -958,7 +1004,7 @@ public class CommitteePanel extends javax.swing.JPanel {
                 {
                      setBackground(dd.getListSelectionColor());
                 }
-              }
+              }catch (AuthorizationException authEx){}}
               return this;
           }
           

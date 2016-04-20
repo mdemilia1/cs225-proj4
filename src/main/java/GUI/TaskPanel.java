@@ -9,6 +9,8 @@ import BackEnd.ManagerSystem.MainManager;
 import BackEnd.UserSystem.User;
 import GUI.Dialog.FindMemberDialog;
 import GUI.Dialog.NewTimeStampDialog;
+import auth.AuthorizationException;
+
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import java.awt.Color;
@@ -58,7 +60,7 @@ public class TaskPanel extends javax.swing.JPanel {
     
     
     public Task createTask()
-    {
+        throws AuthorizationException{
         task.setCompleted(completeCheckBox.isSelected());
         task.setDescription(descriptionTextArea.getText());
         task.setTitle(headerLabel.getText());
@@ -144,7 +146,10 @@ public class TaskPanel extends javax.swing.JPanel {
         editTimeScheduleButton.setMinimumSize(dd.getBigButtonDimension());
         editTimeScheduleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editTimeScheduleButtonActionPerformed(evt);
+
+                try {
+                    editTimeScheduleButtonActionPerformed(evt);
+                }catch (AuthorizationException ignore){}
             }
         });
 
@@ -257,7 +262,8 @@ public class TaskPanel extends javax.swing.JPanel {
         updateInfo();
     }//GEN-LAST:event_addMemberButtonActionPerformed
 
-    private void editTimeScheduleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editTimeScheduleButtonActionPerformed
+    private void editTimeScheduleButtonActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_editTimeScheduleButtonActionPerformed
         // TODO add your handling code here:
         NewTimeStampDialog ntsd = new NewTimeStampDialog(null, true, task.getTimeSchedule());
         ntsd.setVisible(true);

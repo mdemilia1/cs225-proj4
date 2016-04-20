@@ -8,6 +8,8 @@ import BackEnd.EventSystem.Task;
 import BackEnd.EventSystem.TimeSchedule;
 import BackEnd.ManagerSystem.MainManager;
 import GUI.DesignDefault;
+import auth.AuthorizationException;
+
 import javax.swing.JOptionPane;
 
 /**
@@ -41,7 +43,7 @@ public class NewTaskDialog extends javax.swing.JDialog {
     { return confirm; }
     
     public Task createTask()
-    {
+        throws AuthorizationException{
         task.setTitle(taskNameField.getText());
         task.setDescription(descriptionTextArea.getText());
         return task;
@@ -88,7 +90,10 @@ public class NewTaskDialog extends javax.swing.JDialog {
         saveButton.setMinimumSize(dd.getBigButtonDimension());
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveButtonActionPerformed(evt);
+
+                try{
+                    saveButtonActionPerformed(evt);
+                }catch (AuthorizationException ignore){}
             }
         });
 
@@ -115,7 +120,10 @@ public class NewTaskDialog extends javax.swing.JDialog {
         editDueButton.setMinimumSize(dd.getBigButtonDimension());
         editDueButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editDueButtonActionPerformed(evt);
+
+                try{
+                    editDueButtonActionPerformed(evt);
+                }catch (AuthorizationException ignore){}
             }
         });
 
@@ -182,7 +190,7 @@ public class NewTaskDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     public boolean checkNames()
-    {
+        throws AuthorizationException{
         for (Task t : manager.getCommitteeManager().getSelectedCommittee().getTaskList())
         {
             if(t.getTitle().toLowerCase().trim().equals(taskNameField.getText().toLowerCase().trim()))
@@ -191,7 +199,8 @@ public class NewTaskDialog extends javax.swing.JDialog {
         return true;
     }
     
-    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_saveButtonActionPerformed
         // TODO add your handling code here:
         if(!checkNames())
         {
@@ -213,7 +222,8 @@ public class NewTaskDialog extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
 
-    private void editDueButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editDueButtonActionPerformed
+    private void editDueButtonActionPerformed(java.awt.event.ActionEvent evt)
+    throws AuthorizationException{//GEN-FIRST:event_editDueButtonActionPerformed
         // TODO add your handling code here:
         NewTimeStampDialog ntsd = new NewTimeStampDialog(null, true, new TimeSchedule());
         ntsd.setVisible(true);

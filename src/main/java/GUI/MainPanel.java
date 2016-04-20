@@ -12,6 +12,7 @@ import BackEnd.UserSystem.Participant;
 import BackEnd.UserSystem.User;
 import EMS_Database.DoesNotExistException;
 import EMS_Database.DuplicateInsertionException;
+import auth.AuthorizationException;
 import exception.UpdateException;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -48,7 +49,7 @@ public class MainPanel extends javax.swing.JPanel {
     /**
      * Creates new form MainPanel and sets up the inner panels
      */
-    public MainPanel() {
+    public MainPanel() throws AuthorizationException{
         eventManager = MainManager.getInstance().getEventManager();
         loggedInUser = MainManager.getInstance().getLogInManager().getLoggedInUser();
         participantList = eventManager.getSelectedEvent().getParticipantList();
@@ -198,9 +199,10 @@ public class MainPanel extends javax.swing.JPanel {
             }
             catch (UpdateException error)
             {
-                JOptionPane.showMessageDialog(this, "Unable to register.");
+                JOptionPane.showMessageDialog( MainPanel.this, "Unable to register.");
                 System.out.println("Registration update error in MainPanel: " + error.getMessage());
             }
+            catch(AuthorizationException authEx){}
         }
     }
     /*

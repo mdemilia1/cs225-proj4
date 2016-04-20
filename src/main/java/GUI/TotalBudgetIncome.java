@@ -9,6 +9,8 @@ import BackEnd.EventSystem.Expense;
 import BackEnd.EventSystem.Income;
 import BackEnd.ManagerSystem.MainManager;
 import GUI.Dialog.NewIncomeDialog;
+import auth.AuthorizationException;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -25,14 +27,14 @@ public class TotalBudgetIncome extends javax.swing.JPanel {
     
     private MainManager manager;
     
-    public TotalBudgetIncome() {
+    public TotalBudgetIncome() throws AuthorizationException{
         initComponents();
         manager = MainManager.getInstance();
         updateInfo();
     }
     
     public void updateInfo()
-    {
+        throws AuthorizationException{
         DefaultTableModel model = getTableModel();
         model.setRowCount(0);
         

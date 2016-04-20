@@ -6,6 +6,8 @@ package GUI;
 
 import BackEnd.ManagerSystem.MainManager;
 import GUI.Dialog.EditEventDialog;
+import auth.AuthorizationException;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -19,7 +21,7 @@ public class EventDetailsPanel extends javax.swing.JPanel {
     /**
      * Creates new form EventDetailsPanel
      */
-    public EventDetailsPanel() {
+    public EventDetailsPanel() throws AuthorizationException{
         initComponents();
         manager = MainManager.getInstance();
         updateLabels();
@@ -28,7 +30,7 @@ public class EventDetailsPanel extends javax.swing.JPanel {
     /**
      * Updates the labels to the relevant information for the event
      */
-    public void updateLabels()
+    public void updateLabels() throws AuthorizationException
     {
         eventNameLabel.setText(manager.getEventManager().getSelectedEvent().getTitle());
         descriptionTextArea.setText(manager.getEventManager().getSelectedEvent().getDescription());

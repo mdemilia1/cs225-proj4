@@ -9,7 +9,11 @@ import BackEnd.ManagerSystem.ManagerExceptions.PrivilegeInsufficientException;
 import BackEnd.UserSystem.Address;
 import BackEnd.UserSystem.PhoneNumber;
 import BackEnd.UserSystem.User;
+import BackEnd.UserSystem.UserExceptions.ValidationException;
 import EMS_Database.DoesNotExistException;
+import auth.AuthorizationException;
+import exception.UpdateException;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -68,7 +72,7 @@ public class UserManagementPanel extends javax.swing.JPanel {
         ChangeUserPanel.add(listScroller, BorderLayout.CENTER);
     }
     
-    public void updateLabels()
+    public void updateLabels() throws AuthorizationException
     {   
         selectedUser = manager.getUserManager().getSelectedUser();
         selectedUserAddress = selectedUser.getAddress();
@@ -145,7 +149,7 @@ public class UserManagementPanel extends javax.swing.JPanel {
         return tempAddress;
     }
     
-    private void setFieldsToDefaultString() {
+    private void setFieldsToDefaultString() throws AuthorizationException{
         if (selectedUser.getPhoneNumber().toString().equals(""))
             phoneNumberField.setText(PHONE_NUMBER_FIELD);
         else
@@ -493,7 +497,8 @@ public class UserManagementPanel extends javax.swing.JPanel {
         cl.show(UserInfoPanelHolder, "changeUser");
     }//GEN-LAST:event_changeUserButtonActionPerformed
 
-    private void saveChangesButtonPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveChangesButtonPerformed
+    private void saveChangesButtonPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_saveChangesButtonPerformed
         // TODO add your handling code here:
         int choice = JOptionPane.showConfirmDialog(null, "Do you want to save these changes?");
         selectedUser = manager.getUserManager().getSelectedUser();
@@ -525,6 +530,15 @@ public class UserManagementPanel extends javax.swing.JPanel {
             } 
             catch (DoesNotExistException ex) 
             {
+                Logger.getLogger(UserManagementPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            catch (AuthorizationException ex ){
+                Logger.getLogger(UserManagementPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            catch (UpdateException ex ){
+                Logger.getLogger(UserManagementPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            catch (ValidationException ex ){
                 Logger.getLogger(UserManagementPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
             updateLabels();
@@ -648,9 +662,14 @@ private void countryFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:e
     // End of variables declaration//GEN-END:variables
 
     class UserListSelectionListener implements ListSelectionListener {
-    public void valueChanged(ListSelectionEvent e) {
+    public void valueChanged(ListSelectionEvent e){
         manager.getUserManager().setSelectedUser((User)userList.getSelectedValue());
-        updateLabels();
+        try{
+            updateLabels();
+        }catch (AuthorizationException ignore ){
+            JOptionPane pane  = new JOptionPane();
+            pane.showMessageDialog(null, "You lack Proper authorization!");
+        }
     }
     }
 }

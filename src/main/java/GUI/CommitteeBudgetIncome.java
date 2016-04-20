@@ -8,10 +8,15 @@ import BackEnd.EventSystem.Budget;
 import BackEnd.EventSystem.Committee;
 import BackEnd.EventSystem.Income;
 import BackEnd.ManagerSystem.MainManager;
+import BackEnd.ManagerSystem.ManagerExceptions.PrivilegeInsufficientException;
+import EMS_Database.DoesNotExistException;
+import EMS_Database.DuplicateInsertionException;
 import GUI.Dialog.NewIncomeDialog;
+import auth.AuthorizationException;
 import exception.UpdateException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.bind.DataBindingException;
 
 /**
  *
@@ -24,7 +29,7 @@ public class CommitteeBudgetIncome extends javax.swing.JPanel {
      * Creates new form IncomePanel
      */
     private MainManager manager;
-    public CommitteeBudgetIncome() {
+    public CommitteeBudgetIncome() throws AuthorizationException{
         manager = MainManager.getInstance();
         selectedBudget = manager.getBudgetManager().getSelectedBudget();
         initComponents();
@@ -32,7 +37,7 @@ public class CommitteeBudgetIncome extends javax.swing.JPanel {
         
     }
     
-    public void updateInfo()
+    public void updateInfo() throws AuthorizationException
     {
         DefaultTableModel model = getTableModel();
         model.setRowCount(0);
@@ -61,7 +66,7 @@ public class CommitteeBudgetIncome extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents() throws AuthorizationException{
 
         incomeLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -113,14 +118,25 @@ public class CommitteeBudgetIncome extends javax.swing.JPanel {
         addIncomeButton.setText("Add Income");
         addIncomeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addIncomeButtonActionPerformed(evt);
+
+                try{
+                    addIncomeButtonActionPerformed(evt);
+                }catch (AuthorizationException ignore){
+                }catch (PrivilegeInsufficientException alsoIgnore){
+                }catch (DoesNotExistException ignoreThisToo){
+                }catch (DuplicateInsertionException andThis){}
             }
         });
 
         deleteIncomeButton.setText("Delete Income");
         deleteIncomeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteIncomeButtonActionPerformed(evt);
+
+                try{
+                    deleteIncomeButtonActionPerformed(evt);
+                }catch (AuthorizationException ignore){
+                }catch (PrivilegeInsufficientException alsoIgnore){
+                }catch (DoesNotExistException ignoreThisToo){}
             }
         });
 
@@ -165,7 +181,9 @@ public class CommitteeBudgetIncome extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addIncomeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addIncomeButtonActionPerformed
+    private void addIncomeButtonActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException, PrivilegeInsufficientException, DuplicateInsertionException,
+            DoesNotExistException{//GEN-FIRST:event_addIncomeButtonActionPerformed
         // TODO add your handling code here:
         NewIncomeDialog nid = new NewIncomeDialog(null, true);
         nid.setVisible(true);
@@ -185,7 +203,9 @@ public class CommitteeBudgetIncome extends javax.swing.JPanel {
         updateInfo();    
     }//GEN-LAST:event_addIncomeButtonActionPerformed
 
-    private void deleteIncomeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteIncomeButtonActionPerformed
+    private void deleteIncomeButtonActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException, PrivilegeInsufficientException, DoesNotExistException
+        {//GEN-FIRST:event_deleteIncomeButtonActionPerformed
         // TODO add your handling code here:
         int selection = incomeTable.getSelectedRow();
         if(selection < 0){

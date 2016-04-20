@@ -5,6 +5,8 @@
 package GUI.Dialog;
 
 import BackEnd.EventSystem.Income;
+import auth.AuthorizationException;
+
 import javax.swing.JOptionPane;
 
 /**
@@ -29,7 +31,7 @@ public class NewIncomeDialog extends javax.swing.JDialog {
         return confirm; 
     }
     
-    public Income createIncome()
+    public Income createIncome() throws AuthorizationException
     {
         Income i = new Income();
         if(amountField.getText().trim().length() > 0){
@@ -67,7 +69,10 @@ public class NewIncomeDialog extends javax.swing.JDialog {
         saveButton.setText("Save");
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveButtonActionPerformed(evt);
+
+                try{
+                    saveButtonActionPerformed(evt);
+                }catch (AuthorizationException ignore){}
             }
         });
 
@@ -131,7 +136,8 @@ public class NewIncomeDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException{//GEN-FIRST:event_saveButtonActionPerformed
         // TODO add your handling code here:
         Income i = createIncome();
         

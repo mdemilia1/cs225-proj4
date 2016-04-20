@@ -3,6 +3,9 @@
  * and open the template in the editor.
  */
 package GUI;
+import BackEnd.ManagerSystem.ManagerExceptions.PrivilegeInsufficientException;
+import EMS_Database.DoesNotExistException;
+import EMS_Database.DuplicateInsertionException;
 import GUI.Dialog.NewEventDialog;
 import BackEnd.EventSystem.Event;
 import BackEnd.EventSystem.Committee;
@@ -11,6 +14,7 @@ import BackEnd.EventSystem.TimeSchedule;
 import BackEnd.ManagerSystem.MainManager;
 import GUI.Dialog.LoginDialog;
 import GUI.Dialog.SignupDialog;
+import auth.AuthorizationException;
 import exception.UpdateException;
 import java.awt.Component;
 import java.util.Calendar;
@@ -36,7 +40,8 @@ public class Home extends javax.swing.JFrame {
     /**
      *
      */
-    public Home() {
+    public Home() throws AuthorizationException, PrivilegeInsufficientException,
+            DoesNotExistException, DuplicateInsertionException{
         initComponents();
         manager = MainManager.getInstance();
         /* Added following line to center dialog. -Ketty */
@@ -75,8 +80,8 @@ public class Home extends javax.swing.JFrame {
             SignupDialog sd = new SignupDialog(this, true);
             sd.setVisible(true);
     }
-    public void createFirstEvent()
-    {
+    public void createFirstEvent() throws AuthorizationException, PrivilegeInsufficientException,
+            DoesNotExistException, DuplicateInsertionException{
          try
             {
                 JOptionPane.showMessageDialog(this, "An event has not been created yet.  Please create one first.");
@@ -131,7 +136,8 @@ public class Home extends javax.swing.JFrame {
            }
     }
     
-    public void logOut(){
+    public void logOut() throws AuthorizationException, PrivilegeInsufficientException,
+        DoesNotExistException, DuplicateInsertionException{
         dispose();
         manager.getLogInManager().logOut();
         Home home = new Home();
@@ -156,7 +162,7 @@ public class Home extends javax.swing.JFrame {
                 }
             }
 
-            if (loggedInUser.getAdminPrivilege()) {
+            if (loggedInUser.getPrivilegeLevel().isAdmin()) {
                 add(main);
                 activePanel = (Component) main;
             }
@@ -280,7 +286,13 @@ public class Home extends javax.swing.JFrame {
         logOutMenuItem.setText("Logout");
         logOutMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                logOutMenuItemActionPerformed(evt);
+
+                try{
+                    logOutMenuItemActionPerformed(evt);
+                }catch (AuthorizationException AEx){
+                }catch (PrivilegeInsufficientException PEx){
+                }catch (DoesNotExistException DNEex){
+                }catch (DuplicateInsertionException dupEx){}
             }
         });
         fileMenu.add(logOutMenuItem);
@@ -430,7 +442,9 @@ public class Home extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Why does saying budget report make me giggle?");
     }//GEN-LAST:event_budgetReportsMenuItemActionPerformed
 
-    private void logOutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutMenuItemActionPerformed
+    private void logOutMenuItemActionPerformed(java.awt.event.ActionEvent evt)
+        throws AuthorizationException, PrivilegeInsufficientException,
+            DoesNotExistException, DuplicateInsertionException{//GEN-FIRST:event_logOutMenuItemActionPerformed
         logOut();
     }//GEN-LAST:event_logOutMenuItemActionPerformed
 
