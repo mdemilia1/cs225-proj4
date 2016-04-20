@@ -9,8 +9,71 @@ import static auth.PrivilegeLevel.COMMITTEE_LEADER;
 public class CommitteeLeaderLevel extends Level {
     @Override
     protected void checkPermissionSubEvents(Context context) throws AuthorizationException {
-        context.cannotModifyOther();
-        context.cannotDeleteOther();
+        switch (context.getFieldForSwitch()) {
+            case "":
+                context
+                        .cannotDelete();
+                break;
+
+            case "DESCRIPTION":
+                context
+                        .cannotDelete();
+                break;
+
+            case "DETAILS":
+                context
+                        .cannotDelete();
+
+                break;
+
+            case "TITLE":
+                context
+                        .cannotDelete();
+                break;
+
+            case "STARTTIME":
+                context
+                        .cannotDelete();
+                break;
+
+            case "ENDTIME":
+                context
+                        .cannotDelete();
+                break;
+
+            case "COMPLETE":
+                context
+                        .cannotDelete();
+                break;
+
+            case "STREET":
+                context
+                        .cannotDelete();
+                break;
+
+            case "CITY":
+                context
+                        .cannotDelete();
+                break;
+
+            case "STATE":
+                context
+                        .cannotDelete();
+                break;
+
+            case "ZIPCODE":
+                context
+                        .cannotDelete();
+                break;
+
+            case "COUNTRY":
+                context
+                        .cannotDelete();
+                break;
+
+            default:
+                throw new UnknownFieldException(context);
+        }
     }
     @Override
     protected void checkPermissionExpense(Context context) throws AuthorizationException {
