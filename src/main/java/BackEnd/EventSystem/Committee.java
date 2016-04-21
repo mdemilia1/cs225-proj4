@@ -68,24 +68,32 @@ public class Committee implements Reportable {
      *
      * @return True if the committee has finished all tasks, and false if it has not.
      */
-    boolean isFinished() throws AuthorizationException {
+    boolean isFinished() {
         boolean completed = true;
 
-        for (Task task : getTaskList())
-            if (!task.getCompleted())
-                completed = false;
-
+        try {
+            for (Task task : getTaskList())
+                if (!task.getCompleted())
+                    completed = false;
+        }catch (AuthorizationException authEx){}
         return completed;
     }
 
-    int[] getTaskCompletion() throws AuthorizationException {
+    int[] getTaskCompletion() {
         int completed = 0;
-        int total = getTaskList().size();
-        for (Task aTaskList : getTaskList()) {
-            if (aTaskList.getCompleted()) {
-                completed++;
+        int total = 0;
+        try{
+            total = getTaskList().size();
+        }catch (AuthorizationException authEx){}
+
+        try{
+            for (Task aTaskList : getTaskList()) {
+                if (aTaskList.getCompleted()) {
+                    completed++;
+                }
             }
-        }
+        }catch (AuthorizationException authEx){}
+
         return new int[]{completed, total};
     }
 
@@ -94,7 +102,7 @@ public class Committee implements Reportable {
      *
      * @return COMMITTEE_ID The committee ID.
      */
-    public int getCOMMITTEE_ID() throws AuthorizationException {
+    public int getCOMMITTEE_ID() {
         Permissions.get().checkPermission("COMMITTEE","UID", Operation.VIEW);
         return COMMITTEE_ID;
     }
@@ -104,7 +112,7 @@ public class Committee implements Reportable {
      *
      * @param title The committee title.
      */
-    public void setTitle(String title) throws AuthorizationException {
+    public void setTitle(String title) {
         Permissions.get().checkPermission("COMMITTEE","TITLE", Operation.MODIFY);
         this.title = title;
     }
@@ -114,7 +122,7 @@ public class Committee implements Reportable {
      *
      * @return title The committee's title.
      */
-    public String getTitle() throws AuthorizationException {
+    public String getTitle(){
         Permissions.get().checkPermission("COMMITTEE","TITLE", Operation.VIEW);
         return title;
     }
@@ -124,7 +132,7 @@ public class Committee implements Reportable {
      *
      * @param memberList The array list of UIDs for members
      */
-    public void setMemberList(ArrayList<User> memberList) throws AuthorizationException {
+    public void setMemberList(ArrayList<User> memberList) {
         Permissions.get().checkPermission("COMMITTEE","MEMBERS", Operation.MODIFY);
         this.memberList = memberList;
     }
@@ -134,12 +142,12 @@ public class Committee implements Reportable {
      *
      * @return memberList
      */
-    public ArrayList<User> getMemberList() throws AuthorizationException {
+    public ArrayList<User> getMemberList() {
         Permissions.get().checkPermission("COMMITTEE","MEMBERS", Operation.VIEW);
         return memberList;
     }
 
-    public ArrayList<User> getMemberListWithChair() throws NullPointerException, AuthorizationException {
+    public ArrayList<User> getMemberListWithChair(){
         Permissions.get().checkPermission("COMMITTEE","MEMBERS", Operation.VIEW);
         Permissions.get().checkPermission("COMMITTEE","CHAIR", Operation.VIEW);
         for (User member : memberList)
@@ -154,27 +162,27 @@ public class Committee implements Reportable {
         return memberList;
     }
 
-    public void setBudgetAccessList(ArrayList<User> budgetAccessList) throws AuthorizationException {
+    public void setBudgetAccessList(ArrayList<User> budgetAccessList) {
         Permissions.get().checkPermission("COMMITTEE","BUDGETACCESS", Operation.MODIFY);
         this.budgetAccessList = budgetAccessList;
     }
 
-    public ArrayList<User> getBudgetAccessList() throws AuthorizationException {
+    public ArrayList<User> getBudgetAccessList() {
         Permissions.get().checkPermission("COMMITTEE","BUDGETACCESS", Operation.VIEW);
         return budgetAccessList;
     }
 
-    public void setChair(User user) throws AuthorizationException {
+    public void setChair(User user) {
         Permissions.get().checkPermission("COMMITTEE","CHAIRMAN", Operation.MODIFY);
         chair = user;
     }
 
-    public User getChair() throws AuthorizationException {
+    public User getChair() {
         Permissions.get().checkPermission("COMMITTEE","CHAIRMAN", Operation.VIEW);
         return chair;
     }
 
-    public int getCompletePercent() throws AuthorizationException {
+    public int getCompletePercent() {
         Permissions.get().checkPermission("COMMITTEE","TASKS", Operation.VIEW);
         int pct;
         float complete = 0.0f;

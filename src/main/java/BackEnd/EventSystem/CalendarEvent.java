@@ -26,31 +26,29 @@ public class CalendarEvent {
      */
     public CalendarEvent(int d, ArrayList<SubEvent> sList)
     {
-        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+        Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction();
             setDay(d);
             setSubEventList(sList);
-        }
-        catch(AuthorizationException ignored){}
     }
 
     /**
      * Sets the day that this CalendarEvent is on.
      */
-    public void setDay(int d) throws AuthorizationException {
+    public void setDay(int d) {
         day = d;
     }
 
     /**
      * Sets the list of subEvents to be on this day.
      */
-    public void setSubEventList(ArrayList<SubEvent> sList) throws AuthorizationException {
+    public void setSubEventList(ArrayList<SubEvent> sList) {
         subEventList = sList;
     }
     
     /**
      * Returns the day this CalendarEvent represents
      */
-    public int getDay() throws AuthorizationException
+    public int getDay()
     {
         return day;
     }
@@ -58,7 +56,7 @@ public class CalendarEvent {
     /**
      * Returns the list of subEvents for this day
      */
-    public ArrayList<SubEvent> getSubEventList() throws AuthorizationException
+    public ArrayList<SubEvent> getSubEventList()
     {
         return subEventList;
     }

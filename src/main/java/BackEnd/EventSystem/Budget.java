@@ -11,73 +11,68 @@ import auth.PrivilegeLevel;
  * @author Shaunt
  */
 
-public class Budget implements Reportable{
+public class Budget implements Reportable {
 
     ArrayList<Income> incomeList;
     ArrayList<Expense> expenseList;
-    
+
     public Budget() {
         this.incomeList = new ArrayList<Income>();
         this.expenseList = new ArrayList<Expense>();
     }
-    
-    public Budget(Budget budget){
-        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
-            incomeList = budget.getIncomeList();
-        }
-        catch(AuthorizationException ignored){
 
-        }
-        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+    public Budget(Budget budget) {
+        incomeList = budget.getIncomeList();
+
+        Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction();
             expenseList = budget.getExpenseList();
-        }
-        catch(AuthorizationException ignored){
-
-        }
-
     }
 
-    public void setIncomeList(ArrayList<Income> incomeList) throws AuthorizationException {
+    public void setIncomeList(ArrayList<Income> incomeList) {
         this.incomeList = incomeList;
     }
 
-    public void setExpenseList(ArrayList<Expense> expenseList) throws AuthorizationException {
+    public void setExpenseList(ArrayList<Expense> expenseList) {
         this.expenseList = expenseList;
     }
 
-    public ArrayList<Income> getIncomeList() throws AuthorizationException {
+    public ArrayList<Income> getIncomeList() {
         return incomeList;
     }
 
-    public ArrayList<Expense> getExpenseList() throws AuthorizationException{
+    public ArrayList<Expense> getExpenseList() {
         return expenseList;
     }
-    
-    
-    public double getTotalBudget() throws AuthorizationException {
+
+
+    public double getTotalBudget() {
         return getTotalIncome() - getTotalExpense();
     }
-    
-    public double getTotalIncome() throws AuthorizationException {
+
+    public double getTotalIncome() {
         double total = 0;
         for (int i = 0; i < incomeList.size(); i++) {
-            total += incomeList.get(i).getValue();
+            try{
+                total += incomeList.get(i).getValue();
+            }catch (AuthorizationException authEx){}
         }
         return total;
     }
 
-    public double getTotalExpense() throws AuthorizationException {
+    public double getTotalExpense() {
 
         double total = 0;
         for (int i = 0; i < expenseList.size(); i++) {
-            total += expenseList.get(i).getValue();
+            try{
+                total += expenseList.get(i).getValue();
+            }catch(AuthorizationException authEx){}
         }
         return total;
     }
-    
+
     @Override
     public String toString() {
-        return "Budget{" + ", incomeList=" + incomeList + ", expenseList=" + 
+        return "Budget{" + ", incomeList=" + incomeList + ", expenseList=" +
                 expenseList + '}';
     }
 
@@ -98,23 +93,29 @@ public class Budget implements Reportable{
         }
         return true;
     }
-    
+
     @Override
-    public ArrayList<Object> getReport() throws AuthorizationException {
-        
+    public ArrayList<Object> getReport() {
+
         ArrayList<Object> report = new ArrayList<Object>();
         ArrayList<String> income = new ArrayList<String>();
         ArrayList<String> expense = new ArrayList<String>();
-        
-        for(int i = 0; i < incomeList.size(); i ++) {
-            income.add("" + incomeList.get(i).getValue());
-            income.add("" + incomeList.get(i).getDescription());
-            income.add("" + incomeList.get(i).getDate().getTime());
+
+        for (int i = 0; i < incomeList.size(); i++) {
+            try {
+                income.add("" + incomeList.get(i).getValue());
+                income.add("" + incomeList.get(i).getDescription());
+                income.add("" + incomeList.get(i).getDate().getTime());
+            } catch (AuthorizationException authEx) {
+            }
         }
-        for(int i = 0; i < expenseList.size(); i ++) {
-            expense.add("" + expenseList.get(i).getValue());
-            expense.add("" + expenseList.get(i).getDescription());
-            expense.add("" + expenseList.get(i).getDate().getTime());
+        for (int i = 0; i < expenseList.size(); i++) {
+            try {
+                expense.add("" + expenseList.get(i).getValue());
+                expense.add("" + expenseList.get(i).getDescription());
+                expense.add("" + expenseList.get(i).getDate().getTime());
+            } catch (AuthorizationException authEx) {
+            }
         }
 
         report.add(income);
@@ -122,9 +123,7 @@ public class Budget implements Reportable{
         report.add("" + this.getTotalBudget());
         report.add("" + this.getTotalExpense());
         report.add("" + this.getTotalIncome());
-        
+
         return report;
     }
-    
-    
 }

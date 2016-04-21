@@ -95,12 +95,11 @@ public class Permissions {
      * @param operation if dealing with a single field, VIEW or MODIFY; if dealing with a whole row, CREATE or DELETE
      * @throws AuthorizationException if the current user lacks permission
      */
-    public void checkPermission(String table, String field, Operation operation) throws AuthorizationException {
+    public void checkPermission(String table, String field, Operation operation){
         if (isInSystemTransaction()) {
             return;
         }
-
-        checkPermission(table, field, operation, null, null);
+            checkPermission(table, field, operation, null, null);
     }
 
     /**
@@ -114,25 +113,27 @@ public class Permissions {
      * @throws AuthorizationException if the current user lacks permission
      * @throws DoesNotExistException if the other user does not exist
      */
-    public void checkPermission(String table, String field, Operation operation, int userID) throws AuthorizationException, DoesNotExistException {
+    public void checkPermission(String table, String field, Operation operation, int userID) {
         if (isInSystemTransaction()) {
             return;
         }
 
         Who who;
-        PrivilegeLevel otherLevel;
+        PrivilegeLevel otherLevel = null;
 
         if (userID == getCurrentUserID()) {
             who = Who.SELF;
             otherLevel = getCurrentPrivilegeLevel();
         } else {
             who = Who.OTHER;
-            try (SystemTransaction ignored = beginSystemTransaction()) {
+            try{
+                SystemTransaction ignored = beginSystemTransaction();
                 otherLevel = MainManager.getInstance().getUserManager().getUsersTable().getPrivilegeLevel(userID);
-            }
+            }catch (AuthorizationException authEx ){
+            }catch (DoesNotExistException dneEx ){}
         }
 
-        checkPermission(table, field, operation, who, otherLevel);
+            checkPermission(table, field, operation, who, otherLevel);
     }
 
     /**
@@ -146,14 +147,14 @@ public class Permissions {
      * @param otherLevel privilege level of the affected user
      * @throws AuthorizationException if the current user lacks permission
      */
-    public void checkPermission(String table, String field, Operation operation, int userID, PrivilegeLevel otherLevel) throws AuthorizationException {
+    public void checkPermission(String table, String field, Operation operation, int userID, PrivilegeLevel otherLevel) {
         if (isInSystemTransaction()) {
             return;
         }
 
         Who who = userID == getCurrentUserID() ? Who.SELF : Who.OTHER;
 
-        checkPermission(table, field, operation, who, otherLevel);
+            checkPermission(table, field, operation, who, otherLevel);
     }
 
     /**
@@ -168,7 +169,7 @@ public class Permissions {
      * @param otherLevel privilege level of the affected user
      * @throws AuthorizationException if the current user lacks permission
      */
-    public void checkPermission(String table, String field, Operation operation, Who who, PrivilegeLevel otherLevel) throws AuthorizationException {
+    public void checkPermission(String table, String field, Operation operation, Who who, PrivilegeLevel otherLevel){
         if (isInSystemTransaction()) {
             return;
         }
@@ -176,7 +177,9 @@ public class Permissions {
         Level level = getLevel();
         assert level.getPrivilegeLevel() == getCurrentPrivilegeLevel();
 
-        level.checkPermission(table, field, operation, who, otherLevel);
+        try{
+            level.checkPermission(table, field, operation, who, otherLevel);
+        }catch (AuthorizationException authEx){}
     }
 
 

@@ -83,87 +83,114 @@ public class AdminLevel extends Level {
         }
     }
     @Override
-    protected void checkPermissionUsers(Context context) throws AuthorizationException {
+    protected void checkPermissionUsers(Context context) {
         switch (context.getFieldForSwitch()) {
             case "":
-                context.cannotDelete();
+                try{
+                    context.cannotDelete();
+                }catch(AuthorizationException authEx ){}
                 break;
 
             case "LEVEL":
-                context.cannotModify()
-                       .cannotCreate()
-                       .cannotDelete();
+                try{
+                    context.cannotModify()
+                            .cannotCreate()
+                            .cannotDelete();
+                }catch (AuthorizationException authEx){}
                 break;
 
             case "FNAME":
-                context.cannotModify()
-                       .cannotCreate()
-                       .cannotDelete();
-
+                try{
+                    context.cannotModify()
+                            .cannotCreate()
+                            .cannotDelete();
+                }catch (AuthorizationException authEx){}
                 break;
 
             case "LNAME":
-                context.cannotModify()
-                       .cannotCreate()
-                       .cannotDelete();
+                try{
+                    context.cannotModify()
+                            .cannotCreate()
+                            .cannotDelete();
+                }catch (AuthorizationException authEx){}
                 break;
 
             case "PWD":
-                context.noAccess();
+                try{
+                    context.noAccess();
+                }catch (AuthorizationException authEx){}
                 break;
 
             case "EMAIL":
-                context.cannotCreate()
-                       .cannotDelete()
-                       .cannotModify();
+                try{
+                    context.cannotCreate()
+                            .cannotDelete()
+                            .cannotModify();
+                }catch(AuthorizationException authEx ){}
                 break;
 
             case "PHONE":
-                context.cannotCreate()
-                       .cannotDelete()
-                       .cannotModify();
+                try{
+                    context.cannotCreate()
+                            .cannotDelete()
+                            .cannotModify();
+                }catch(AuthorizationException authEx ){}
                 break;
 
             case "STREET":
-                context.cannotCreate()
-                       .cannotDelete()
-                       .cannotModify();
+                try{
+                    context.cannotCreate()
+                            .cannotDelete()
+                            .cannotModify();
+                }catch(AuthorizationException authEx ){}
                 break;
 
             case "CITY":
-                context.cannotCreate()
-                       .cannotDelete()
-                       .cannotModify();
+                try{
+                    context.cannotCreate()
+                            .cannotDelete()
+                            .cannotModify();
+                }catch(AuthorizationException authEx ){}
                 break;
 
             case "STATE":
-                context.cannotCreate()
-                       .cannotDelete()
-                       .cannotModify();
+                try{
+                    context.cannotCreate()
+                            .cannotDelete()
+                            .cannotModify();
+                }catch(AuthorizationException authEx ){}
                 break;
 
             case "ZIPCODE":
-                context.cannotCreate()
-                       .cannotDelete()
-                       .cannotModify();
+                try{
+                    context.cannotCreate()
+                            .cannotDelete()
+                            .cannotModify();
+                }catch(AuthorizationException authEx ){}
                 break;
 
             case "COUNTRY":
-                context.cannotCreate()
-                       .cannotDelete()
-                       .cannotModify();
+                try{
+                    context.cannotCreate()
+                            .cannotDelete()
+                            .cannotModify();
+                }catch(AuthorizationException authEx ){}
                 break;
 
             case "PARTICIPANT":
-                context.cannotCreate()
-                       .cannotDelete()
-                       .cannotModify();
+                try{
+                    context.cannotCreate()
+                            .cannotDelete()
+                            .cannotModify();
+                }catch(AuthorizationException authEx ){}
                 break;
 
             case "EVENTLEVEL":
-                context.cannotCreate()
-                       .cannotDelete()
-                       .cannotModify();
+                try{
+                    context.cannotCreate()
+                            .cannotDelete()
+                            .cannotModify();
+                }catch(AuthorizationException authEx ){}
                 break;
 
             default:
