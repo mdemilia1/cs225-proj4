@@ -2,13 +2,15 @@ package GUI;
 
 
 import BackEnd.ManagerSystem.UserManager;
-import javax.swing.JTable;
-import javax.swing.JCheckBox;
+
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import BackEnd.ManagerSystem.MainManager;
 import BackEnd.UserSystem.Participant;
 import EMS_Database.DoesNotExistException;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -16,7 +18,7 @@ import java.util.Vector;
  * Created by michael on 4/19/2016.
  */
 
-public class AdministrationManagementPanel extends javax.swing.JPanel {
+public class AdministrationManagementPanel extends javax.swing.JPanel implements ActionListener {
 
     private Object[][] data = new Object[10][5];
     private String[] columnNames = {"First Name", "Last Name", "User Id", "Make Admin"};
@@ -25,13 +27,12 @@ public class AdministrationManagementPanel extends javax.swing.JPanel {
     private AdminPanelTable ut;
     private JTable userTable;
     private ArrayList<Participant> userList;
+    private JScrollPane scrollBar;
+    private JButton submit;
 
-    private JCheckBox cb;
-
-    //asdfas
 
     public AdministrationManagementPanel() {
-        this.setLayout(new BorderLayout());
+        this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
         manage = new MainManager().getInstance();
         user = manage.getUserManager();
         userList = user.getUserList();
@@ -40,7 +41,26 @@ public class AdministrationManagementPanel extends javax.swing.JPanel {
         } catch (DoesNotExistException e) {
             e.printStackTrace();
         }
-        this.add(userTable, BorderLayout.CENTER);
+        scrollBar = new JScrollPane(userTable);
+        //scrollBar.setPreferredSize(new Dimension(50, 50));
+        scrollBar.setVisible(true);
+        submit = new JButton("Submit");
+        submit.setPreferredSize(new Dimension(30, 30));
+        submit.addActionListener(this);
+        this.add(scrollBar);
+        this.add(submit);
+    }
+
+    public void actionPerformed(ActionEvent e)
+    {
+        for(int i =0; i < ut.getRowCount(); i++)
+        {
+            if((boolean) ut.getValueAt(i, 2) == true)
+            {
+                System.out.println("row: " + i + " is checked");
+                //update the database on click
+            }
+        }
     }
 
     public void setTable() throws DoesNotExistException {
@@ -51,28 +71,13 @@ public class AdministrationManagementPanel extends javax.swing.JPanel {
 
         }
         userTable = new JTable(ut);
-       /* for(int userID : users.getUsersTable().currentUIDList("USERS")) {
-            if (users.getUsersTable().getLevel(userID) == 0)
-            {
-                int i = 0;
-                data[j][i] = users.getUsersTable().getFirstName(userID);
-                i++;
-                data[j][i] = users.getUsersTable().getLastName(userID);
-                i++;
-                data[j][i] = userID;
-                i++;
-                data[j][i] = cb = new JCheckBox("Make Admin");
-                j++;
-            }*/
-
-
-        //userTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        //userTable.setRowHeight(50);
-
+        userTable.setPreferredScrollableViewportSize(new Dimension(50, 50));
+        userTable.setFillsViewportHeight(true);
     }
 
 
-    public class AdminPanelTable extends DefaultTableModel {
+    public class AdminPanelTable extends DefaultTableModel
+    {
         public AdminPanelTable() {
             super(new String[]{"First Name", "Last Name", "Make Admin"}, 0);
         }
@@ -95,7 +100,8 @@ public class AdministrationManagementPanel extends javax.swing.JPanel {
                 Vector rowData = (Vector) getDataVector().get(row);
                 rowData.set(2, (boolean) aValue);
                 fireTableCellUpdated(row, column);
-
+                if((boolean) aValue)
+                    System.out.println("checked");
             }
         }
     }
