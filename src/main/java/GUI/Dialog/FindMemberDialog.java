@@ -8,6 +8,7 @@ import BackEnd.ManagerSystem.MainManager;
 import BackEnd.UserSystem.Participant;
 import BackEnd.UserSystem.User;
 import GUI.DesignDefault;
+
 import javax.swing.DefaultListModel;
 
 /**
@@ -22,7 +23,7 @@ public class FindMemberDialog extends javax.swing.JDialog {
     /**
      * Creates new form FindMemberDialog
      */
-    public FindMemberDialog(java.awt.Frame parent, boolean modal) {
+    public FindMemberDialog(java.awt.Frame parent, boolean modal){
         super(parent, modal);
         dd = DesignDefault.getInstance();
         initComponents();
@@ -152,7 +153,7 @@ public class FindMemberDialog extends javax.swing.JDialog {
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            public void run(){
                 FindMemberDialog dialog = new FindMemberDialog(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
