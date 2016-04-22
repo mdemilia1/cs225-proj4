@@ -84,20 +84,24 @@ public class BudgetItemManager {
      * @throws PrivilegeInsufficientException
      * @throws DoesNotExistException
      */
-    public void editValue(int value)
-            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
+    public void editValue(int value) {
 
-        if (PrivilegeManager.hasBudgetPrivilege(
-                logInManager.getLoggedInUser(),
-                eventManager.getSelectedEvent(),
-                committeeManager.getSelectedCommittee())) {
-            selectedBudgetItem.setValue(value);
-            if (selectedBudgetItem instanceof Income) {
-                incomeTable.setValue(selectedBudgetItem.getBUDGET_ITEM_ID(), value);
-            } else {
-                expenseTable.setValue(selectedBudgetItem.getBUDGET_ITEM_ID(), value);
+        try {
+            if (PrivilegeManager.hasBudgetPrivilege(
+                    logInManager.getLoggedInUser(),
+                    eventManager.getSelectedEvent(),
+                    committeeManager.getSelectedCommittee())) {
+                selectedBudgetItem.setValue(value);
+                if (selectedBudgetItem instanceof Income) {
+                    incomeTable.setValue(selectedBudgetItem.getBUDGET_ITEM_ID(), value);
+                } else {
+                    expenseTable.setValue(selectedBudgetItem.getBUDGET_ITEM_ID(), value);
+                }
             }
-        }
+        }catch ( AuthorizationException authEx){
+        }catch ( PrivilegeInsufficientException privEx){
+        }catch (DoesNotExistException dneEx){
+        }catch (UpdateException uEx){}
     }
 
     /**
@@ -107,20 +111,24 @@ public class BudgetItemManager {
      * @throws PrivilegeInsufficientException
      * @throws DoesNotExistException
      */
-    public void editDescription(String description)
-            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
+    public void editDescription(String description) {
 
-        if (PrivilegeManager.hasBudgetPrivilege(
-                logInManager.getLoggedInUser(),
-                eventManager.getSelectedEvent(),
-                committeeManager.getSelectedCommittee())) {
-            selectedBudgetItem.setDescription(description);
-            if (selectedBudgetItem instanceof Income) {
-                incomeTable.setDescription(selectedBudgetItem.getBUDGET_ITEM_ID(), description);
-            } else {
-                expenseTable.setDescription(selectedBudgetItem.getBUDGET_ITEM_ID(), description);
+        try {
+            if (PrivilegeManager.hasBudgetPrivilege(
+                    logInManager.getLoggedInUser(),
+                    eventManager.getSelectedEvent(),
+                    committeeManager.getSelectedCommittee())) {
+                selectedBudgetItem.setDescription(description);
+                if (selectedBudgetItem instanceof Income) {
+                    incomeTable.setDescription(selectedBudgetItem.getBUDGET_ITEM_ID(), description);
+                } else {
+                    expenseTable.setDescription(selectedBudgetItem.getBUDGET_ITEM_ID(), description);
+                }
             }
-        }
+        }catch ( AuthorizationException authEx){
+        }catch ( PrivilegeInsufficientException privEx){
+        }catch (DoesNotExistException dneEx){
+        }catch (UpdateException uEx){}
     }
 
     /**
@@ -134,19 +142,23 @@ public class BudgetItemManager {
      * @throws PrivilegeInsufficientException
      * @throws DoesNotExistException
      */
-    public void editDate(int year, int month, int day, int hour, int minute)
-            throws PrivilegeInsufficientException, DoesNotExistException, UpdateException, AuthorizationException {
+    public void editDate(int year, int month, int day, int hour, int minute){
 
-        if (PrivilegeManager.hasBudgetPrivilege(
-                logInManager.getLoggedInUser(),
-                eventManager.getSelectedEvent(),
-                committeeManager.getSelectedCommittee())) {
-            selectedBudgetItem.setDate(year, month, day, hour, minute);
-            if (selectedBudgetItem instanceof Income) {
-                incomeTable.setDate(selectedBudgetItem.getBUDGET_ITEM_ID(), selectedBudgetItem.getDate());
-            } else {
-                incomeTable.setDate(selectedBudgetItem.getBUDGET_ITEM_ID(), selectedBudgetItem.getDate());
+        try {
+            if (PrivilegeManager.hasBudgetPrivilege(
+                    logInManager.getLoggedInUser(),
+                    eventManager.getSelectedEvent(),
+                    committeeManager.getSelectedCommittee())) {
+                selectedBudgetItem.setDate(year, month, day, hour, minute);
+                if (selectedBudgetItem instanceof Income) {
+                    incomeTable.setDate(selectedBudgetItem.getBUDGET_ITEM_ID(), selectedBudgetItem.getDate());
+                } else {
+                    incomeTable.setDate(selectedBudgetItem.getBUDGET_ITEM_ID(), selectedBudgetItem.getDate());
+                }
             }
-        }
+        }catch (AuthorizationException authEx){
+        }catch (PrivilegeInsufficientException privEx){
+        }catch (DoesNotExistException dneEx){
+        }catch (UpdateException uEx){}
     }
 }

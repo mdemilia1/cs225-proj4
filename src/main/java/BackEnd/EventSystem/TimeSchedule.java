@@ -23,14 +23,14 @@ public class TimeSchedule {
     }
     
     public TimeSchedule(TimeSchedule timeSchedule){
-        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
-            startDateTime = timeSchedule.getStartDateTimeCalendar();
-            endDateTime = timeSchedule.getEndDateTimeCalendar();
-        }
-        catch(AuthorizationException ignored){}
+
+        Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction();
+        startDateTime = timeSchedule.getStartDateTimeCalendar();
+        endDateTime = timeSchedule.getEndDateTimeCalendar();
+
     }
     
-    public void setStartDateTime(int year, int month, int day, int hour, int minute) throws IllegalArgumentException, AuthorizationException {
+    public void setStartDateTime(int year, int month, int day, int hour, int minute) {
         Permissions.get().checkPermission("SUBEVENTS","STARTDATE", Operation.MODIFY);
         if (year >= 2013 && year <= 9999)
             startDateTime.set(Calendar.YEAR, year);
@@ -58,22 +58,22 @@ public class TimeSchedule {
             throw new IllegalArgumentException("Invalid minute entered.");
     }
     
-    public void setStartDateTime(Timestamp startDateTime) throws AuthorizationException{
+    public void setStartDateTime(Timestamp startDateTime){
         Permissions.get().checkPermission("SUBEVENTS","STARTDATE", Operation.MODIFY);
         this.startDateTime.setTimeInMillis(startDateTime.getTime());
     }
     
-    public Calendar getStartDateTimeCalendar() throws AuthorizationException {
+    public Calendar getStartDateTimeCalendar() {
         Permissions.get().checkPermission("SUBEVENTS","STARTDATE", Operation.VIEW);
         return startDateTime;
     }
     
-    public Timestamp getStartDateTimeTimestamp() throws AuthorizationException {
+    public Timestamp getStartDateTimeTimestamp(){
         Permissions.get().checkPermission("SUBEVENTS","STARTDATE", Operation.VIEW);
         return new Timestamp(startDateTime.getTimeInMillis());
     }
     
-    public void setEndDateTime(int year, int month, int day, int hour, int minute) throws IllegalArgumentException, AuthorizationException {
+    public void setEndDateTime(int year, int month, int day, int hour, int minute) {
         Permissions.get().checkPermission("SUBEVENTS","ENDDATE", Operation.MODIFY);
         if (year >= 2013 && year <= 9999)
             endDateTime.set(Calendar.YEAR, year);
@@ -101,22 +101,22 @@ public class TimeSchedule {
             throw new IllegalArgumentException("Invalid minute entered.");
     }
     
-    public void setEndDateTime(Timestamp endDateTime) throws AuthorizationException {
+    public void setEndDateTime(Timestamp endDateTime) {
         Permissions.get().checkPermission("SUBEVENTS","ENDDATE", Operation.MODIFY);
         this.endDateTime.setTimeInMillis(endDateTime.getTime());
     }
     
-    public Calendar getEndDateTimeCalendar() throws AuthorizationException {
+    public Calendar getEndDateTimeCalendar() {
         Permissions.get().checkPermission("SUBEVENTS","ENDDATE", Operation.VIEW);
         return endDateTime;
     }
     
-    public Timestamp getEndDateTimeTimestamp() throws AuthorizationException {
+    public Timestamp getEndDateTimeTimestamp() {
         Permissions.get().checkPermission("SUBEVENTS","ENDDATE", Operation.VIEW);
         return new Timestamp(endDateTime.getTimeInMillis());
     }
     
-    public boolean equals(TimeSchedule timeSchedule) throws AuthorizationException {
+    public boolean equals(TimeSchedule timeSchedule) {
         if (this.getStartDateTimeCalendar().equals(timeSchedule.getStartDateTimeCalendar()) 
                 && this.getEndDateTimeCalendar().equals(timeSchedule.getEndDateTimeCalendar()))
             return true;
@@ -125,15 +125,10 @@ public class TimeSchedule {
     }
     
     public String toString() {
-        try {
             return "Start Date & Time: " + getStartDateTimeCalendar().get(Calendar.MONTH) + "/" + getStartDateTimeCalendar().get(Calendar.DAY_OF_MONTH) +
                     "/" + getStartDateTimeCalendar().get(Calendar.YEAR) + " " + String.format("%02d", getStartDateTimeCalendar().get(Calendar.HOUR_OF_DAY)) + ":" +
                     String.format("%02d", getStartDateTimeCalendar().get(Calendar.MINUTE)) + "\nEnd Date & Time: " + getEndDateTimeCalendar().get(Calendar.MONTH) +
                     "/" + getEndDateTimeCalendar().get(Calendar.DAY_OF_MONTH) + "/" + getEndDateTimeCalendar().get(Calendar.YEAR) + " " +
                     String.format("%02d", getEndDateTimeCalendar().get(Calendar.HOUR_OF_DAY)) + ":" + String.format("%02d", getEndDateTimeCalendar().get(Calendar.MINUTE));
-        }
-        catch (AuthorizationException check){
-            return "Unauthorized Access";
-        }
     }
 }

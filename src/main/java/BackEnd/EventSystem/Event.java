@@ -41,19 +41,16 @@ public class Event extends ScheduleItem implements Reportable {
     public Event(int eventID, Event event){
         super(event);
         EVENT_ID = eventID;
-        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+        Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction();
             organizerList = event.getOrganizerList();
             subEventList = event.getSubEventList();
             committeeList = event.getCommitteeList();
             participantList = event.getParticipantList();
-        }
-        catch(AuthorizationException ignored){
 
-        }
     }
 
     //This is never used? What's it for?
-    public boolean isReady() throws AuthorizationException{
+    public boolean isReady(){
         boolean eventReady = true;
         
         for (Committee committee : committeeList)
@@ -67,56 +64,56 @@ public class Event extends ScheduleItem implements Reportable {
         EVENT_ID = event_id;
     }
     
-    public int getEVENT_ID() throws AuthorizationException {
+    public int getEVENT_ID() {
         Permissions.get().checkPermission("EVENT","UID", Operation.VIEW);
         return EVENT_ID;
     }
     
-    public void setOrganizerList(ArrayList<User> organizerList) throws AuthorizationException {
+    public void setOrganizerList(ArrayList<User> organizerList) {
         Permissions.get().checkPermission("EVENT","ORGANIZER",Operation.MODIFY);
         this.organizerList = organizerList;
     }
     
-    public ArrayList<User> getOrganizerList() throws AuthorizationException {
+    public ArrayList<User> getOrganizerList() {
         Permissions.get().checkPermission("EVENT","ORGANIZER",Operation.VIEW);
         return organizerList;
     }
     
-    public void setSubEventList(ArrayList<SubEvent> subEventList) throws AuthorizationException {
+    public void setSubEventList(ArrayList<SubEvent> subEventList) {
         Permissions.get().checkPermission("EVENT","SUBEVENT",Operation.MODIFY);
         this.subEventList = subEventList;
     }
     
-    public ArrayList<SubEvent> getSubEventList() throws AuthorizationException {
+    public ArrayList<SubEvent> getSubEventList() {
         Permissions.get().checkPermission("EVENT","SUBEVENT",Operation.VIEW);
         return subEventList;
     }
     
-    public void setCommitteeList(ArrayList<Committee> committeeList) throws AuthorizationException {
+    public void setCommitteeList(ArrayList<Committee> committeeList) {
         Permissions.get().checkPermission("EVENT","COMMITTEE",Operation.MODIFY);
         this.committeeList = committeeList;
     }
     
-    public ArrayList<Committee> getCommitteeList() throws AuthorizationException {
+    public ArrayList<Committee> getCommitteeList() {
         Permissions.get().checkPermission("EVENT","COMMITTEE",Operation.VIEW);
         return committeeList;
     }
     
-    public void setParticipantList(ArrayList<Participant> participantList) throws AuthorizationException {
+    public void setParticipantList(ArrayList<Participant> participantList) {
         Permissions.get().checkPermission("EVENT","PARTICIPANT",Operation.MODIFY);
         this.participantList = participantList;
     }
     
-    public ArrayList<Participant> getParticipantList() throws AuthorizationException {
+    public ArrayList<Participant> getParticipantList() {
         Permissions.get().checkPermission("EVENT","PARTICIPANT",Operation.VIEW);
         return participantList;
     }
     
-    public double getTotalEventBudget() throws AuthorizationException {
+    public double getTotalEventBudget() {
         return getTotalEventIncome() - getTotalEventExpense();
     }
     
-    public double getTotalEventIncome() throws AuthorizationException{
+    public double getTotalEventIncome(){
         double income = 0;
         for (int i = 0; i < getCommitteeList().size(); i++){
             income += getCommitteeList().get(i).getBudget().getTotalIncome();
@@ -124,7 +121,7 @@ public class Event extends ScheduleItem implements Reportable {
         return income;
     }
     
-    public double getTotalEventExpense() throws AuthorizationException{
+    public double getTotalEventExpense(){
         double expense = 0;
         for (int i = 0; i < getCommitteeList().size(); i++){
             expense += getCommitteeList().get(i).getBudget().getTotalExpense();
@@ -132,7 +129,7 @@ public class Event extends ScheduleItem implements Reportable {
         return expense;
     }
     
-    public int getTotalTaskProgress() throws AuthorizationException{
+    public int getTotalTaskProgress() {
         double completed = 0;
         double total = 0;
         int[] taskCompletion = new int[2];
@@ -144,7 +141,7 @@ public class Event extends ScheduleItem implements Reportable {
         return (int)(100 * completed / total);
     }
     
-    public boolean equals(Event event) throws AuthorizationException {
+    public boolean equals(Event event){
         if (this.getEVENT_ID() == event.getEVENT_ID()
                 && this.getOrganizerList().equals(event.getOrganizerList())
                 && this.getSubEventList().equals(event.getSubEventList())
@@ -166,7 +163,7 @@ public class Event extends ScheduleItem implements Reportable {
     }
     
     @Override
-    public ArrayList<Object> getReport() throws AuthorizationException{
+    public ArrayList<Object> getReport() {
         ArrayList<Object> report = new ArrayList<Object>();
         ArrayList<String> organizer = new ArrayList<String>();
         ArrayList<String> subEvent = new ArrayList<String>();
@@ -184,32 +181,35 @@ public class Event extends ScheduleItem implements Reportable {
 
         }
         for (int i = 0; i < getSubEventList().size(); i++) {
-            subEvent.add("" + getSubEventList().get(i).getTitle());
-            subEvent.add("" + getSubEventList().get(i).getDescription());
-            subEvent.add("" + getSubEventList().get(i).getLocation());
-            subEvent.add("" + getSubEventList().get(i).getTimeSchedule().getStartDateTimeCalendar());
-            subEvent.add("" + getSubEventList().get(i).getTimeSchedule().getEndDateTimeCalendar());
+            try {
+                subEvent.add("" + getSubEventList().get(i).getTitle());
+                subEvent.add("" + getSubEventList().get(i).getDescription());
+                subEvent.add("" + getSubEventList().get(i).getLocation());
+                subEvent.add("" + getSubEventList().get(i).getTimeSchedule().getStartDateTimeCalendar());
+                subEvent.add("" + getSubEventList().get(i).getTimeSchedule().getEndDateTimeCalendar());
+            }catch (AuthorizationException authEx){}
         }
         int numOfMembers = 0;
         int numOfTasks = 0;
         for (int i = 0; i < getCommitteeList().size(); i++) {
-            committee.add("" + getCommitteeList().get(i).getTitle());
-            committee.add("" + getCommitteeList().get(i).getBudget().getTotalIncome());
-            committee.add("" + getCommitteeList().get(i).getBudget().getTotalExpense());
-            committee.add("" + getCommitteeList().get(i).getBudget().getTotalIncome());
-            committee.add("" + getCommitteeList().get(i).getChair().getFirstName());
-            committee.add("" + getCommitteeList().get(i).getChair().getLastName());
-            committee.add("" + getCommitteeList().get(i).getChair().getEmailAddress());
-            committee.add("" + getCommitteeList().get(i).getChair().getAddress().getCity());
-            committee.add("" + getCommitteeList().get(i).getChair().getAddress().getCountry());
-            committee.add("" + getCommitteeList().get(i).getChair().getAddress().getState());
-            committee.add("" + getCommitteeList().get(i).getChair().getAddress().getStreet());
-            committee.add("" + getCommitteeList().get(i).getChair().getAddress().getZipCode());
-            //committee.add("" + committeeList.get(i).getChair().getAdminPrivilege());
-            //committee.add("" + committeeList.get(i).getChair().getEventCreationPrivilege());
-            committee.add("" + getCommitteeList().get(i).getChair().getPhoneNumber());
-            committee.add("" + getCommitteeList().get(i).getChair().getUserId());
-
+            try {
+                committee.add("" + getCommitteeList().get(i).getTitle());
+                committee.add("" + getCommitteeList().get(i).getBudget().getTotalIncome());
+                committee.add("" + getCommitteeList().get(i).getBudget().getTotalExpense());
+                committee.add("" + getCommitteeList().get(i).getBudget().getTotalIncome());
+                committee.add("" + getCommitteeList().get(i).getChair().getFirstName());
+                committee.add("" + getCommitteeList().get(i).getChair().getLastName());
+                committee.add("" + getCommitteeList().get(i).getChair().getEmailAddress());
+                committee.add("" + getCommitteeList().get(i).getChair().getAddress().getCity());
+                committee.add("" + getCommitteeList().get(i).getChair().getAddress().getCountry());
+                committee.add("" + getCommitteeList().get(i).getChair().getAddress().getState());
+                committee.add("" + getCommitteeList().get(i).getChair().getAddress().getStreet());
+                committee.add("" + getCommitteeList().get(i).getChair().getAddress().getZipCode());
+                //committee.add("" + committeeList.get(i).getChair().getAdminPrivilege());
+                //committee.add("" + committeeList.get(i).getChair().getEventCreationPrivilege());
+                committee.add("" + getCommitteeList().get(i).getChair().getPhoneNumber());
+                committee.add("" + getCommitteeList().get(i).getChair().getUserId());
+            }catch (AuthorizationException authEx){}
 
             for (int j = 0; j < getCommitteeList().get(i).getMemberList().size(); j++) {
                 numOfMembers++;
@@ -241,12 +241,13 @@ public class Event extends ScheduleItem implements Reportable {
         report.add(subEvent);
         report.add(committee);
         report.add(participant);
-        report.add("" + this.getTitle());
-        report.add("" + this.getLocation());
-        report.add("" + this.getDescription());
-        report.add("" + this.getTimeSchedule().getStartDateTimeCalendar().getTime().getDay());
-        report.add("" + this.getTimeSchedule().getEndDateTimeCalendar().getTime().getDay());
-
+        try {
+            report.add("" + this.getTitle());
+            report.add("" + this.getLocation());
+            report.add("" + this.getDescription());
+            report.add("" + this.getTimeSchedule().getStartDateTimeCalendar().getTime().getDay());
+            report.add("" + this.getTimeSchedule().getEndDateTimeCalendar().getTime().getDay());
+        }catch (AuthorizationException authEx){}
         return report;
     }
 }

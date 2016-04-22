@@ -38,64 +38,64 @@ public class SubEvent extends ScheduleItem implements Reportable {
         return SUB_EVENT_ID;
     }
 
-    public void setTitle(String title) throws AuthorizationException {
+    public void setTitle(String title)  {
         Permissions.get().checkPermission("SUBEVENTS","TITLE", Operation.MODIFY);
         super.setTitle(title);
     }
 
-    public String getTitle() throws AuthorizationException {
+    public String getTitle() {
         Permissions.get().checkPermission("SUBEVENTS","TITLE", Operation.VIEW);
         return super.getTitle();
     }
 
-    public void setDescription(String description) throws AuthorizationException {
+    public void setDescription(String description) {
         Permissions.get().checkPermission("SUBEVENTS","DESCRIPTION", Operation.MODIFY);
         super.setDescription(description);
     }
 
-    public String getDescription() throws AuthorizationException {
+    public String getDescription() {
         Permissions.get().checkPermission("SUBEVENTS","DESCRIPTION", Operation.VIEW);
         return super.getDescription();
     }
 
-    public void setLocation(Location location) throws AuthorizationException {
+    public void setLocation(Location location) {
         //Should only have to check one Field type of "Location" right?
         Permissions.get().checkPermission("SUBEVENTS","STREET", Operation.MODIFY);
         super.setLocation(location);
     }
 
-    public Location getLocation() throws AuthorizationException {
+    public Location getLocation() {
         //See setLocation
         Permissions.get().checkPermission("SUBEVENTS","STREET", Operation.VIEW);
         return super.getLocation();
     }
 
-    public void setTimeSchedule(TimeSchedule timeSchedule) throws AuthorizationException {
+    public void setTimeSchedule(TimeSchedule timeSchedule) {
         super.setTimeSchedule(timeSchedule);
     }
 
-    public TimeSchedule getTimeSchedule() throws AuthorizationException {
+    public TimeSchedule getTimeSchedule() {
         return super.getTimeSchedule();
     }
     
-    public boolean equals(SubEvent subEvent) throws AuthorizationException{
-        if (this.getSUB_EVENT_ID() == subEvent.getSUB_EVENT_ID())
-            return true;
-        else
-            return false;
+    public boolean equals(SubEvent subEvent){
+        try {
+            if (this.getSUB_EVENT_ID() == subEvent.getSUB_EVENT_ID())
+                return true;
+            else
+                return false;
+        }catch (AuthorizationException authEx){ return false;}
     }
     
     public String toString() {
-        try{
             return "Sub-Event Description: \n" + getDescription();
-        }
-        catch(AuthorizationException check){ return "Unauthorized Access";}
 
     }
     
     @Override
-    public ArrayList<Object> getReport() throws AuthorizationException {
+    public ArrayList<Object> getReport() {
         ArrayList<Object> report = new ArrayList<Object>();
+        try {
             report.add("" + this.getTitle());
             report.add("" + this.getDescription());
             report.add("" + this.getLocation().getCity());
@@ -105,7 +105,8 @@ public class SubEvent extends ScheduleItem implements Reportable {
             report.add("" + this.getLocation().getZipCode());
             report.add("" + this.getTimeSchedule().getStartDateTimeCalendar().getTime().getDay());
             report.add("" + this.getTimeSchedule().getEndDateTimeCalendar().getTime().getDay());
-        
+        }catch (AuthorizationException authEx){}
+
         return report;
     }
 }

@@ -29,54 +29,55 @@ public class ScheduleItem {
     }
     
     public ScheduleItem(ScheduleItem scheduleItem){
-        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
-            title = scheduleItem.getTitle();
-            description = scheduleItem.getDescription();
-            location = scheduleItem.getLocation();
-            timeSchedule = scheduleItem.getTimeSchedule();
-        }
-        catch(AuthorizationException ignored){
-
-        }
+        Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction();
+        title = scheduleItem.getTitle();
+        description = scheduleItem.getDescription();
+        location = scheduleItem.getLocation();
+        timeSchedule = scheduleItem.getTimeSchedule();
     }
     
-    public void setTitle(String title) throws AuthorizationException {
+    public void setTitle(String title) {
         this.title = title;
     }
     
-    public String getTitle() throws AuthorizationException {
+    public String getTitle() {
         return title;
     }
     
-    public void setDescription(String description) throws AuthorizationException {
+    public void setDescription(String description) {
         this.description = description;
     }
     
-    public String getDescription() throws AuthorizationException {
+    public String getDescription() {
         return description;
     }
     
-    public void setLocation(Location location) throws AuthorizationException {
+    public void setLocation(Location location){
         this.location = location;
     }
     
-    public Location getLocation() throws AuthorizationException {
+    public Location getLocation() {
         return location;
     }
     
-    public void setTimeSchedule(TimeSchedule timeSchedule) throws AuthorizationException {
+    public void setTimeSchedule(TimeSchedule timeSchedule) {
         this.timeSchedule = timeSchedule;
     }
     
-    public TimeSchedule getTimeSchedule() throws AuthorizationException {
+    public TimeSchedule getTimeSchedule() {
         return timeSchedule;
     }
     
-    public boolean equals(ScheduleItem scheduleItem) throws AuthorizationException {
+    public boolean equals(ScheduleItem scheduleItem) {
+
+        boolean ts = false;
+        try{
+            ts = this.getTimeSchedule().equals(scheduleItem.getTimeSchedule());
+        }catch (AuthorizationException authEx){}
         if (this.getTitle().equalsIgnoreCase(scheduleItem.getTitle()) &&
-                this.getDescription().equalsIgnoreCase(scheduleItem.getDescription()) 
+                this.getDescription().equalsIgnoreCase(scheduleItem.getDescription())
                 && this.getLocation().equals(scheduleItem.getLocation())
-                && this.getTimeSchedule().equals(scheduleItem.getTimeSchedule()))
+                && ts )
             return true;
         else
             return false;

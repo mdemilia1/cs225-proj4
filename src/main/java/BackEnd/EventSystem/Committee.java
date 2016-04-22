@@ -49,18 +49,16 @@ public class Committee implements Reportable {
     }
 
     public Committee(int committee_id, Committee committee) {
-        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
-            this.COMMITTEE_ID = committee_id;
-            title = committee.getTitle();
-            memberList = committee.getMemberList();
-            budgetAccessList = committee.getBudgetAccessList();
-            chair = committee.getChair();
-            taskList = committee.getTaskList();
-            budget = committee.getBudget();
-        }
-        catch(AuthorizationException ignored){
 
-        }
+        Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction();
+        this.COMMITTEE_ID = committee_id;
+        title = committee.getTitle();
+        memberList = committee.getMemberList();
+        budgetAccessList = committee.getBudgetAccessList();
+        chair = committee.getChair();
+        taskList = committee.getTaskList();
+        budget = committee.getBudget();
+
     }
 
     /**
@@ -82,9 +80,8 @@ public class Committee implements Reportable {
     int[] getTaskCompletion() {
         int completed = 0;
         int total = 0;
-        try{
-            total = getTaskList().size();
-        }catch (AuthorizationException authEx){}
+
+        total = getTaskList().size();
 
         try{
             for (Task aTaskList : getTaskList()) {
@@ -188,35 +185,37 @@ public class Committee implements Reportable {
         float complete = 0.0f;
         float total = taskList.size();
         for (Task t : taskList) {
-            if (t.getCompleted()) {
-                complete += 1;
-            }
+            try{
+                if (t.getCompleted()) {
+                    complete += 1;
+                }
+            }catch (AuthorizationException authEx){}
         }
         pct = (int) (complete / total * 100);
         return pct;
     }
 
-    public void setTaskList(ArrayList<Task> taskList) throws AuthorizationException {
+    public void setTaskList(ArrayList<Task> taskList) {
         Permissions.get().checkPermission("COMMITTEE","TASKS", Operation.MODIFY);
         this.taskList = taskList;
     }
 
-    public ArrayList<Task> getTaskList() throws AuthorizationException {
+    public ArrayList<Task> getTaskList() {
         Permissions.get().checkPermission("COMMITTEE","TASKS", Operation.VIEW);
         return taskList;
     }
 
-    public void setBudget(Budget budget) throws AuthorizationException {
+    public void setBudget(Budget budget) {
         Permissions.get().checkPermission("COMMITTEE","BUDGET", Operation.MODIFY);
         this.budget = budget;
     }
 
-    public Budget getBudget() throws AuthorizationException {
+    public Budget getBudget() {
         Permissions.get().checkPermission("COMMITTEE","BUDGET", Operation.VIEW);
         return budget;
     }
 
-    public boolean equals(Committee committee) throws AuthorizationException {
+    public boolean equals(Committee committee) {
         return this.getCOMMITTEE_ID() == committee.getCOMMITTEE_ID()
                 && this.getTitle().equalsIgnoreCase(committee.getTitle())
                 && this.getMemberList().equals(committee.getMemberList())
@@ -233,33 +232,30 @@ public class Committee implements Reportable {
 //            taskDescriptions += task.toString() + "\n";
 //            
 //        return "Committee Title: " + title + "\nTotal Budget: $" + budget.getTotalBudget() + "\nTask List: \n" + taskDescriptions;
-        try {
             Permissions.get().checkPermission("COMMITTEE","TITLE", Operation.VIEW);
             return getTitle();
-        }
-        catch (AuthorizationException check){
-            return "Access Not Granted";
-        }
     }
 
-    private void buildReportComponent(List<String> component, List<User> users) throws AuthorizationException {
+    private void buildReportComponent(List<String> component, List<User> users) {
         for (User user : users) {
-            component.add("" + user.getFirstName());
-            component.add("" + user.getLastName());
-            component.add("" + user.getEmailAddress());
-            component.add("" + user.getAddress().getCity());
-            component.add("" + user.getAddress().getCountry());
-            component.add("" + user.getAddress().getState());
-            component.add("" + user.getAddress().getStreet());
-            component.add("" + user.getAddress().getZipCode());
-            component.add("" + user.getPrivilegeLevel());
-            component.add("" + user.getPhoneNumber());
-            component.add("" + user.getUserId());
+            try {
+                component.add("" + user.getFirstName());
+                component.add("" + user.getLastName());
+                component.add("" + user.getEmailAddress());
+                component.add("" + user.getAddress().getCity());
+                component.add("" + user.getAddress().getCountry());
+                component.add("" + user.getAddress().getState());
+                component.add("" + user.getAddress().getStreet());
+                component.add("" + user.getAddress().getZipCode());
+                component.add("" + user.getPrivilegeLevel());
+                component.add("" + user.getPhoneNumber());
+                component.add("" + user.getUserId());
+            }catch (AuthorizationException authEx){}
         }
     }
 
     @Override
-    public ArrayList<Object> getReport() throws AuthorizationException {
+    public ArrayList<Object> getReport() {
         ArrayList<Object> report = new ArrayList<>();
         List<String> member = new ArrayList<>();
         List<String> budgetAccess = new ArrayList<>();

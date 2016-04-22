@@ -14,5 +14,5 @@ import java.util.ArrayList;
  * @author Julian Kuk
  */
 public interface Reportable {
-    public ArrayList<Object> getReport() throws AuthorizationException;
+    public ArrayList<Object> getReport();
 }

@@ -32,81 +32,79 @@ public class Task extends ScheduleItem implements Reportable {
     public Task(int task_id, Task task){
         super(task);
         TASK_ID = task_id;
-        try(Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction()) {
+        Permissions.SystemTransaction ignored = Permissions.get().beginSystemTransaction();
             responsibleList = task.getResponsibleList();
             completed = task.getCompleted();
-        }
-        catch (AuthorizationException ignored){}
     }
 
     
-    public int getTASK_ID() throws AuthorizationException {
+    public int getTASK_ID() {
         Permissions.get().checkPermission("TASKS","UID", Operation.VIEW);
         return TASK_ID;
     }
     
-    public void setResponsibleList(ArrayList<User> responsibleList) throws AuthorizationException {
+    public void setResponsibleList(ArrayList<User> responsibleList) {
         Permissions.get().checkPermission("TASKS","MANAGER", Operation.MODIFY);
         this.responsibleList = responsibleList;
     }
     
-    public ArrayList<User> getResponsibleList() throws AuthorizationException {
+    public ArrayList<User> getResponsibleList() {
         Permissions.get().checkPermission("TASKS","MANAGER", Operation.VIEW);
         return responsibleList;
     }
     
-    public void setCompleted(boolean completed) throws AuthorizationException {
+    public void setCompleted(boolean completed) {
         Permissions.get().checkPermission("TASKS","COMPLETE", Operation.MODIFY);
         this.completed = completed;
     }
     
-    public boolean getCompleted() throws AuthorizationException {
+    public boolean getCompleted() {
         Permissions.get().checkPermission("TASKS","COMPLETE", Operation.VIEW);
         return completed;
     }
 
-    public void setTitle(String title) throws AuthorizationException {
+    public void setTitle(String title) {
         Permissions.get().checkPermission("TASKS","TITLE", Operation.MODIFY);
         super.setTitle(title);
     }
 
-    public String getTitle() throws AuthorizationException {
+    public String getTitle() {
         Permissions.get().checkPermission("TASKS","TITLE", Operation.VIEW);
         return super.getTitle();
     }
 
-    public void setDescription(String description) throws AuthorizationException {
+    public void setDescription(String description) {
         Permissions.get().checkPermission("TASKS","DESCRIPTION", Operation.MODIFY);
         super.setDescription(description);
     }
 
-    public String getDescription() throws AuthorizationException {
+    public String getDescription() {
         Permissions.get().checkPermission("TASKS","DESCRIPTION", Operation.VIEW);
         return super.getDescription();
     }
 
-    public void setLocation(Location location) throws AuthorizationException {
+    public void setLocation(Location location) {
         //Should only have to check one Field type of "Location" right?
         Permissions.get().checkPermission("TASKS","STREET", Operation.MODIFY);
         super.setLocation(location);
     }
 
-    public Location getLocation() throws AuthorizationException {
+    public Location getLocation() {
         //See setLocation
         Permissions.get().checkPermission("TASKS","STREET", Operation.VIEW);
         return super.getLocation();
     }
 
-    public void setTimeSchedule(TimeSchedule timeSchedule) throws AuthorizationException {
+    public void setTimeSchedule(TimeSchedule timeSchedule) {
         super.setTimeSchedule(timeSchedule);
     }
 
-    public TimeSchedule getTimeSchedule() throws AuthorizationException {
+    public TimeSchedule getTimeSchedule() {
         return super.getTimeSchedule();
     }
 
 
-    public boolean equals(Task task) throws AuthorizationException {
+    public boolean equals(Task task) {
         if (this.getTASK_ID() == task.getTASK_ID() 
                 && this.getResponsibleList().equals(task.getResponsibleList()) 
                 && this.getCompleted() == task.getCompleted())
@@ -117,32 +115,30 @@ public class Task extends ScheduleItem implements Reportable {
 
      public String toString() {
 	 //return "Task Description: \n" + super.getDescription() + "\nTask Complete: " + completed;
-     try {
-         return getTitle();
-     }
-         catch(AuthorizationException check){ return "Unauthorized Access"; }
 
+         return getTitle();
      }
 
     
      @Override
-    public ArrayList<Object> getReport() throws AuthorizationException {
+    public ArrayList<Object> getReport() {
         ArrayList<Object> report = new ArrayList<Object>();
         ArrayList<String> responsible = new ArrayList<String>();
         
         for(int i = 0; i < getResponsibleList().size(); i++) {
-            responsible.add("" + getResponsibleList().get(i).getFirstName());
-            responsible.add("" + getResponsibleList().get(i).getLastName());
-            responsible.add("" + getResponsibleList().get(i).getEmailAddress());
-            responsible.add("" + getResponsibleList().get(i).getAddress().getCity());
-            responsible.add("" + getResponsibleList().get(i).getAddress().getCountry());
-            responsible.add("" + getResponsibleList().get(i).getAddress().getState());
-            responsible.add("" + getResponsibleList().get(i).getAddress().getStreet());
-            responsible.add("" + getResponsibleList().get(i).getAddress().getZipCode());
-            responsible.add("" + getResponsibleList().get(i).getPrivilegeLevel().name());
-            responsible.add("" + getResponsibleList().get(i).getPhoneNumber());
-            responsible.add("" + getResponsibleList().get(i).getUserId());
-            
+            try {
+                responsible.add("" + getResponsibleList().get(i).getFirstName());
+                responsible.add("" + getResponsibleList().get(i).getLastName());
+                responsible.add("" + getResponsibleList().get(i).getEmailAddress());
+                responsible.add("" + getResponsibleList().get(i).getAddress().getCity());
+                responsible.add("" + getResponsibleList().get(i).getAddress().getCountry());
+                responsible.add("" + getResponsibleList().get(i).getAddress().getState());
+                responsible.add("" + getResponsibleList().get(i).getAddress().getStreet());
+                responsible.add("" + getResponsibleList().get(i).getAddress().getZipCode());
+                responsible.add("" + getResponsibleList().get(i).getPrivilegeLevel().name());
+                responsible.add("" + getResponsibleList().get(i).getPhoneNumber());
+                responsible.add("" + getResponsibleList().get(i).getUserId());
+            }catch (AuthorizationException authEx){}
 
         }
         
@@ -151,9 +147,11 @@ public class Task extends ScheduleItem implements Reportable {
         report.add("" + this.getDescription());
         report.add("" + this.getTitle());
         report.add("" + this.getLocation());
-        report.add("" + this.getTimeSchedule().getEndDateTimeCalendar());
-        report.add("" + this.getTimeSchedule().getStartDateTimeCalendar());
-        
+         try {
+             report.add("" + this.getTimeSchedule().getEndDateTimeCalendar());
+             report.add("" + this.getTimeSchedule().getStartDateTimeCalendar());
+         }catch (AuthorizationException authEx){}
+
         return report;
     }
 }

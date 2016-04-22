@@ -12,6 +12,7 @@ import BackEnd.UserSystem.User;
 import BackEnd.UserSystem.UserExceptions.ValidationException;
 import EMS_Database.DoesNotExistException;
 import auth.AuthorizationException;
+import auth.PrivilegeLevel;
 import exception.UpdateException;
 
 import java.awt.BorderLayout;
@@ -72,28 +73,33 @@ public class UserManagementPanel extends javax.swing.JPanel {
         ChangeUserPanel.add(listScroller, BorderLayout.CENTER);
     }
     
-    public void updateLabels() throws AuthorizationException
-    {   
-        selectedUser = manager.getUserManager().getSelectedUser();
-        selectedUserAddress = selectedUser.getAddress();
-        
-        currentUserLabel.setText("Currently Editing User: < " + selectedUser.getFirstName() + " " + selectedUser.getLastName() + " >");
-        firstNameField.setText(selectedUser.getFirstName());
-        lastNameField.setText(selectedUser.getLastName());
-        emailField.setText(selectedUser.getEmailAddress());
+    public void updateLabels()
+    {
+        try {
+            selectedUser = manager.getUserManager().getSelectedUser();
+            selectedUserAddress = selectedUser.getAddress();
+
+            currentUserLabel.setText("Currently Editing User: < " + selectedUser.getFirstName() + " " + selectedUser.getLastName() + " >");
+            firstNameField.setText(selectedUser.getFirstName());
+            lastNameField.setText(selectedUser.getLastName());
+            emailField.setText(selectedUser.getEmailAddress());
+        }catch (AuthorizationException authEx){}
 
         setFieldsToDefaultString();
 
-        if (selectedUser.getAdminPrivilege()) {
+        try{
+        if (selectedUser.getPrivilegeLevel().isAdmin()) {
             adminBox.setSelected(true);
         } else {
             adminBox.setSelected(false);
-        }
-        if (selectedUser.getEventCreationPrivilege()) {
+        }}catch (AuthorizationException authEx){}
+
+        try{
+        if (selectedUser.getPrivilegeLevel().isCommitteeLeader()) {
             eventBox.setSelected(true);
         } else {
             eventBox.setSelected(false);
-        }
+        }}catch (AuthorizationException authEx){}
     }
 
     public void setNonAdminView() {
@@ -149,12 +155,15 @@ public class UserManagementPanel extends javax.swing.JPanel {
         return tempAddress;
     }
     
-    private void setFieldsToDefaultString() throws AuthorizationException{
-        if (selectedUser.getPhoneNumber().toString().equals(""))
-            phoneNumberField.setText(PHONE_NUMBER_FIELD);
-        else
-            phoneNumberField.setText(selectedUser.getPhoneNumber().toString());
-        
+    private void setFieldsToDefaultString(){
+
+        try {
+            if (selectedUser.getPhoneNumber().toString().equals(""))
+                phoneNumberField.setText(PHONE_NUMBER_FIELD);
+            else
+                phoneNumberField.setText(selectedUser.getPhoneNumber().toString());
+        }catch (AuthorizationException authEx){}
+
         if (selectedUserAddress.getStreet().equals(""))
             streetField.setText(STREET_FIELD);
         else
@@ -498,7 +507,7 @@ public class UserManagementPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_changeUserButtonActionPerformed
 
     private void saveChangesButtonPerformed(java.awt.event.ActionEvent evt)
-        throws AuthorizationException{//GEN-FIRST:event_saveChangesButtonPerformed
+       {//GEN-FIRST:event_saveChangesButtonPerformed
         // TODO add your handling code here:
         int choice = JOptionPane.showConfirmDialog(null, "Do you want to save these changes?");
         selectedUser = manager.getUserManager().getSelectedUser();
@@ -511,14 +520,14 @@ public class UserManagementPanel extends javax.swing.JPanel {
                 manager.getUserManager().editEmailAddress(emailField.getText());
                 manager.getUserManager().editPhoneNumber(setPhoneNumberToSystemValue());
                 manager.getUserManager().editAddress(setAddressToSystemValue());
-                if (manager.getLogInManager().getLoggedInUser().getAdminPrivilege()) {
+                if (manager.getLogInManager().getLoggedInUser().getPrivilegeLevel().isAdmin()) {
                     if (adminBox.isSelected()) {
-                        manager.getUserManager().editAdminPrivilege(true);
+                        manager.getUserManager().editPrivilegeLevel(PrivilegeLevel.ADMIN);
                     } else {
-                        manager.getUserManager().editAdminPrivilege(false);
+                        manager.getUserManager().editPrivilegeLevel(PrivilegeLevel.COMMITTEE_LEADER);
                     }
                     if (eventBox.isSelected()) {
-                        manager.getUserManager().editEventCreationPrivilege(true);
+                        manager.getUserManager().editPrivilegeLevel(PrivilegeLevel.COMMITTEE_LEADER);
                     } else {
                         manager.getUserManager().editEventCreationPrivilege(false);
                     }

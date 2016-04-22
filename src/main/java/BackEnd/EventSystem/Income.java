@@ -33,44 +33,44 @@ public class Income extends BudgetItem {
     }
 
     //GETTERS
-    public int getBUDGET_ITEM_ID() throws AuthorizationException {
+    public int getBUDGET_ITEM_ID() {
         Permissions.get().checkPermission("INCOME","UID", Operation.VIEW);
         return super.getBUDGET_ITEM_ID();
     }
 
-    public double getValue() throws AuthorizationException {
+    public double getValue(){
         Permissions.get().checkPermission("INCOME","VALUE", Operation.VIEW);
         return super.getValue();
     }
 
-    public String getDescription() throws AuthorizationException {
+    public String getDescription() {
         Permissions.get().checkPermission("INCOME","DESCRIPTION", Operation.VIEW);
         return super.getDescription();
     }
 
-    public Timestamp getDate() throws AuthorizationException {
+    public Timestamp getDate() {
         Permissions.get().checkPermission("INCOME","DATE", Operation.VIEW);
         return super.getDate();
     }
 
     //SETTERS
-    public void setValue(double value) throws AuthorizationException {
+    public void setValue(double value) {
         Permissions.get().checkPermission("INCOME","VALUE", Operation.MODIFY);
         super.setValue(value);
     }
 
 
-    public void setDescription(String description) throws AuthorizationException {
+    public void setDescription(String description){
         Permissions.get().checkPermission("INCOME","DESCRIPTION", Operation.MODIFY);
         super.setDescription(description);
     }
 
-    public void setDate(Timestamp date) throws AuthorizationException {
+    public void setDate(Timestamp date){
         Permissions.get().checkPermission("INCOME","DATE", Operation.MODIFY);
         super.setDate(date);
     }
 
-    public void setDate(int year, int month, int day, int hour, int minute) throws IllegalArgumentException, AuthorizationException {
+    public void setDate(int year, int month, int day, int hour, int minute){
         Permissions.get().checkPermission("INCOME","DATE", Operation.MODIFY);
         super.setDate(year,month,day,hour,minute);
     }
