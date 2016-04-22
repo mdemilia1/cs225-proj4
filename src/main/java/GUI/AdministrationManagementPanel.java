@@ -2,7 +2,6 @@ package GUI;
 
 
 import BackEnd.ManagerSystem.UserManager;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import BackEnd.ManagerSystem.MainManager;
@@ -21,7 +20,6 @@ import java.util.Vector;
 public class AdministrationManagementPanel extends javax.swing.JPanel implements ActionListener {
 
     private Object[][] data = new Object[10][5];
-    private String[] columnNames = {"First Name", "Last Name", "User Id", "Make Admin"};
     private MainManager manage;
     private UserManager user;
     private AdminPanelTable ut;
@@ -41,8 +39,8 @@ public class AdministrationManagementPanel extends javax.swing.JPanel implements
         } catch (DoesNotExistException e) {
             e.printStackTrace();
         }
+
         scrollBar = new JScrollPane(userTable);
-        //scrollBar.setPreferredSize(new Dimension(50, 50));
         scrollBar.setVisible(true);
         submit = new JButton("Submit");
         submit.setPreferredSize(new Dimension(30, 30));
@@ -51,6 +49,9 @@ public class AdministrationManagementPanel extends javax.swing.JPanel implements
         this.add(submit);
     }
 
+    /**
+     * update the database to make users an admin when the buttons is clicked
+     */
     public void actionPerformed(ActionEvent e)
     {
         for(int i =0; i < ut.getRowCount(); i++)
@@ -63,10 +64,15 @@ public class AdministrationManagementPanel extends javax.swing.JPanel implements
         }
     }
 
+    /**
+     * set up the table for all users that are not already admins
+     * @throws DoesNotExistException
+     */
     public void setTable() throws DoesNotExistException {
         ut = new AdminPanelTable();
         for (int j = 0; j < userList.size(); j++)
         {
+            if(user.getUsersTable().getLevel(userList.get(j).getUserId()) == 0)
                 ut.addRow(new Object[]{userList.get(j).getFirstName(), userList.get(j).getLastName(), false});
 
         }
