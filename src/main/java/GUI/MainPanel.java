@@ -34,11 +34,12 @@ import javax.swing.SwingUtilities;
 public class MainPanel extends javax.swing.JPanel {
 
     private JPanel calendarSelectionPanel;
-    private JButton selectCalendarButton, selectEventDetailsButton, registerForEventButton;
+    private JButton selectCalendarButton, selectEventDetailsButton, registerForEventButton, setAdminsButton;
     //private JButton clearEventButton;
     private JPanel calendarSwitchingPanel;
     private CalendarPanel cp;
     private EventManager eventManager;
+    private AdministrationManagementPanel amp;
     private User loggedInUser;
     private ArrayList<User> organizerList;
     private ArrayList<Participant> participantList;
@@ -69,19 +70,23 @@ public class MainPanel extends javax.swing.JPanel {
             registerForEventButton = new JButton(REGISTER);
         }
 
+        setAdminsButton = new JButton("Admin Management");
+
         Dimension dimension = new Dimension(150, 25);
         registerForEventButton.setPreferredSize(dimension);
+        setAdminsButton.setPreferredSize(dimension);
 
         selectCalendarButton.addActionListener(new CalendarButtonListener());
         selectEventDetailsButton.addActionListener(new CalendarButtonListener());
+        setAdminsButton.addActionListener(new CalendarButtonListener());
         registerForEventButton.addActionListener(new RegisterForEventButtonListener());
-
 
         calendarSwitchingPanel.setLayout(new CardLayout());
 
         calendarSelectionPanel.add(selectCalendarButton);
         calendarSelectionPanel.add(selectEventDetailsButton);
         calendarSelectionPanel.add(registerForEventButton);
+        calendarSelectionPanel.add(setAdminsButton);
   
         /*
         clearEventButton = new JButton("Clear Event");
@@ -90,9 +95,11 @@ public class MainPanel extends javax.swing.JPanel {
         */
 
         cp = new CalendarPanel();
+        amp = new AdministrationManagementPanel();
         EventDetailsPanel edp = new EventDetailsPanel();
         calendarSwitchingPanel.add(cp, "calendar");
         calendarSwitchingPanel.add(edp, "eventDetails");
+        calendarSwitchingPanel.add(amp, "adminManagement");
         add(calendarSwitchingPanel, BorderLayout.NORTH);
         add(calendarSelectionPanel, BorderLayout.SOUTH);
     }
@@ -159,6 +166,15 @@ public class MainPanel extends javax.swing.JPanel {
     }
 
     /**
+     * switches the visible panel to the administration management panel
+     */
+    private void AdminManagementButtonPerformed(java.awt.event.ActionEvent evt)
+    {
+        CardLayout cl = (CardLayout)  (calendarSwitchingPanel.getLayout());
+        cl.show(calendarSwitchingPanel, "adminManagement");
+    }
+
+    /**
      * The listener for the buttons in the mainPanel to switch between the Calendar and Event Details
      */
     private class CalendarButtonListener implements ActionListener {
@@ -170,6 +186,8 @@ public class MainPanel extends javax.swing.JPanel {
             if (e.getSource() == selectEventDetailsButton) {
                 selectEventDetailsButtonActionPerformed(e);
             }
+            if (e.getSource() == setAdminsButton)
+                AdminManagementButtonPerformed(e);
         }
     }
 

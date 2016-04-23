@@ -10,6 +10,8 @@ import BackEnd.UserSystem.Address;
 import BackEnd.UserSystem.PhoneNumber;
 import BackEnd.UserSystem.User;
 import BackEnd.UserSystem.UserExceptions.ValidationException;
+import BackEnd.UserSystem.UserExceptions.IllegalCharacterException;
+import BackEnd.UserSystem.UserExceptions.PasswordMismatchError;
 import EMS_Database.DoesNotExistException;
 import auth.AuthorizationException;
 import auth.PrivilegeLevel;
@@ -18,8 +20,12 @@ import exception.UpdateException;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -493,7 +499,34 @@ public class UserManagementPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void passwordButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordButtonActionPerformed
-        JOptionPane.showInputDialog("Please enter your new password:");
+        if(JOptionPane.showInputDialog("Please enter your current password:").equals(selectedUser.getPassword()))
+        {
+            String newPass =JOptionPane.showInputDialog("Please enter your new password:");
+            try {
+            manager.getUserManager().editPassword(newPass, newPass);
+            }
+            catch (PrivilegeInsufficientException ex) {
+                Logger.getLogger(UserManagementPanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalCharacterException ex) {
+                Logger.getLogger(UserManagementPanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (PasswordMismatchError ex) {
+                Logger.getLogger(UserManagementPanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (DoesNotExistException ex) {
+                Logger.getLogger(UserManagementPanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvalidKeyException ex) {
+                Logger.getLogger(UserManagementPanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedEncodingException ex) {
+                Logger.getLogger(UserManagementPanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalBlockSizeException ex) {
+                Logger.getLogger(UserManagementPanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (BadPaddingException ex) {
+                Logger.getLogger(UserManagementPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Incorrect Password");
+        }
     }//GEN-LAST:event_passwordButtonActionPerformed
 
     private void changeInfoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeInfoButtonActionPerformed
