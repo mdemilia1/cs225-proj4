@@ -17,7 +17,9 @@ public class CommitteeMemberLevel extends Level {
     protected void checkPermissionUsers(Context context) throws AuthorizationException {
         switch (context.getFieldForSwitch()){
             case "":
-                context.noAccess();
+                context
+                        .cannotCreate()
+                        .cannotDelete();
                 break;
             case "LEVEL":
                 context.noAccess();
@@ -98,7 +100,9 @@ public class CommitteeMemberLevel extends Level {
     protected void checkPermissionEvents(Context context) throws AuthorizationException {
         switch (context.getFieldForSwitch()){
             case "":
-                context.noAccess();
+                context
+                    .cannotCreate()
+                    .cannotDelete();
             case "DESCRIPTION":
                 context
                         .cannotModify()
@@ -198,7 +202,9 @@ public class CommitteeMemberLevel extends Level {
     protected void checkPermissionSubEvents(Context context) throws AuthorizationException {
         switch (context.getFieldForSwitch()){
             case "":
-                context.noAccess();
+                context
+                        .cannotCreate()
+                        .cannotDelete();
             case "DESCRIPTION":
                 context
                         .cannotModify()
@@ -274,7 +280,9 @@ public class CommitteeMemberLevel extends Level {
     protected void checkPermissionCommittee(Context context) throws AuthorizationException {
         switch (context.getFieldForSwitch()){
             case "":
-                context.noAccess();
+                context
+                        .cannotCreate()
+                        .cannotDelete();
             case "TITLE":
                 context
                         .cannotModify()
@@ -320,7 +328,9 @@ public class CommitteeMemberLevel extends Level {
     protected void checkPermissionTasks(Context context) throws AuthorizationException {
         switch (context.getFieldForSwitch()){
             case "":
-                context.noAccess();
+                context
+                        .cannotCreate()
+                        .cannotDelete();
             case "DESCRIPTION":
                 context
                         .cannotModify()
@@ -402,7 +412,9 @@ public class CommitteeMemberLevel extends Level {
     protected void checkPermissionIncome(Context context) throws AuthorizationException {
         switch (context.getFieldForSwitch()){
             case "":
-                context.noAccess();
+                context
+                        .cannotCreate()
+                        .cannotDelete();
             case "DESCRIPTION":
                 context.noAccess();
                 break;
@@ -421,7 +433,9 @@ public class CommitteeMemberLevel extends Level {
     protected void checkPermissionExpense(Context context) throws AuthorizationException {
         switch (context.getFieldForSwitch()){
             case "":
-                context.noAccess();
+                context
+                        .cannotCreate()
+                        .cannotDelete();
             case "DESCRIPTION":
                 context.noAccess();
                 break;
