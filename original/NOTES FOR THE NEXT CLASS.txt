@@ -1,0 +1,43 @@
+EMSLauncher.java is the main class.
+
+You can find the github repository at:
+https://github.com/MassBayCS225/EMS
+ 
+If you want to build a JAR for this,
+just build the JAR first and then copy/paste your EMS_DB folder
+into the same fodler as the JAR.
+
+
+
+Also, a couple notes about how to work with this program.
+
+
+The "Manager" classes basically serve as the connection between the GUI
+and the back end. The manager checks privilege levels, and if it passes,
+then writes to the database.
+
+
+Also, there isn't a real password encryption system.
+There are a couple classes related to it, that one member
+began building, but never finished.
+
+
+In the Main folder, there are 2 classes:
+ClearData.java and SetUpData.java
+Those were used for testing purposes.
+ClearData clears the entire database.
+SetUpData, sets the database up with dummy data.
+
+
+A few of the GUI classes were manually coded, as opposed to
+being created with the netbeans designer, so when you go to
+view the .form, you'll just see a blank screen, despite the fact
+that the source actually has code in it.
+
+
+If you want to add data to the table, you have to create
+an Input_Event (or whatever object you want to insert)
+wrapper class. So you create an Event object.
+You pass the Event object's details into an Input_Event.
+Then you pass the Input_Event to the database.
+It's a little tedious, and redundant, but that's how it is.

@@ -1,0 +1,8 @@
+Amounts over a million dollars are not shown properly due to lack of space to display decimal values. 
+Also a problem for values larger than ten million. 
+
+After clicking on the "details" buttons in the side panel, then clicking on the "report" button, it throws a NullPointer Exception. See Budget_View_Empty_Report.exception.
+
+RESOLVED-
+BUTTON-
+    "Report" button does not do anything.

@@ -1,0 +1,37 @@
+Main event information not displayed on the calendar.
+
+Rightmost column (Saturday) and bottom row(Sixth week) is smaller in size than all the other respective colums and rows.
+
+ADD EVENT-
+    EDIT BUTTON-
+	1. "edit" button shows a pop-up window that is resizable. Not a bug per se but it allows the user to create a weird looking window.
+	2. After editing main event, it's time is showing some extra decimals after seconds(milliseconds?).
+    ADD EVENT BUTTON-
+
+//FIXED	a) After being clicked when no calendar dates are chosen throws ArraysIndexOutOfBoundsException. See Date_Not_Selected.exception.
+//FIXED	b) If any Calendar date in the year 2012 or before is chosen, an exception is thrown. See Invalid_Year_2.exception.
+//FIXED	c) If a blank Calendar date is chosen after 2012, an exception is thrown. See Invalid_Day_2.exception.
+//FIXED
+
+	4. After using the "edit" button then choosing a value from the START TIME DROP DOWN MENU:
+//FIXED	a) Accidentaly choosing "Month" as an option and saving, sets the month to December and the year to the year before.
+//FIXED		b) Accidentaly choosing "Day" as an option and saving, throws an exception. See Suggestion 2 below and Invalid_Day_2.exception.
+//FIXED	    	c) Accidentaly choosing "Year" as an option and saving, throws an exception. See Suggestion 2 below and Invalid_Year.exception.
+//FIXED   	d) Accidentaly choosing "Hour" as an option and saving, sets the hour to midnight if the AM radio button is chosen, midday otherwise.
+//FIXED    	e) Accidentaly choosing "Minute" as an option and saving, throws an exception. See Suggestion 4 below and Invalid_Minute.exception.
+	   5. After using the "edit" button then choosing a value from the END TIME DROP DOWN MENU:
+//FIXED	    a) Accidentaly choosing "Month" as an option and saving, throws an exception. See Suggestion 4 below and Invalid_Month.exception.
+//FIXED	    b) Accidentaly choosing "Day" as an option and saving, throws an exception. See Suggestion 4 below and Invalid_Day.exception.
+//FIXED	    c) Accidentaly choosing "Year" as an option and saving, throws an exception. See Suggestion 4 below and Invalid_Year.exception.
+//FIXED     d) Accidentaly choosing "Hour" as an option and saving, sets the hour to midnight if the AM radio button is chosen, midday otherwise.
+//FIXED     e) Accidentaly choosing "Minute" as an option and saving, throws an exception. See Suggestion 4 below and Invalid_Minute.exception.
+
+    END TIME DROP DOWN MENU
+	It allows for an event to end prior to a start time.
+
+SUGGESTIONS-
+
+1. Consider editing the edit button to restrict the options to only hours and minutes since the user must click on that calendar Day, Month and Year.
+2. Let the user know that he/she entered incorrect information or remove first item from the list as an available option.
+
+

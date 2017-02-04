@@ -1,0 +1,29 @@
+{
+	"package": {
+		"name": "cs225-proj4-stable",
+		"repo": "cs225-proj4",
+		"subject": "massbay-cs",
+		"desc": "MassBay CS225: Project 4",
+		"website_url": "https://github.com/massbay-cs/cs225-proj4/wiki",
+		"issue_tracker_url": "https://github.com/massbay-cs/cs225-proj4/issues",
+		"vcs_url": "https://github.com/massbay-cs/cs225-proj4.git",
+		"github_use_tag_release_notes": true,
+		"github_release_notes_file": "RELEASE.txt",
+		"licenses": ["AGPL-V3"],
+		"labels": ["massbay", "education", "java"],
+		"public_download_numbers": false,
+		"public_stats": false
+	},
+	"version": {
+		"name": "1.0.0",
+		"desc": "",
+		"released": "",
+		"vcs_tag": "",
+		"gpgSign": false
+	},
+	"files": [
+		{"matrixParams": {"override": 1}, "includePattern": "([A-Z][A-Z_-]*[A-Z](\\.(md|txt))?)", "uploadPattern": "$1"     },
+		{"matrixParams": {"override": 1}, "includePattern": "package/([^/]*\\.jar)",              "uploadPattern": "jars/$1"}
+	],
+	"publish": true
+}

@@ -1,0 +1,32 @@
+***NOTE: Work in Progress, currently writing this from my phone at work***
+I propose we enforce permissions in a similar fashion to the unix file permission style. Every table should have extra columns
+for UID, Owner(int), Group(int), and Permission(int(in decimal or octal)). In theory, each row will belong to a specific user
+and a specific group with specific Read/Write/Edit permissions. The Owner will corispond with the UID of the user in the 
+user table, Group, based off of our types of users(admin,committee leaders, committee members), and the Permission, which will
+determine bitwise the read write capabilities on the row.
+
+Groups:
+admin = 1
+committeeleader = 2
+committeemember = 4
+participant = 8
+
+Permissions(unix style):
+owner_read = 256
+owner_write = 128
+owner_delete = 64
+group_read = 32
+group_write = 16
+group_delete = 8
+global_read  = 4
+global_write = 2
+global_delete = 1
+
+For example, the first authorization enforcement in the requirements editing or viewing the budget, if a row(object) 
+in the budget table had an owner id of 1 (first account, or admin, created), a group ID of 1, and a Permission of 416(decimal)
+or 640(octal), then a user under the admin group would be able to view and edit the budget, a Committee Leader would only 
+be able to view the budget, and no other user group would be able to view the budget at all. 
+[Add example of Permissions Table]
+
+
+

@@ -1,0 +1,23 @@
+eventsTable
+What are fields?
+- tableName (String)(Static)
+(Local)
+- newUID (int)
+(Directly extracted from event parameter)
+- description (String)
+- details (String)
+- title (String)
+- startDate (Timestamp)
+- endDate (Timestamp)
+- complete (int)
+- street (String)
+- city (String)
+- state (String)
+- zipCode (String)
+- country (String)
+- organizerList (String)
+- subEventList (String)
+- participantList (String)
+- committee (String)
+
+What are they used for?

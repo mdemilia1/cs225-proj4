@@ -1,0 +1,81 @@
+All of these fields are held in InputUser class.  They are set when an instance of InputUser is created through the UserManager
+which calls it through the Signup class on the gui side.
+They are also when a participant is created.  A participant is an object with just the basic user information (ID, name, email).  
+They are also set when a User is created. A User extends Participant but has a password and admin privileges fields
+
+userId - The unique user identification number (Does not check for duplicates upon creation.)
+  Type - int
+  Length -
+  Usages - Used in Event manager to Add and remove Organizer
+  
+level - User's level of privilege (Admin, user, ect.)
+  Type - int
+  Length - 1
+  Possible Values -
+  Default - not null
+  Usages - Used in UserManager to 'rebuild' a user
+  
+fName - User's first name
+  Type - String
+  Length - 50
+  Default - null
+  Usages - Used in UserManager to rebuild a user or participant
+  
+lName - User's last name
+  Type - String
+  Length - 50
+  Default - null
+  Usages  - Used in UserManager to rebuild a user or participant (Maybe they should be using userID instead of name)
+  
+PWD - The protected password of the user (should be hashed.)
+  Type - String
+  Length - 256
+  Default - not null
+  Usages - Used in UserManager to rebuild a user
+  
+email - The email of the user (should be validated)
+  Type - String
+  Length - 256
+  Default - not null
+  Usages Used in UserManager to rebuild user or participant
+  
+phone - The phone number of the user (should be validated)
+  Type - String (probably should be an int)
+  Length - 30 (probably should be 10)
+  Default - null
+  
+street - The street address of the user
+  Type - String
+  Length - 100
+  Default - null
+  
+city - The city the user lives in
+  Type - String
+  Length - 100 (should be less)
+  Default - null
+  
+state - The state the user lives in
+  Type - String
+  Length - 50 (should be less)
+  Default - null
+  
+zipcode - The zip code of the user
+  Type - String (maybe should be int)
+  Length - 20
+  Default - null
+  
+country - The country the user lives in
+  Type - String
+  Length - 100 (should be less)
+  Default - null
+  
+participant - I think this is a field that says whether the user is a participant or not (1 being true)
+this probably should be a boolean.
+  Type - int
+  Length
+  Default - null
+  
+eventLevel - Event access level must be declared (??)
+  Type - int
+  Length - 
+  Default - not null
